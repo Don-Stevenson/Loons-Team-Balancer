@@ -146,6 +146,14 @@ export const useLogin = (options = {}) => {
   })
 }
 
+export const useResetPassword = (options = {}) => {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: apiService.auth.resetPassword,
+    ...options,
+  })
+}
+
 export const useLogout = (options = {}) => {
   const queryClient = useQueryClient()
 
