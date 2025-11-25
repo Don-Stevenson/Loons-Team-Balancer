@@ -117,9 +117,9 @@ export default function PasswordResetStep2({ username, currentPassword }) {
               }
             >
               {showConfirmPassword ? (
-                <PasswordEyeClosed />
-              ) : (
                 <PasswordEyeOpened />
+              ) : (
+                <PasswordEyeClosed />
               )}
             </button>
           </div>

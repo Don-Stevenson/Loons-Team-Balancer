@@ -98,9 +98,9 @@ export default function PasswordResetStep1() {
               }
             >
               {showCurrentPassword ? (
-                <PasswordEyeClosed />
-              ) : (
                 <PasswordEyeOpened />
+              ) : (
+                <PasswordEyeClosed />
               )}
             </button>
           </div>
