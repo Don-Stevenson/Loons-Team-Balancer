@@ -52,12 +52,13 @@ api.interceptors.response.use(
   async error => {
     const originalRequest = error.config
 
-    // Handle 401 Unauthorized errors, but don't retry auth/check calls or logout calls
+    // Handle 401 Unauthorized errors, but don't retry auth/check calls, logout calls, or verify-credentials calls
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
       !originalRequest.url?.includes('/auth/check') &&
-      !originalRequest.url?.includes('/logout')
+      !originalRequest.url?.includes('/logout') &&
+      !originalRequest.url?.includes('/verify-credentials')
     ) {
       originalRequest._retry = true
 
@@ -75,12 +76,13 @@ api.interceptors.response.use(
       }
     }
 
-    // Only log errors that aren't expected 401s after logout
+    // Only log errors that aren't expected 401s after logout or verify-credentials
     if (
       !(
         error.response?.status === 401 &&
         (originalRequest.url?.includes('/auth/check') ||
-          originalRequest.url?.includes('/logout'))
+          originalRequest.url?.includes('/logout') ||
+          originalRequest.url?.includes('/verify-credentials'))
       )
     ) {
       console.error('API Error:', error.response)
@@ -222,6 +224,52 @@ export const apiService = {
       } catch (error) {
         logPersistent('Login failed', { error: error.message })
         console.error('Login Error:', error)
+        throw error
+      }
+    },
+
+    verifyCredentials: async ({ username, password }) => {
+      try {
+        logPersistent('Verify credentials attempt', { username })
+        const response = await api.post('/verify-credentials', {
+          username,
+          password,
+        })
+        logPersistent('Credentials verified', response.data)
+        return response.data
+      } catch (error) {
+        logPersistent('Credential verification failed', {
+          error: error.message,
+        })
+        console.error('Credential verification error:', error)
+        throw error
+      }
+    },
+    resetPassword: async ({ username, currentPassword, newPassword }) => {
+      try {
+        const response = await api.post('/reset-password', {
+          username,
+          currentPassword,
+          newPassword,
+        })
+        return response.data
+      } catch (error) {
+        logPersistent('Reset password failed', { error: error.message })
+        console.error('Reset password Error:', error)
+        throw error
+      }
+    },
+
+    forceResetPassword: async ({ username, newPassword }) => {
+      try {
+        const response = await api.post('/force-reset-password', {
+          username,
+          newPassword,
+        })
+        return response.data
+      } catch (error) {
+        logPersistent('Force reset password failed', { error: error.message })
+        console.error('Force reset password Error:', error)
         throw error
       }
     },
