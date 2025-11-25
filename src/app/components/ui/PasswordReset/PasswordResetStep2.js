@@ -90,7 +90,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
               disabled={resetPasswordMutation.isPending || success}
               aria-label={showNewPassword ? 'Hide password' : 'Show password'}
             >
-              {showNewPassword ? <PasswordEyeClosed /> : <PasswordEyeOpened />}
+              {showNewPassword ? <PasswordEyeOpened /> : <PasswordEyeClosed />}
             </button>
           </div>
         </div>
