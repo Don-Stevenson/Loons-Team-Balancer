@@ -36,6 +36,7 @@ export const Button = ({
   classes,
   onClick,
   testId,
+  disabled,
 }) => {
   return (
     <div
@@ -43,7 +44,7 @@ export const Button = ({
       onClick={onClick}
       data-testid="button-container"
     >
-      <button disabled={isLoading} data-testid={testId}>
+      <button disabled={isLoading || disabled} data-testid={testId}>
         {isLoading ? (
           <div className="flex justify-center items-center gap-2 py-4">
             {loadingMessage}

@@ -48,9 +48,25 @@ export default function PasswordResetStep2({ username, currentPassword }) {
       return
     }
 
-    // Validate password strength (optional but recommended)
     if (newPassword.length < 6) {
       setError('Password must be at least 6 characters long')
+      return
+    }
+
+    if (newPassword === currentPassword) {
+      setError('New password cannot be the same as the current password')
+      return
+    }
+
+    // check if password includes at least one uppercase letter, one lowercase letter, one number
+    if (
+      !newPassword.match(/[A-Z]/) ||
+      !newPassword.match(/[a-z]/) ||
+      !newPassword.match(/[0-9]/)
+    ) {
+      setError(
+        'Password must include at least one uppercase letter, one lowercase letter, and one number'
+      )
       return
     }
 
@@ -70,9 +86,10 @@ export default function PasswordResetStep2({ username, currentPassword }) {
         <p className="text-sm text-gray-600 mb-2">
           Step 2: Enter your new password
         </p>
-        <div className="flex flex-col justify-center xs:flex-row gap-3 mb-3 text-sm">
+        <div className="flex flex-col justify-center sm:flex-row gap-3 mb-3 text-sm">
           <div className="relative">
             <input
+              id="new-password"
               type={showNewPassword ? 'text' : 'password'}
               value={newPassword}
               onChange={e => setNewPassword(e.target.value)}
@@ -93,8 +110,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
               {showNewPassword ? <PasswordEyeOpened /> : <PasswordEyeClosed />}
             </button>
           </div>
-        </div>
-        <div className="flex flex-col justify-center xs:flex-row gap-3 mb-3 text-sm">
+
           <div className="relative">
             <input
               type={showConfirmPassword ? 'text' : 'password'}
@@ -128,7 +144,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
           <Button
             variant="secondary"
             text="Reset Password"
-            loadingMessage="Resetting..."
+            loadingMessage="Resetting"
             isLoading={resetPasswordMutation.isPending}
             testId="reset-password-button"
             disabled={success}

@@ -25,7 +25,6 @@ export default function PasswordResetStep1() {
     setError(false)
 
     try {
-      // Verify credentials without logging in
       const response = await apiService.auth.verifyCredentials({
         username,
         password: currentPassword,
@@ -46,7 +45,6 @@ export default function PasswordResetStep1() {
     }
   }
 
-  // If credentials verified, show Step 2
   if (credentialsVerified) {
     return (
       <PasswordResetStep2
@@ -64,8 +62,9 @@ export default function PasswordResetStep1() {
         <p className="text-sm text-gray-600 mb-2">
           Step 1: Verify your identity
         </p>
-        <div className="flex flex-col justify-center xs:flex-row gap-3 mb-3 text-sm">
+        <div className="flex flex-col items-center justify-center sm:flex-row gap-3 mb-3 text-sm">
           <input
+            id="username"
             type="text"
             value={username}
             onChange={e => setUsername(e.target.value)}
@@ -78,6 +77,7 @@ export default function PasswordResetStep1() {
           />
           <div className="relative">
             <input
+              id="current-password"
               type={showCurrentPassword ? 'text' : 'password'}
               value={currentPassword}
               onChange={e => setCurrentPassword(e.target.value)}
@@ -89,6 +89,7 @@ export default function PasswordResetStep1() {
               className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 pr-8"
             />
             <button
+              id="toggle password button"
               type="button"
               onClick={() => setShowCurrentPassword(!showCurrentPassword)}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -109,7 +110,7 @@ export default function PasswordResetStep1() {
           <Button
             variant="secondary"
             text="Next"
-            loadingMessage="Verifying..."
+            loadingMessage="Verifying"
             isLoading={isVerifying}
             testId="verify-credentials-button"
           />
