@@ -87,7 +87,7 @@ export default function LoginForm() {
           />
         </div>
       </div>
-      <div className="flex justify-center text-center items-center h-10 text-xs">
+      <div className="flex justify-center text-center items-center text-loonsBrown hover:cursor-pointer hover:text-[#f38686] transition-colors duration-300 text-xs mt-4">
         <Link href="/password-help">Need help with your password?</Link>
       </div>
       <div className="flex justify-center text-center items-center text-loonsRed h-10">
