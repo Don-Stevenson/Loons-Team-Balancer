@@ -123,7 +123,7 @@ describe('PasswordResetStep2', () => {
     expect(confirmPasswordInput.type).toBe('password')
   })
 
-  it('handles successful password reset', async () => {
+  it('fails when new password doesnt contain at least 1 number and 1 uppercase letter', async () => {
     const mockMutate = jest.fn(({ username, currentPassword, newPassword }) => {
       const mockOnSuccess = useResetPassword.mock.calls[0][0].onSuccess
       mockOnSuccess({ success: true })
@@ -149,10 +149,46 @@ describe('PasswordResetStep2', () => {
     fireEvent.click(submitButton)
 
     await waitFor(() => {
+      expect(
+        screen.getByText(
+          'Password must include at least one uppercase letter, one lowercase letter, and one number'
+        )
+      ).toBeInTheDocument()
+    })
+  })
+
+  it('handles successful password reset', async () => {
+    const mockMutate = jest.fn(({ username, currentPassword, newPassword }) => {
+      const mockOnSuccess = useResetPassword.mock.calls[0][0].onSuccess
+      mockOnSuccess({ success: true })
+    })
+
+    useResetPassword.mockReturnValue({
+      mutate: mockMutate,
+      isPending: false,
+      isError: false,
+      error: null,
+    })
+
+    renderWithQuery(
+      <PasswordResetStep2 username="testuser" currentPassword="oldpass" />
+    )
+
+    const newPasswordInput = screen.getByPlaceholderText('New Password')
+    const confirmPasswordInput = screen.getByPlaceholderText('Confirm New PW')
+    const submitButton = screen.getByRole('button', { name: /reset password/i })
+
+    fireEvent.change(newPasswordInput, { target: { value: 'NewPassword123' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'NewPassword123' },
+    })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
       expect(mockMutate).toHaveBeenCalledWith({
         username: 'testuser',
         currentPassword: 'oldpass',
-        newPassword: 'newpass123',
+        newPassword: 'NewPassword123',
       })
     })
 
@@ -237,8 +273,10 @@ describe('PasswordResetStep2', () => {
     const confirmPasswordInput = screen.getByPlaceholderText('Confirm New PW')
     const submitButton = screen.getByRole('button', { name: /reset password/i })
 
-    fireEvent.change(newPasswordInput, { target: { value: 'newpass123' } })
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newpass123' } })
+    fireEvent.change(newPasswordInput, { target: { value: 'NewPassword123' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'NewPassword123' },
+    })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -269,8 +307,10 @@ describe('PasswordResetStep2', () => {
     const confirmPasswordInput = screen.getByPlaceholderText('Confirm New PW')
     const submitButton = screen.getByRole('button', { name: /reset password/i })
 
-    fireEvent.change(newPasswordInput, { target: { value: 'newpass123' } })
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newpass123' } })
+    fireEvent.change(newPasswordInput, { target: { value: 'NewPassword123' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'NewPassword123' },
+    })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -322,7 +362,7 @@ describe('PasswordResetStep2', () => {
 
     const newPasswordInput = screen.getByPlaceholderText('New Password')
     const confirmPasswordInput = screen.getByPlaceholderText('Confirm New PW')
-    const submitButton = screen.getByRole('button', { name: /resetting.../i })
+    const submitButton = screen.getByRole('button', { name: /resetting/i })
 
     expect(newPasswordInput).toBeDisabled()
     expect(confirmPasswordInput).toBeDisabled()
@@ -350,8 +390,10 @@ describe('PasswordResetStep2', () => {
     const confirmPasswordInput = screen.getByPlaceholderText('Confirm New PW')
     const submitButton = screen.getByRole('button', { name: /reset password/i })
 
-    fireEvent.change(newPasswordInput, { target: { value: 'newpass123' } })
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newpass123' } })
+    fireEvent.change(newPasswordInput, { target: { value: 'NewPassword123' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'NewPassword123' },
+    })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
