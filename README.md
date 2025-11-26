@@ -16,15 +16,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You will require a`.env` at root level:
 
-```
-ATLAS_URI=mongodb+srv://user:pass@cluster0.pczcs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-PORT=5050
-JWT_SECRET=SECRET
-NEXT_PUBLIC_API_URL=http://localhost:5050
-ORIGIN_URL=http://localhost:3000
-TEAM_ID=
-REFRESH_TOKEN=
-```
+- see .env.example
 
 to generate the JWT_SECRET use:
 

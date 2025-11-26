@@ -11,10 +11,16 @@ console.log('Email configuration:', {
   emailConfigured: !!emailAddress,
   passwordConfigured: !!emailPassword,
   emailAddress: emailAddress ? `${emailAddress.substring(0, 3)}...` : 'NOT SET',
+  environment: process.env.NODE_ENV,
+  vercelEnv: process.env.VERCEL_ENV,
 })
 
 if (!emailAddress || !emailPassword) {
   console.error('CRITICAL: Email credentials not configured!')
+  console.error('Missing environment variables:', {
+    TEST_USERNAME: !!process.env.TEST_USERNAME,
+    GMAIL_PASSWORD: !!process.env.GMAIL_PASSWORD,
+  })
   console.error(
     'Please set TEST_USERNAME and GMAIL_PASSWORD environment variables'
   )

@@ -120,7 +120,7 @@ export default function PasswordResetStep1() {
         <BackArrow />
         <Link href="/login">Back to login</Link>
       </div>
-      <div className="flex justify-center text-center items-center text-loonsRed h-10">
+      <div className="flex justify-center text-center items-center text-loonsRed text-sm h-4">
         {error ? 'Invalid credentials. Please try again' : ''}
       </div>
     </form>
