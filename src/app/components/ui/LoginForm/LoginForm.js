@@ -66,6 +66,7 @@ export default function LoginForm() {
               className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 pr-8"
             />
             <button
+              id="toggle-password-button"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
@@ -87,7 +88,7 @@ export default function LoginForm() {
         </div>
       </div>
       <div className="flex justify-center text-center items-center h-10 text-xs">
-        <Link href="/password-reset">Forgot password?</Link>
+        <Link href="/password-help">Need help with your password?</Link>
       </div>
       <div className="flex justify-center text-center items-center text-loonsRed h-10">
         {error ? "There's been an error. Please try again" : ''}
