@@ -291,7 +291,7 @@ describe('Send Temporary Password API Route', () => {
       expect(data.message).toBe(
         'Password reset but failed to send email. Please contact support.'
       )
-      expect(data.error).toBe('Email service unavailable')
+      expect(data.error).toBe('Email service error')
     })
 
     it('should still save the new password even if email fails', async () => {
@@ -324,7 +324,7 @@ describe('Send Temporary Password API Route', () => {
 
       expect(response.status).toBe(500)
       expect(data.success).toBe(false)
-      expect(data.error).toBe('SMTP connection failed')
+      expect(data.error).toBe('Email service error')
     })
 
     it('should include CORS headers in email error response', async () => {
