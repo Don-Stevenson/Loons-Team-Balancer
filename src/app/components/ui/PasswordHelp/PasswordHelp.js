@@ -71,8 +71,11 @@ const PasswordHelp = () => {
       />
       <Button
         variant="secondary"
-        text={loading ? 'Submitting' : 'Submit'}
+        text="Submit"
         disabled={loading}
+        isLoading={loading}
+        loadingMessage="Submitting"
+        testId="submit-button"
       />
       {error && (
         <p className="text-red-500 text-sm text-center max-w-xs h-4">

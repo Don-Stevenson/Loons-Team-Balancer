@@ -75,7 +75,7 @@ export default function PasswordResetStep1() {
             autoComplete="username"
             className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
           />
-          <div className="relative">
+          <div className="relative flex items-center justify-between">
             <input
               id="current-password"
               type={showCurrentPassword ? 'text' : 'password'}
@@ -86,7 +86,7 @@ export default function PasswordResetStep1() {
               required
               disabled={isVerifying}
               autoComplete="current-password"
-              className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 pr-8"
+              className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 pr-1"
             />
             <button
               id="toggle password button"

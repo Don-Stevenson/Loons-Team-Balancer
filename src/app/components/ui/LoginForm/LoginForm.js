@@ -53,7 +53,7 @@ export default function LoginForm() {
             autoComplete="current-username"
             className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
           />
-          <div className="relative">
+          <div className="relative flex items-center">
             <input
               type={showPassword ? 'text' : 'password'}
               value={password}
@@ -63,7 +63,7 @@ export default function LoginForm() {
               required
               disabled={loginMutation.isPending}
               autoComplete="current-password"
-              className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 pr-8"
+              className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 "
             />
             <button
               id="toggle-password-button"

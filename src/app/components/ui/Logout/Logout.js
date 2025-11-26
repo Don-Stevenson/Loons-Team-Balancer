@@ -28,6 +28,7 @@ export default function Logout({ variant }) {
       text="Logout"
       testId="logout-button"
       classes="font-semibold w-full"
+      isLoading={isLoading}
     />
   )
 }
