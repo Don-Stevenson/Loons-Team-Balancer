@@ -87,7 +87,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
           Step 2: Enter your new password
         </p>
         <div className="flex flex-col justify-center sm:flex-row gap-3 mb-3 text-sm">
-          <div className="relative">
+          <div className="relative flex items-center justify-between">
             <input
               id="new-password"
               type={showNewPassword ? 'text' : 'password'}
@@ -111,7 +111,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
             </button>
           </div>
 
-          <div className="relative">
+          <div className="relative flex items-center justify-between">
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               value={confirmNewPassword}

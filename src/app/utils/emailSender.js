@@ -77,7 +77,12 @@ export async function sendTemporaryPasswordEmail(
         <p>Loons Team Balancer</p>
         <hr>
         <p style="color: #666; font-size: 12px;">This is an automated email. Please do not reply to this email.</p>
-        <p style="color: #666; font-size: 12px;">This email was sent on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}.</p>
+             <p style="color: #666; font-size: 12px;">This email was sent on ${new Date().toLocaleDateString(
+               'en-US',
+               { timeZone: 'America/New_York' }
+             )} at ${new Date().toLocaleTimeString('en-US', {
+        timeZone: 'America/New_York',
+      })} EST.</p>
       `,
     })
 
