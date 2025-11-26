@@ -37,7 +37,7 @@ const PasswordHelp = () => {
 
       if (response.ok) {
         setMessage(
-          'If an account exists with this email, a temporary password has been generated. Please contact your administrator to receive it.'
+          'If an account exists with this email, a temporary password has been generated and sent to your email address.'
         )
         setUsername('')
       } else {
