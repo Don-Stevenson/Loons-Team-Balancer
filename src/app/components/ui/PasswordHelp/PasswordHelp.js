@@ -75,12 +75,12 @@ const PasswordHelp = () => {
         disabled={loading}
       />
       {error && (
-        <p className="text-red-500 text-sm text-center max-w-xs">
+        <p className="text-red-500 text-sm text-center max-w-xs h-4">
           {'' || error}
         </p>
       )}
       {message && (
-        <p className="text-green-600 text-sm text-center max-w-xs">
+        <p className="text-green-600 text-sm text-center max-w-xs h-4">
           {'' || message}
         </p>
       )}
