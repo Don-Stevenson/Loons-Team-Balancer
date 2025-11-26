@@ -267,6 +267,8 @@ function Players() {
             variant="primary"
             onClick={() => setIsAddPlayerModalOpen(true)}
             text="Add A New Player"
+            loadingMessage="Adding player"
+            testId="add-player-button"
           />
           <AddPlayerModal
             isOpen={isAddPlayerModalOpen}

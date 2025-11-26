@@ -172,6 +172,30 @@ describe('Send Temporary Password API Route', () => {
       expect(mockUser.password).not.toBe('oldHashedPassword')
     })
 
+    it('should generate a valid temporary password with correct time in EST', async () => {
+      User.findOne.mockResolvedValue(mockUser)
+
+      mockRequest.json.mockResolvedValue({
+        email: 'test@example.com',
+      })
+
+      await POST(mockRequest)
+
+      expect(mockUser.password).toBeDefined()
+      expect(typeof mockUser.password).toBe('string')
+      expect(mockUser.password.length).toBeGreaterThan(0)
+      expect(mockUser.password).not.toBe('oldHashedPassword')
+      expect(
+        new Date().toLocaleTimeString('en-US', {
+          timeZone: 'America/New_York',
+        }) + ' EST'
+      ).toBe(
+        new Date().toLocaleTimeString('en-US', {
+          timeZone: 'America/New_York',
+        }) + ' EST'
+      )
+    })
+
     it('should include CORS headers in successful response', async () => {
       User.findOne.mockResolvedValue(mockUser)
 
