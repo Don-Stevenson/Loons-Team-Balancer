@@ -80,7 +80,7 @@ const PasswordHelp = () => {
         </p>
       )}
       {message && (
-        <p className="text-green-600 text-sm text-center max-w-xs h-4">
+        <p className="text-green-600 text-sm text-center max-w-xs h-12">
           {'' || message}
         </p>
       )}
