@@ -84,7 +84,7 @@ const PasswordHelp = () => {
           {'' || message}
         </p>
       )}
-      <div className="flex justify-center items-center text-loonsRed hover:cursor-pointer hover:text-[#f38686] transition-colors duration-300 font-bold mt-10">
+      <div className="flex justify-center items-center text-loonsRed hover:cursor-pointer hover:text-[#f38686] transition-colors duration-300 text-lg mt-10">
         <Link href="/password-reset" className="text-lg text-center">
           Already know your username and password? Reset your password here
         </Link>
