@@ -52,14 +52,30 @@ export async function POST(request) {
         message: emailError.message,
         code: emailError.code,
         command: emailError.command,
+        stack: emailError.stack,
+        responseCode: emailError.responseCode,
+        response: emailError.response,
       })
+
+      // Determine user-friendly error message
+      let userMessage =
+        'Password reset but failed to send email. Please contact support.'
+      if (emailError.message.includes('not configured')) {
+        userMessage =
+          'Email service is not properly configured. Please contact support.'
+      } else if (emailError.code === 'EAUTH') {
+        userMessage = 'Email authentication failed. Please contact support.'
+      }
+
       // You might want to handle this differently - either fail the request or succeed with a warning
       const response = NextResponse.json(
         {
           success: false,
-          message:
-            'Password reset but failed to send email. Please contact support.',
-          error: emailError.message, // Include error in response for debugging
+          message: userMessage,
+          error:
+            process.env.NODE_ENV === 'development'
+              ? emailError.message
+              : 'Email service error', // Include error in response for debugging (only in dev)
         },
         { status: 500 }
       )
