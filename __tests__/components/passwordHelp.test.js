@@ -200,7 +200,7 @@ describe('PasswordHelp', () => {
       await waitFor(() => {
         expect(
           screen.getByText(
-            'If an account exists with this email, a temporary password has been generated. Please contact your administrator to receive it.'
+            'If an account exists with this email, a temporary password has been generated and sent to your email address.'
           )
         ).toBeInTheDocument()
       })
@@ -247,7 +247,7 @@ describe('PasswordHelp', () => {
 
       await waitFor(() => {
         const successMessage = screen.getByText(
-          'If an account exists with this email, a temporary password has been generated. Please contact your administrator to receive it.'
+          'If an account exists with this email, a temporary password has been generated and sent to your email address.'
         )
         expect(successMessage).toBeInTheDocument()
         expect(successMessage).toHaveClass('text-green-600')
@@ -529,7 +529,7 @@ describe('PasswordHelp', () => {
       await waitFor(() => {
         expect(
           screen.getByText(
-            'If an account exists with this email, a temporary password has been generated. Please contact your administrator to receive it.'
+            'If an account exists with this email, a temporary password has been generated and sent to your email address.'
           )
         ).toBeInTheDocument()
       })
@@ -546,7 +546,7 @@ describe('PasswordHelp', () => {
       await waitFor(() => {
         expect(
           screen.queryByText(
-            'If an account exists with this email, a temporary password has been generated. Please contact your administrator to receive it.'
+            'If an account exists with this email, a temporary password has been generated and sent to your email address.'
           )
         ).not.toBeInTheDocument()
       })
