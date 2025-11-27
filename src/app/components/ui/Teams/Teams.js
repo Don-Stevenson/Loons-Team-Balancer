@@ -121,15 +121,45 @@ const Teams = ({
     handleDrop,
   } = useDragAndDrop(balancedTeams, setBalancedTeams)
 
+  const getTeamColorClasses = (index, totalTeams) => {
+    const isThreeColorSystem = totalTeams === 3
+
+    if (isThreeColorSystem) {
+      const colorIndex = index % 3
+
+      if (colorIndex === 0) {
+        return 'border-loonsRed bg-red-200 print:bg-red-100'
+      }
+      if (colorIndex === 1) {
+        return 'border-gray-500 bg-gray-200 print:bg-gray-100'
+      }
+      return 'border-gray-800 bg-white print:bg-gray-50'
+    }
+
+    return index % 2 === 0
+      ? 'border-loonsRed bg-red-200 print:bg-red-100'
+      : 'border-gray-500 bg-gray-200 print:bg-gray-100'
+  }
+
   const getTeamName = index => {
+    const totalTeams = balancedTeams.length
+
+    if (totalTeams === 3) {
+      const colorIndex = index % 3
+      if (colorIndex === 0) return 'Red Team'
+      if (colorIndex === 1) return 'Black Team'
+      if (colorIndex === 2) return 'White Team'
+    }
+
+    if (totalTeams === 2) {
+      return index === 0 ? 'Red Team' : 'Black Team'
+    }
+
     const isRedTeam = index % 2 === 0
     const teamNumber = Math.floor(index / 2) + 1
     const color = isRedTeam ? 'Red' : 'Black'
 
-    if (balancedTeams.length > 2) {
-      return `${color} Team ${teamNumber}`
-    }
-    return `${color} Team`
+    return `${color} Team ${teamNumber}`
   }
 
   const hasLargeTeams = balancedTeams.some(team => team.players.length > 12)
@@ -184,11 +214,10 @@ const Teams = ({
             return (
               <div
                 key={actualIndex}
-                className={`flex flex-col p-2 rounded max-w-[600px] border-4 print:w-full print:p-1 print:text-sm print:border-1 ${
-                  actualIndex % 2 === 0
-                    ? 'border-loonsRed bg-red-200 print:bg-red-100'
-                    : 'border-gray-500 bg-gray-200 print:bg-gray-100'
-                }`}
+                className={`flex flex-col p-2 rounded max-w-[600px] border-4 print:w-full print:p-1 print:text-sm print:border-1 ${getTeamColorClasses(
+                  actualIndex,
+                  balancedTeams.length
+                )}`}
                 onDragOver={e => handleDragOver(e, actualIndex)}
                 onDragLeave={handleDragLeave}
                 onDrop={e => handleDrop(e, actualIndex)}
@@ -198,7 +227,11 @@ const Teams = ({
                   index={actualIndex}
                   getTeamName={getTeamName}
                 />
-                <TeamStats team={team} index={actualIndex} />
+                <TeamStats
+                  team={team}
+                  index={actualIndex}
+                  totalTeams={balancedTeams.length}
+                />
                 <h4 className="font-semibold mt-2 print:hidden">
                   {getTeamName(actualIndex)} Players:
                 </h4>

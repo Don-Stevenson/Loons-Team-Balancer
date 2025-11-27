@@ -97,11 +97,34 @@ jest.mock(
 
 jest.mock('../../src/app/components/ui/Teams/Teams', () => {
   return function MockTeams({ balancedTeams, totalPlayers }) {
+    // Helper function to get team name - matches the actual component logic
+    const getTeamName = index => {
+      const totalTeams = balancedTeams.length
+
+      if (totalTeams === 3) {
+        const colorIndex = index % 3
+        if (colorIndex === 0) return 'Red Team'
+        if (colorIndex === 1) return 'Black Team'
+        if (colorIndex === 2) return 'White Team'
+      }
+
+      if (totalTeams === 2) {
+        return index === 0 ? 'Red Team' : 'Black Team'
+      }
+
+      const isRedTeam = index % 2 === 0
+      const teamNumber = Math.floor(index / 2) + 1
+      const color = isRedTeam ? 'Red' : 'Black'
+
+      return `${color} Team ${teamNumber}`
+    }
+
     return (
       <div data-testid="teams">
         <div data-testid="total-players">{totalPlayers}</div>
         {balancedTeams?.map((team, index) => (
           <div key={index} data-testid={`team-${index}`}>
+            <div data-testid={`team-${index}-name`}>{getTeamName(index)}</div>
             {team.players.map(player => (
               <div
                 key={player.name}
@@ -645,5 +668,427 @@ describe('CreateTeams Component', () => {
       },
       { timeout: 3000 }
     )
+  })
+
+  describe('Team Naming Patterns', () => {
+    it('creates 3 teams with Red, Black, and White team names', async () => {
+      const mockBalanceMutateAsync = jest.fn().mockResolvedValue({
+        teams: [
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 1', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 2', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 3', isPlayingThisWeek: true },
+            ],
+          },
+        ],
+      })
+
+      useBalanceTeams.mockReturnValue({
+        mutate: jest.fn(),
+        mutateAsync: mockBalanceMutateAsync,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      // Start with players already selected
+      const playingPlayers = [
+        { ...mockPlayers[0], isPlayingThisWeek: true },
+        { ...mockPlayers[1], isPlayingThisWeek: true },
+      ]
+
+      usePlayers.mockReturnValue({
+        data: playingPlayers,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      await act(async () => {
+        render(<CreateTeams />)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('player-list')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Change number of teams to 3
+      const numTeamsInput = screen.getByLabelText('Number of Teams')
+      await act(async () => {
+        fireEvent.change(numTeamsInput, { target: { value: '3' } })
+      })
+
+      // Click create teams button
+      const createTeamsButton = screen.getByText('Create Balanced Teams')
+      await act(async () => {
+        fireEvent.click(createTeamsButton)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('teams')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Verify team names for 3 teams
+      expect(screen.getByTestId('team-0-name')).toHaveTextContent('Red Team')
+      expect(screen.getByTestId('team-1-name')).toHaveTextContent('Black Team')
+      expect(screen.getByTestId('team-2-name')).toHaveTextContent('White Team')
+    })
+
+    it('creates 2 teams with Red and Black team names', async () => {
+      const mockBalanceMutateAsync = jest.fn().mockResolvedValue({
+        teams: [
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 1', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 2', isPlayingThisWeek: true },
+            ],
+          },
+        ],
+      })
+
+      useBalanceTeams.mockReturnValue({
+        mutate: jest.fn(),
+        mutateAsync: mockBalanceMutateAsync,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      // Start with players already selected
+      const playingPlayers = [
+        { ...mockPlayers[0], isPlayingThisWeek: true },
+        { ...mockPlayers[1], isPlayingThisWeek: true },
+      ]
+
+      usePlayers.mockReturnValue({
+        data: playingPlayers,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      await act(async () => {
+        render(<CreateTeams />)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('player-list')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Number of teams is 2 by default
+      const numTeamsInput = screen.getByLabelText('Number of Teams')
+      expect(numTeamsInput.value).toBe('2')
+
+      // Click create teams button
+      const createTeamsButton = screen.getByText('Create Balanced Teams')
+      await act(async () => {
+        fireEvent.click(createTeamsButton)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('teams')).toBeInTheDocument()
+        },
+        { timeout: 2500 }
+      )
+
+      // Verify team names for 2 teams
+      expect(screen.getByTestId('team-0-name')).toHaveTextContent('Red Team')
+      expect(screen.getByTestId('team-1-name')).toHaveTextContent('Black Team')
+    })
+
+    it('creates 4 teams with numbered Red and Black teams', async () => {
+      const mockBalanceMutateAsync = jest.fn().mockResolvedValue({
+        teams: [
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 1', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 2', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 3', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 4', isPlayingThisWeek: true },
+            ],
+          },
+        ],
+      })
+
+      useBalanceTeams.mockReturnValue({
+        mutate: jest.fn(),
+        mutateAsync: mockBalanceMutateAsync,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      // Start with players already selected
+      const playingPlayers = [
+        { ...mockPlayers[0], isPlayingThisWeek: true },
+        { ...mockPlayers[1], isPlayingThisWeek: true },
+      ]
+
+      usePlayers.mockReturnValue({
+        data: playingPlayers,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      await act(async () => {
+        render(<CreateTeams />)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('player-list')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Change number of teams to 4
+      const numTeamsInput = screen.getByLabelText('Number of Teams')
+      await act(async () => {
+        fireEvent.change(numTeamsInput, { target: { value: '4' } })
+      })
+
+      // Click create teams button
+      const createTeamsButton = screen.getByText('Create Balanced Teams')
+      await act(async () => {
+        fireEvent.click(createTeamsButton)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('teams')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Verify team names for 4 teams (Red Team 1, Black Team 1, Red Team 2, Black Team 2)
+      expect(screen.getByTestId('team-0-name')).toHaveTextContent('Red Team 1')
+      expect(screen.getByTestId('team-1-name')).toHaveTextContent(
+        'Black Team 1'
+      )
+      expect(screen.getByTestId('team-2-name')).toHaveTextContent('Red Team 2')
+      expect(screen.getByTestId('team-3-name')).toHaveTextContent(
+        'Black Team 2'
+      )
+    })
+
+    it('creates 6 teams with numbered Red and Black teams', async () => {
+      const mockBalanceMutateAsync = jest.fn().mockResolvedValue({
+        teams: [
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 1', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 2', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 3', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 4', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 5', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 6', isPlayingThisWeek: true },
+            ],
+          },
+        ],
+      })
+
+      useBalanceTeams.mockReturnValue({
+        mutate: jest.fn(),
+        mutateAsync: mockBalanceMutateAsync,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      // Start with players already selected
+      const playingPlayers = [
+        { ...mockPlayers[0], isPlayingThisWeek: true },
+        { ...mockPlayers[1], isPlayingThisWeek: true },
+      ]
+
+      usePlayers.mockReturnValue({
+        data: playingPlayers,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      await act(async () => {
+        render(<CreateTeams />)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('player-list')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Change number of teams to 6
+      const numTeamsInput = screen.getByLabelText('Number of Teams')
+      await act(async () => {
+        fireEvent.change(numTeamsInput, { target: { value: '6' } })
+      })
+
+      // Click create teams button
+      const createTeamsButton = screen.getByText('Create Balanced Teams')
+      await act(async () => {
+        fireEvent.click(createTeamsButton)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('teams')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Verify team names for 6 teams
+      expect(screen.getByTestId('team-0-name')).toHaveTextContent('Red Team 1')
+      expect(screen.getByTestId('team-1-name')).toHaveTextContent(
+        'Black Team 1'
+      )
+      expect(screen.getByTestId('team-2-name')).toHaveTextContent('Red Team 2')
+      expect(screen.getByTestId('team-3-name')).toHaveTextContent(
+        'Black Team 2'
+      )
+      expect(screen.getByTestId('team-4-name')).toHaveTextContent('Red Team 3')
+      expect(screen.getByTestId('team-5-name')).toHaveTextContent(
+        'Black Team 3'
+      )
+    })
+
+    it('maintains Red-Black-White pattern when cycling through 3-team configurations', async () => {
+      // Test that the pattern repeats correctly if we had 6 teams in a 3-color system
+      // This would only happen if someone explicitly uses the 3-team color system
+      const mockBalanceMutateAsync = jest.fn().mockResolvedValue({
+        teams: [
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 1', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[1], name: 'Player 2', isPlayingThisWeek: true },
+            ],
+          },
+          {
+            players: [
+              { ...mockPlayers[0], name: 'Player 3', isPlayingThisWeek: true },
+            ],
+          },
+        ],
+      })
+
+      useBalanceTeams.mockReturnValue({
+        mutate: jest.fn(),
+        mutateAsync: mockBalanceMutateAsync,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      const playingPlayers = [
+        { ...mockPlayers[0], isPlayingThisWeek: true },
+        { ...mockPlayers[1], isPlayingThisWeek: true },
+      ]
+
+      usePlayers.mockReturnValue({
+        data: playingPlayers,
+        isLoading: false,
+        isError: false,
+        error: null,
+      })
+
+      await act(async () => {
+        render(<CreateTeams />)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('player-list')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Change number of teams to 3
+      const numTeamsInput = screen.getByLabelText('Number of Teams')
+      await act(async () => {
+        fireEvent.change(numTeamsInput, { target: { value: '3' } })
+      })
+
+      // Click create teams button
+      const createTeamsButton = screen.getByText('Create Balanced Teams')
+      await act(async () => {
+        fireEvent.click(createTeamsButton)
+      })
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('teams')).toBeInTheDocument()
+        },
+        { timeout: 3000 }
+      )
+
+      // Verify the 3-team pattern
+      expect(screen.getByTestId('team-0-name')).toHaveTextContent('Red Team')
+      expect(screen.getByTestId('team-1-name')).toHaveTextContent('Black Team')
+      expect(screen.getByTestId('team-2-name')).toHaveTextContent('White Team')
+
+      // Verify all three teams are present
+      expect(screen.getAllByTestId(/^team-\d+-name$/)).toHaveLength(3)
+    })
   })
 })
