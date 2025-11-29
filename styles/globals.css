@@ -19,3 +19,23 @@ body {
 .dot-flash {
   animation: flash 1.8s infinite;
 }
+
+/* Mobile drag and drop ghost element styles */
+#touch-drag-ghost {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  border-radius: 0.375rem;
+  cursor: grabbing;
+}
+
+/* Add subtle animation when dragging starts */
+@media (hover: none) and (pointer: coarse) {
+  .opacity-30 {
+    transition: opacity 0.2s ease-in-out;
+  }
+}
+
+/* Drag-over highlight for team drop zones - uses !important to override team border colors */
+.drag-over-highlight {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3) !important;
+}
