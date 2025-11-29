@@ -20,6 +20,13 @@ const oswald = Oswald({
   weight: ['200', '300', '400', '500', '600', '700'],
 })
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+}
+
 export const metadata = {
   title: 'Loons Team Balancer',
   description: 'Loons Team Balancer',

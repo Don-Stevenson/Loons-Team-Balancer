@@ -5,9 +5,17 @@ import TeamStats from './TeamsStats'
 import TeamsPlayerList from './TeamsPlayerList'
 import GameMeetDate, { todaysDate } from '../GamesSelector/GameMeetDate'
 
-// Custom hook for drag and drop functionality
+// Custom hook for drag and drop functionality (supports both mouse and touch)
 const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
   const [draggedPlayer, setDraggedPlayer] = useState(null)
+  const [touchState, setTouchState] = useState({
+    isDragging: false,
+    startY: 0,
+    startX: 0,
+    currentElement: null,
+    ghostElement: null,
+  })
+  const autoScrollIntervalRef = useRef(null)
 
   const handleDragStart = (e, teamIndex, playerIndex, playerId) => {
     // Store the dragged player info
@@ -36,17 +44,17 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     e.preventDefault()
     e.dataTransfer.dropEffect = 'move'
 
-    e.currentTarget.classList.add('border-indigo-400')
+    e.currentTarget.classList.add('drag-over-highlight')
   }
 
   const handleDragLeave = e => {
-    e.currentTarget.classList.remove('border-indigo-400')
+    e.currentTarget.classList.remove('drag-over-highlight')
   }
 
   const handleDrop = (e, destTeamIndex) => {
     e.preventDefault()
 
-    e.currentTarget.classList.remove('border-indigo-400')
+    e.currentTarget.classList.remove('drag-over-highlight')
 
     const { teamIndex: sourceTeamIndex, playerIndex } = draggedPlayer
 
@@ -71,6 +79,247 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     setBalancedTeams(newBalancedTeams)
   }
 
+  // Touch event handlers for mobile
+  const handleTouchStart = (e, teamIndex, playerIndex, playerId) => {
+    const touch = e.touches[0]
+    const element = e.currentTarget
+
+    // Only start drag if it's a long press (will be handled in touchmove)
+    // Store initial position to detect if it's a scroll or drag
+    setTouchState({
+      isDragging: false,
+      startY: touch.clientY,
+      startX: touch.clientX,
+      currentElement: element,
+      ghostElement: null,
+      teamIndex,
+      playerIndex,
+      playerId,
+    })
+
+    // Store the dragged player info
+    setDraggedPlayer({ teamIndex, playerIndex, playerId })
+  }
+
+  const handleTouchMove = (e, teamIndex) => {
+    // Don't interfere if we don't have touch state initialized
+    if (!touchState.currentElement || touchState.startY === 0) {
+      return
+    }
+
+    const touch = e.touches[0]
+    if (!touch) return
+
+    // Calculate movement distance
+    const deltaY = Math.abs(touch.clientY - touchState.startY)
+    const deltaX = Math.abs(touch.clientX - touchState.startX)
+
+    // If moved more than 10px, determine if it's a drag or scroll
+    if (!touchState.isDragging && (deltaY > 10 || deltaX > 10)) {
+      // If horizontal movement is dominant (30% more horizontal than vertical), it's a drag
+      if (deltaX > deltaY * 1.3) {
+        e.preventDefault() // Prevent scrolling only when dragging
+
+        // Create ghost element
+        const ghostElement = touchState.currentElement.cloneNode(true)
+        ghostElement.id = 'touch-drag-ghost'
+        ghostElement.style.position = 'fixed'
+        ghostElement.style.zIndex = '9999'
+        ghostElement.style.pointerEvents = 'none'
+        ghostElement.style.opacity = '0.8'
+        ghostElement.style.transform = 'scale(1.05)'
+        ghostElement.style.transition = 'none'
+        ghostElement.style.width = `${touchState.currentElement.offsetWidth}px`
+        ghostElement.style.left = `${
+          touch.clientX - touchState.currentElement.offsetWidth / 2
+        }px`
+        ghostElement.style.top = `${
+          touch.clientY - touchState.currentElement.offsetHeight / 2
+        }px`
+        document.body.appendChild(ghostElement)
+
+        setTouchState(prev => ({ ...prev, isDragging: true, ghostElement }))
+
+        // Add visual feedback to original element
+        if (touchState.currentElement) {
+          touchState.currentElement.classList.add('opacity-30')
+          touchState.currentElement.classList.add('border-indigo-500')
+        }
+      } else if (deltaY > 20) {
+        // Clear vertical movement - only cancel if significant vertical scroll detected
+        // Clear auto-scroll interval if it exists
+        if (autoScrollIntervalRef.current) {
+          clearInterval(autoScrollIntervalRef.current)
+          autoScrollIntervalRef.current = null
+        }
+        setTouchState({
+          isDragging: false,
+          startY: 0,
+          startX: 0,
+          currentElement: null,
+          ghostElement: null,
+        })
+        setDraggedPlayer(null)
+        return
+      }
+    }
+
+    // Continue dragging
+    if (touchState.isDragging) {
+      e.preventDefault() // Prevent scrolling while dragging
+
+      // Update ghost element position
+      if (touchState.ghostElement) {
+        touchState.ghostElement.style.left = `${
+          touch.clientX - touchState.ghostElement.offsetWidth / 2
+        }px`
+        touchState.ghostElement.style.top = `${
+          touch.clientY - touchState.ghostElement.offsetHeight / 2
+        }px`
+      }
+
+      // Auto-scroll logic: scroll the page when near edges
+      const scrollThreshold = 80 // pixels from edge to trigger scroll
+      const scrollSpeed = 8 // pixels per frame
+      const viewportHeight = window.innerHeight
+
+      // Clear any existing auto-scroll interval
+      if (autoScrollIntervalRef.current) {
+        clearInterval(autoScrollIntervalRef.current)
+        autoScrollIntervalRef.current = null
+      }
+
+      // Check if touch is near top or bottom edge
+      if (touch.clientY < scrollThreshold) {
+        // Near top - scroll up
+        autoScrollIntervalRef.current = setInterval(() => {
+          window.scrollBy(0, -scrollSpeed)
+        }, 16) // ~60fps
+      } else if (touch.clientY > viewportHeight - scrollThreshold) {
+        // Near bottom - scroll down
+        autoScrollIntervalRef.current = setInterval(() => {
+          window.scrollBy(0, scrollSpeed)
+        }, 16) // ~60fps
+      }
+
+      // Find the team container under the touch point
+      const elementAtPoint = document.elementFromPoint(
+        touch.clientX,
+        touch.clientY
+      )
+      const teamContainer = elementAtPoint?.closest('[data-team-drop-zone]')
+
+      // Remove highlight from all team containers
+      document.querySelectorAll('[data-team-drop-zone]').forEach(el => {
+        el.classList.remove('drag-over-highlight')
+      })
+
+      // Add highlight to the current team container
+      if (teamContainer) {
+        teamContainer.classList.add('drag-over-highlight')
+      }
+    }
+  }
+
+  const handleTouchEnd = (e, currentTeamIndex) => {
+    // Clear auto-scroll interval
+    if (autoScrollIntervalRef.current) {
+      clearInterval(autoScrollIntervalRef.current)
+      autoScrollIntervalRef.current = null
+    }
+
+    // Clean up visual feedback if exists
+    if (touchState.currentElement) {
+      touchState.currentElement.classList.remove('opacity-30')
+      touchState.currentElement.classList.remove('opacity-50')
+      touchState.currentElement.classList.remove('border-indigo-500')
+    }
+
+    // Remove ghost element
+    if (touchState.ghostElement) {
+      touchState.ghostElement.remove()
+    }
+
+    // Remove highlight from all team containers
+    document.querySelectorAll('[data-team-drop-zone]').forEach(el => {
+      el.classList.remove('drag-over-highlight')
+    })
+
+    if (!touchState.isDragging) {
+      // It was just a tap, not a drag
+      setDraggedPlayer(null)
+      setTouchState({
+        isDragging: false,
+        startY: 0,
+        startX: 0,
+        currentElement: null,
+        ghostElement: null,
+      })
+      return
+    }
+
+    // Get the last touch position
+    const touch = e.changedTouches[0]
+    if (!touch) {
+      // Reset state if no touch data
+      setDraggedPlayer(null)
+      setTouchState({
+        isDragging: false,
+        startY: 0,
+        startX: 0,
+        currentElement: null,
+        ghostElement: null,
+      })
+      return
+    }
+
+    // Find the team container under the touch point
+    const elementAtPoint = document.elementFromPoint(
+      touch.clientX,
+      touch.clientY
+    )
+    const teamContainer = elementAtPoint?.closest('[data-team-drop-zone]')
+
+    if (teamContainer && draggedPlayer) {
+      const destTeamIndex = parseInt(
+        teamContainer.getAttribute('data-team-index'),
+        10
+      )
+      const sourceTeamIndex = draggedPlayer.teamIndex
+      const playerIndex = draggedPlayer.playerIndex
+
+      if (sourceTeamIndex !== destTeamIndex) {
+        // Create a copy of teams to work with
+        const newBalancedTeams = Array.from(balancedTeams)
+
+        const movedPlayer =
+          newBalancedTeams[sourceTeamIndex].players[playerIndex]
+
+        newBalancedTeams[sourceTeamIndex].players.splice(playerIndex, 1)
+
+        newBalancedTeams[destTeamIndex].players.push(movedPlayer)
+
+        newBalancedTeams[sourceTeamIndex] = calculateTeamStats(
+          newBalancedTeams[sourceTeamIndex]
+        )
+        newBalancedTeams[destTeamIndex] = calculateTeamStats(
+          newBalancedTeams[destTeamIndex]
+        )
+
+        setBalancedTeams(newBalancedTeams)
+      }
+    }
+
+    setDraggedPlayer(null)
+    setTouchState({
+      isDragging: false,
+      startY: 0,
+      startX: 0,
+      currentElement: null,
+      ghostElement: null,
+    })
+  }
+
   return {
     draggedPlayer,
     handleDragStart,
@@ -78,6 +327,9 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     handleDragOver,
     handleDragLeave,
     handleDrop,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
   }
 }
 
@@ -119,17 +371,50 @@ const Teams = ({
     handleDragOver,
     handleDragLeave,
     handleDrop,
+    handleTouchStart,
+    handleTouchMove,
+    handleTouchEnd,
   } = useDragAndDrop(balancedTeams, setBalancedTeams)
 
+  const getTeamColorClasses = (index, totalTeams) => {
+    const isThreeColorSystem = totalTeams === 3
+
+    if (isThreeColorSystem) {
+      const colorIndex = index % 3
+
+      if (colorIndex === 0) {
+        return 'border-loonsRed bg-red-200 print:bg-red-100'
+      }
+      if (colorIndex === 1) {
+        return 'border-gray-500 bg-gray-200 print:bg-gray-100'
+      }
+      return 'border-gray-800 bg-white print:bg-gray-50'
+    }
+
+    return index % 2 === 0
+      ? 'border-loonsRed bg-red-200 print:bg-red-100'
+      : 'border-gray-500 bg-gray-200 print:bg-gray-100'
+  }
+
   const getTeamName = index => {
+    const totalTeams = balancedTeams.length
+
+    if (totalTeams === 3) {
+      const colorIndex = index % 3
+      if (colorIndex === 0) return 'Red Team'
+      if (colorIndex === 1) return 'Black Team'
+      if (colorIndex === 2) return 'White Team'
+    }
+
+    if (totalTeams === 2) {
+      return index === 0 ? 'Red Team' : 'Black Team'
+    }
+
     const isRedTeam = index % 2 === 0
     const teamNumber = Math.floor(index / 2) + 1
     const color = isRedTeam ? 'Red' : 'Black'
 
-    if (balancedTeams.length > 2) {
-      return `${color} Team ${teamNumber}`
-    }
-    return `${color} Team`
+    return `${color} Team ${teamNumber}`
   }
 
   const hasLargeTeams = balancedTeams.some(team => team.players.length > 12)
@@ -184,11 +469,12 @@ const Teams = ({
             return (
               <div
                 key={actualIndex}
-                className={`flex flex-col p-2 rounded max-w-[600px] border-4 print:w-full print:p-1 print:text-sm print:border-1 ${
-                  actualIndex % 2 === 0
-                    ? 'border-loonsRed bg-red-200 print:bg-red-100'
-                    : 'border-gray-500 bg-gray-200 print:bg-gray-100'
-                }`}
+                data-team-drop-zone="true"
+                data-team-index={actualIndex}
+                className={`flex flex-col p-2 rounded max-w-[600px] border-4 print:w-full print:p-1 print:text-sm print:border-1 ${getTeamColorClasses(
+                  actualIndex,
+                  balancedTeams.length
+                )}`}
                 onDragOver={e => handleDragOver(e, actualIndex)}
                 onDragLeave={handleDragLeave}
                 onDrop={e => handleDrop(e, actualIndex)}
@@ -198,7 +484,11 @@ const Teams = ({
                   index={actualIndex}
                   getTeamName={getTeamName}
                 />
-                <TeamStats team={team} index={actualIndex} />
+                <TeamStats
+                  team={team}
+                  index={actualIndex}
+                  totalTeams={balancedTeams.length}
+                />
                 <h4 className="font-semibold mt-2 print:hidden">
                   {getTeamName(actualIndex)} Players:
                 </h4>
@@ -207,6 +497,9 @@ const Teams = ({
                   teamIndex={actualIndex}
                   handleDragStart={handleDragStart}
                   handleDragEnd={handleDragEnd}
+                  handleTouchStart={handleTouchStart}
+                  handleTouchMove={handleTouchMove}
+                  handleTouchEnd={handleTouchEnd}
                   hoveredPlayer={hoveredPlayer}
                   handleMouseEnter={handleMouseEnter}
                   handleMouseLeave={handleMouseLeave}

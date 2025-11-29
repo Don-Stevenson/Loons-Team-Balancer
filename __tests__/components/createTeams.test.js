@@ -97,11 +97,34 @@ jest.mock(
 
 jest.mock('../../src/app/components/ui/Teams/Teams', () => {
   return function MockTeams({ balancedTeams, totalPlayers }) {
+    // Helper function to get team name - matches the actual component logic
+    const getTeamName = index => {
+      const totalTeams = balancedTeams.length
+
+      if (totalTeams === 3) {
+        const colorIndex = index % 3
+        if (colorIndex === 0) return 'Red Team'
+        if (colorIndex === 1) return 'Black Team'
+        if (colorIndex === 2) return 'White Team'
+      }
+
+      if (totalTeams === 2) {
+        return index === 0 ? 'Red Team' : 'Black Team'
+      }
+
+      const isRedTeam = index % 2 === 0
+      const teamNumber = Math.floor(index / 2) + 1
+      const color = isRedTeam ? 'Red' : 'Black'
+
+      return `${color} Team ${teamNumber}`
+    }
+
     return (
       <div data-testid="teams">
         <div data-testid="total-players">{totalPlayers}</div>
         {balancedTeams?.map((team, index) => (
           <div key={index} data-testid={`team-${index}`}>
+            <div data-testid={`team-${index}-name`}>{getTeamName(index)}</div>
             {team.players.map(player => (
               <div
                 key={player.name}
@@ -146,6 +169,9 @@ jest.mock('../../src/app/components/ui/GamesSelector/GameSelector', () => {
   }
 })
 
+// This test suite focuses on the CreateTeams parent component integration tests.
+// Team naming patterns and team-specific logic are tested in Teams.test.js
+// Player list rendering logic is tested in TeamsPlayerList.test.js
 describe('CreateTeams Component', () => {
   const mockPlayers = [
     {
