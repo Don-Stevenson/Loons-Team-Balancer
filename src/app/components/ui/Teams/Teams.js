@@ -114,10 +114,10 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     const deltaY = Math.abs(touch.clientY - touchState.startY)
     const deltaX = Math.abs(touch.clientX - touchState.startX)
 
-    // If moved more than 15px, determine if it's a drag or scroll
-    if (!touchState.isDragging && (deltaY > 15 || deltaX > 15)) {
-      // If horizontal movement is dominant (60% more horizontal than vertical), it's a drag
-      if (deltaX > deltaY * 1.6) {
+    // If moved more than 10px, determine if it's a drag or scroll
+    if (!touchState.isDragging && (deltaY > 10 || deltaX > 10)) {
+      // If horizontal movement is dominant (30% more horizontal than vertical), it's a drag
+      if (deltaX > deltaY * 1.3) {
         e.preventDefault() // Prevent scrolling only when dragging
 
         // Create ghost element
@@ -145,8 +145,8 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
           touchState.currentElement.classList.add('opacity-30')
           touchState.currentElement.classList.add('border-indigo-500')
         }
-      } else {
-        // Vertical movement - clear state and allow scrolling
+      } else if (deltaY > 20) {
+        // Clear vertical movement - only cancel if significant vertical scroll detected
         // Clear auto-scroll interval if it exists
         if (autoScrollIntervalRef.current) {
           clearInterval(autoScrollIntervalRef.current)
