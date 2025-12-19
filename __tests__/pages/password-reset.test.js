@@ -44,7 +44,9 @@ describe('PasswordResetPage', () => {
   it('renders PasswordResetStep1 component', () => {
     renderWithQuery(<PasswordResetPage />)
 
-    expect(screen.getByPlaceholderText('Username')).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText(/Username \/ Email/i)
+    ).toBeInTheDocument()
     expect(screen.getByPlaceholderText('Current Password')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument()
   })

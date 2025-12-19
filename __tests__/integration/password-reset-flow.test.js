@@ -89,12 +89,14 @@ describe('Password Reset Flow Integration Test', () => {
     expect(screen.getByText('Step 1: Verify your identity')).toBeInTheDocument()
 
     // Fill in Step 1 credentials
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const currentPasswordInput = screen.getByPlaceholderText('Current Password')
     const nextButton = screen.getByRole('button', { name: /next/i })
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } })
-    fireEvent.change(currentPasswordInput, { target: { value: 'oldPassword123' } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: 'oldPassword123' },
+    })
     fireEvent.click(nextButton)
 
     // Verify credentials were checked
@@ -107,7 +109,9 @@ describe('Password Reset Flow Integration Test', () => {
 
     // Should progress to Step 2
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Enter your new password')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Enter your new password')
+      ).toBeInTheDocument()
     })
 
     // Fill in new password
@@ -116,7 +120,9 @@ describe('Password Reset Flow Integration Test', () => {
     const resetButton = screen.getByRole('button', { name: /reset password/i })
 
     fireEvent.change(newPasswordInput, { target: { value: 'newPassword456' } })
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newPassword456' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'newPassword456' },
+    })
     fireEvent.click(resetButton)
 
     // Verify password reset was called
@@ -154,24 +160,30 @@ describe('Password Reset Flow Integration Test', () => {
     renderWithQuery(<PasswordResetStep1 />)
 
     // Fill in Step 1 credentials
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const currentPasswordInput = screen.getByPlaceholderText('Current Password')
     const nextButton = screen.getByRole('button', { name: /next/i })
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } })
-    fireEvent.change(currentPasswordInput, { target: { value: 'wrongPassword' } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: 'wrongPassword' },
+    })
     fireEvent.click(nextButton)
 
     // Should show error message
     await waitFor(() => {
-      expect(screen.getByText('Invalid credentials. Please try again')).toBeInTheDocument()
+      expect(
+        screen.getByText('Invalid credentials. Please try again')
+      ).toBeInTheDocument()
     })
 
     // Should remain on Step 1
     expect(screen.getByText('Step 1: Verify your identity')).toBeInTheDocument()
 
     // Should not progress to Step 2
-    expect(screen.queryByText('Step 2: Enter your new password')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Step 2: Enter your new password')
+    ).not.toBeInTheDocument()
   })
 
   it('handles password mismatch in Step 2', async () => {
@@ -184,17 +196,21 @@ describe('Password Reset Flow Integration Test', () => {
     renderWithQuery(<PasswordResetStep1 />)
 
     // Complete Step 1
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const currentPasswordInput = screen.getByPlaceholderText('Current Password')
     const nextButton = screen.getByRole('button', { name: /next/i })
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } })
-    fireEvent.change(currentPasswordInput, { target: { value: 'oldPassword123' } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: 'oldPassword123' },
+    })
     fireEvent.click(nextButton)
 
     // Wait for Step 2
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Enter your new password')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Enter your new password')
+      ).toBeInTheDocument()
     })
 
     // Try to submit with mismatched passwords
@@ -203,7 +219,9 @@ describe('Password Reset Flow Integration Test', () => {
     const resetButton = screen.getByRole('button', { name: /reset password/i })
 
     fireEvent.change(newPasswordInput, { target: { value: 'newPassword456' } })
-    fireEvent.change(confirmPasswordInput, { target: { value: 'differentPassword' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'differentPassword' },
+    })
     fireEvent.click(resetButton)
 
     // Should show error
@@ -228,17 +246,21 @@ describe('Password Reset Flow Integration Test', () => {
     renderWithQuery(<PasswordResetStep1 />)
 
     // Complete Step 1
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const currentPasswordInput = screen.getByPlaceholderText('Current Password')
     const nextButton = screen.getByRole('button', { name: /next/i })
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } })
-    fireEvent.change(currentPasswordInput, { target: { value: 'oldPassword123' } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: 'oldPassword123' },
+    })
     fireEvent.click(nextButton)
 
     // Wait for Step 2
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Enter your new password')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Enter your new password')
+      ).toBeInTheDocument()
     })
 
     // Try to submit with password that's too short
@@ -277,17 +299,21 @@ describe('Password Reset Flow Integration Test', () => {
     renderWithQuery(<PasswordResetStep1 />)
 
     // Complete Step 1
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const currentPasswordInput = screen.getByPlaceholderText('Current Password')
     const nextButton = screen.getByRole('button', { name: /next/i })
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } })
-    fireEvent.change(currentPasswordInput, { target: { value: 'oldPassword123' } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: 'oldPassword123' },
+    })
     fireEvent.click(nextButton)
 
     // Wait for Step 2
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Enter your new password')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Enter your new password')
+      ).toBeInTheDocument()
     })
 
     // Fill in new password
@@ -296,7 +322,9 @@ describe('Password Reset Flow Integration Test', () => {
     const resetButton = screen.getByRole('button', { name: /reset password/i })
 
     fireEvent.change(newPasswordInput, { target: { value: 'newPassword456' } })
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newPassword456' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'newPassword456' },
+    })
     fireEvent.click(resetButton)
 
     // Should show error from API
@@ -322,31 +350,41 @@ describe('Password Reset Flow Integration Test', () => {
 
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const currentPasswordInput = screen.getByPlaceholderText('Current Password')
     const nextButton = screen.getByRole('button', { name: /next/i })
 
     // First attempt with wrong password
     fireEvent.change(usernameInput, { target: { value: 'testuser' } })
-    fireEvent.change(currentPasswordInput, { target: { value: 'wrongPassword' } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: 'wrongPassword' },
+    })
     fireEvent.click(nextButton)
 
     await waitFor(() => {
-      expect(screen.getByText('Invalid credentials. Please try again')).toBeInTheDocument()
+      expect(
+        screen.getByText('Invalid credentials. Please try again')
+      ).toBeInTheDocument()
     })
 
     // Clear error by focusing input
     fireEvent.focus(currentPasswordInput)
 
-    expect(screen.queryByText('Invalid credentials. Please try again')).not.toBeInTheDocument()
+    expect(
+      screen.queryByText('Invalid credentials. Please try again')
+    ).not.toBeInTheDocument()
 
     // Second attempt with correct password
-    fireEvent.change(currentPasswordInput, { target: { value: 'correctPassword' } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: 'correctPassword' },
+    })
     fireEvent.click(nextButton)
 
     // Should progress to Step 2
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Enter your new password')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Enter your new password')
+      ).toBeInTheDocument()
     })
 
     expect(apiService.auth.verifyCredentials).toHaveBeenCalledTimes(2)
@@ -371,17 +409,21 @@ describe('Password Reset Flow Integration Test', () => {
     const testCurrentPassword = 'oldPassword456'
 
     // Complete Step 1
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const currentPasswordInput = screen.getByPlaceholderText('Current Password')
     const nextButton = screen.getByRole('button', { name: /next/i })
 
     fireEvent.change(usernameInput, { target: { value: testUsername } })
-    fireEvent.change(currentPasswordInput, { target: { value: testCurrentPassword } })
+    fireEvent.change(currentPasswordInput, {
+      target: { value: testCurrentPassword },
+    })
     fireEvent.click(nextButton)
 
     // Wait for Step 2
     await waitFor(() => {
-      expect(screen.getByText('Step 2: Enter your new password')).toBeInTheDocument()
+      expect(
+        screen.getByText('Step 2: Enter your new password')
+      ).toBeInTheDocument()
     })
 
     // Complete Step 2
@@ -390,7 +432,9 @@ describe('Password Reset Flow Integration Test', () => {
     const resetButton = screen.getByRole('button', { name: /reset password/i })
 
     fireEvent.change(newPasswordInput, { target: { value: 'newPassword789' } })
-    fireEvent.change(confirmPasswordInput, { target: { value: 'newPassword789' } })
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'newPassword789' },
+    })
     fireEvent.click(resetButton)
 
     // Verify that Step 1 credentials were passed to Step 2
@@ -403,4 +447,3 @@ describe('Password Reset Flow Integration Test', () => {
     })
   })
 })
-
