@@ -8,7 +8,7 @@ import { isSessionValid } from '../../../../lib/utils/sessionStore'
 
 // Auth helper function
 async function authenticateRequest(request) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   let token = cookieStore.get('token')?.value
 
   if (!token) {
@@ -53,7 +53,7 @@ export async function PUT(request, { params }) {
     await authenticateRequest(request)
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
     const updateData = await request.json()
 
     // Check if this is just updating isPlayingThisWeek
@@ -175,7 +175,7 @@ export async function DELETE(request, { params }) {
     await authenticateRequest(request)
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
     const deletedPlayer = await Player.findByIdAndDelete(id)
 
     if (!deletedPlayer) {

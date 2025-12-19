@@ -49,7 +49,9 @@ describe('PasswordResetStep1', () => {
 
     expect(screen.getByText('Password Reset')).toBeInTheDocument()
     expect(screen.getByText('Step 1: Verify your identity')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('Username')).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText(/Username \/ Email/i)
+    ).toBeInTheDocument()
     expect(screen.getByPlaceholderText('Current Password')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument()
     expect(screen.getByText('Back to login')).toBeInTheDocument()
@@ -58,7 +60,7 @@ describe('PasswordResetStep1', () => {
   it('updates input values on change', () => {
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
 
     fireEvent.change(usernameInput, { target: { value: 'testuser' } })
@@ -91,7 +93,7 @@ describe('PasswordResetStep1', () => {
 
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
     const submitButton = screen.getByRole('button', { name: /next/i })
 
@@ -122,7 +124,7 @@ describe('PasswordResetStep1', () => {
 
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
     const submitButton = screen.getByRole('button', { name: /next/i })
 
@@ -147,7 +149,7 @@ describe('PasswordResetStep1', () => {
 
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
     const submitButton = screen.getByRole('button', { name: /next/i })
 
@@ -170,7 +172,7 @@ describe('PasswordResetStep1', () => {
 
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
     const submitButton = screen.getByRole('button', { name: /next/i })
 
@@ -214,7 +216,7 @@ describe('PasswordResetStep1', () => {
 
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
     const submitButton = screen.getByRole('button', { name: /next/i })
 
@@ -239,7 +241,7 @@ describe('PasswordResetStep1', () => {
   it('requires both username and password fields', () => {
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
 
     expect(usernameInput).toHaveAttribute('required')
@@ -249,7 +251,7 @@ describe('PasswordResetStep1', () => {
   it('has proper autocomplete attributes', () => {
     renderWithQuery(<PasswordResetStep1 />)
 
-    const usernameInput = screen.getByPlaceholderText('Username')
+    const usernameInput = screen.getByPlaceholderText(/Username \/ Email/i)
     const passwordInput = screen.getByPlaceholderText('Current Password')
 
     expect(usernameInput).toHaveAttribute('autocomplete', 'username')

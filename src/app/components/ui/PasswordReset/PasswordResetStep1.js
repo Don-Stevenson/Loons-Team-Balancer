@@ -69,7 +69,7 @@ export default function PasswordResetStep1() {
             value={username}
             onChange={e => setUsername(e.target.value)}
             onFocus={() => setError(false)}
-            placeholder="Username"
+            placeholder="Username / Email"
             required
             disabled={isVerifying}
             autoComplete="username"
