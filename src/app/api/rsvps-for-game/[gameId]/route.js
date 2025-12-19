@@ -7,7 +7,7 @@ import { isSessionValid } from '../../../../lib/utils/sessionStore'
 
 // Auth helper function
 async function authenticateRequest(request) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   let token = cookieStore.get('token')?.value
 
   if (!token) {
@@ -51,7 +51,7 @@ export async function GET(request, { params }) {
   try {
     await authenticateRequest(request)
 
-    const { gameId } = params
+    const { gameId } = await params
     const rsvps = await rsvpsForGame({
       teamId: process.env.TEAM_ID,
       gameId,

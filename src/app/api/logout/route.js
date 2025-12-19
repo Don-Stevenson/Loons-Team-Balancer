@@ -16,7 +16,7 @@ export async function POST(request) {
   const origin = request.headers.get('origin')
 
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const currentToken = cookieStore.get('token')?.value
 
     if (currentToken) {

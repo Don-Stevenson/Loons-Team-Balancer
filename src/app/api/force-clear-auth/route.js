@@ -5,7 +5,7 @@ import { invalidateSession } from '../../../lib/utils/sessionStore'
 
 export async function POST(request) {
   try {
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const currentToken = cookieStore.get('token')?.value
 
     if (currentToken) {

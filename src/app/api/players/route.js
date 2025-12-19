@@ -8,7 +8,7 @@ import { isSessionValid } from '../../../lib/utils/sessionStore'
 
 // Auth helper function
 async function authenticateRequest(request) {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   let token = cookieStore.get('token')?.value
 
   // If no cookie token, check for Authorization header (Bearer token)
