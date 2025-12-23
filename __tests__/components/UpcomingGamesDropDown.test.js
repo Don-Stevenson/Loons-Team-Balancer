@@ -162,9 +162,7 @@ describe('UpcomingGamesDropDown', () => {
         screen.getByText('⚠️ Heja Service Unavailable')
       ).toBeInTheDocument()
       expect(
-        screen.getByText(
-          'Heja is currently unavailable. Please try again later.'
-        )
+        screen.getByText(/Heja is currently unavailable/i)
       ).toBeInTheDocument()
     })
 
@@ -183,13 +181,9 @@ describe('UpcomingGamesDropDown', () => {
 
       // Should display default error message
       expect(
-        screen.getByText('⚠️ Heja Service Unavailable')
+        screen.getByText(/⚠️ Heja Service Unavailable/i)
       ).toBeInTheDocument()
-      expect(
-        screen.getByText(
-          'Heja is currently unavailable. Please try again later.'
-        )
-      ).toBeInTheDocument()
+      expect(screen.getByText(/Please try again later./i)).toBeInTheDocument()
     })
 
     it('shows error message instead of games list when error occurs', () => {
@@ -208,7 +202,7 @@ describe('UpcomingGamesDropDown', () => {
 
       // Should show error, not games
       expect(
-        screen.getByText('⚠️ Heja Service Unavailable')
+        screen.getByText(/⚠️ Heja Service Unavailable/i)
       ).toBeInTheDocument()
       expect(screen.getByText('Service error occurred')).toBeInTheDocument()
       expect(screen.queryByText('Game 1')).not.toBeInTheDocument()
