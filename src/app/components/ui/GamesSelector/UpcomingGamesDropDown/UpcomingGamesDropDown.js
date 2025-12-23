@@ -48,7 +48,7 @@ const UpcomingGamesDropDown = ({
         <ChevronDownIcon />
       </button>
       {isOpen && (
-        <ul className="absolute left-1/2 -translate-x-1/2 mt-1 bg-white border border-black rounded-md shadow-lg w-[80%] md:w-[60%] lg:w-[20%] z-50">
+        <ul className="absolute left-1/2 -translate-x-1/2 mt-1 bg-white border border-black rounded-md shadow-lg w-[80%] md:w-[60%] lg:w-[40%] z-50 max-w-[450px]">
           {gamesError ? (
             <li className="flex items-center gap-2 px-4 py-3 text-red-600 bg-red-50 rounded-md w-full">
               <div className="font-semibold mb-1 text-center">
