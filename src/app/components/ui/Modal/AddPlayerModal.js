@@ -27,6 +27,59 @@ export default function AddPlayerModal({
     { value: 'nonBinary', label: 'Non Binary' },
   ]
 
+  // Form fields data for cleaner rendering
+  const formFields = [
+    { name: 'name', label: 'Name', type: 'text', placeholder: 'Enter name' },
+    {
+      name: 'gameKnowledgeScore',
+      label: 'Game Knowledge Score (1-10)',
+      type: 'number',
+      placeholder: '1-10',
+      min: 1,
+      max: 10,
+    },
+    {
+      name: 'goalScoringScore',
+      label: 'Goal Scoring Score (1-10)',
+      type: 'number',
+      placeholder: '1-10',
+      min: 1,
+      max: 10,
+    },
+    {
+      name: 'attackScore',
+      label: 'Attack Score (1-10)',
+      type: 'number',
+      placeholder: '1-10',
+      min: 1,
+      max: 10,
+    },
+    {
+      name: 'midfieldScore',
+      label: 'Midfield Score (1-10)',
+      type: 'number',
+      placeholder: '1-10',
+      min: 1,
+      max: 10,
+    },
+    {
+      name: 'defenseScore',
+      label: 'Defense Score (1-10)',
+      type: 'number',
+      placeholder: '1-10',
+      min: 1,
+      max: 10,
+    },
+    {
+      name: 'fitnessScore',
+      label: 'Mobility/Stamina Score (1-10)',
+      type: 'number',
+      placeholder: '1-10',
+      min: 1,
+      max: 10,
+    },
+  ]
+
   const handleSubmit = async e => {
     e.preventDefault()
     setError(null)
@@ -55,190 +108,106 @@ export default function AddPlayerModal({
   const handleChange = e => {
     setPlayerData({ ...playerData, [e.target.name]: e.target.value })
   }
+
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50">
-      <div className="flex items-center justify-center pt-5 pb-8 md:pt-4 md:pb-4">
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white rounded-lg w-full max-w-md max-h-[90vh] flex flex-col shadow-xl"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Header - Fixed */}
+        <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+            Add Player
+          </h2>
+          {error && !playerAdded && (
+            <p className="text-red-500 text-xs mt-2">{error}</p>
+          )}
+        </div>
+
+        {/* Scrollable Content */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded px-8 pt-4 pb-4 mt-4 lg:mt-5 lg:mb-5 w-70 sm:w-96 h-[36.5rem] md:h-[43rem] lg:w-96 overflow-visible gap-2"
           data-testid="add-player-form"
+          className="flex flex-col flex-1 overflow-hidden"
         >
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <h2 className="text-2xl font-semibold text-black mb-2 sm:mb-4">
-              Add Player
-            </h2>
-            {error && !playerAdded && (
-              <p className="text-red-500 text-xs italic mt-4">{error}</p>
-            )}
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              htmlFor="name"
-            >
-              Name
-            </label>
-            <input
-              className="shadow appearance-none border text-xs sm:text-sm rounded w-[180px] py-1 px-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="name"
-              type="text"
-              name="name"
-              placeholder="name"
-              value={playerData.name}
-              onChange={handleChange}
-              required
-            />
+          <div className="overflow-y-auto px-4 sm:px-6 py-4 space-y-3 sm:space-y-4">
+            {formFields.map(field => (
+              <div key={field.name}>
+                <label
+                  htmlFor={field.name}
+                  className="block text-gray-700 font-semibold mb-1 text-xs sm:text-sm"
+                >
+                  {field.label}
+                </label>
+                <input
+                  type={field.type}
+                  id={field.name}
+                  testId={field.name}
+                  name={field.name}
+                  value={playerData[field.name]}
+                  onChange={handleChange}
+                  placeholder={field.placeholder}
+                  min={field.min}
+                  max={field.max}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                />
+              </div>
+            ))}
+
+            {/* Gender Select */}
+            <div>
+              <label
+                id="gender-label"
+                className="block text-gray-700 font-semibold mb-1 text-xs sm:text-sm"
+              >
+                Gender
+              </label>
+              <Select
+                name="gender"
+                aria-labelledby="gender-label"
+                options={genderOptions}
+                className="text-xs sm:text-sm"
+                value={genderOptions.find(
+                  option => option.value === playerData.gender
+                )}
+                onChange={selectedOption =>
+                  setPlayerData({
+                    ...playerData,
+                    gender: selectedOption ? selectedOption.value : '',
+                  })
+                }
+                placeholder="Select Gender"
+                isClearable
+                required
+              />
+            </div>
           </div>
 
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              htmlFor="gameKnowledgeScore"
-            >
-              Game Knowledge Score
-            </label>
-            <input
-              className="shadow appearance-none border text-xs sm:text-sm rounded w-[60px] py-1 px-1 md:w-[100px] md:p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="gameKnowledgeScore"
-              type="number"
-              placeholder="1-10"
-              name="gameKnowledgeScore"
-              value={playerData.gameKnowledgeScore}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              htmlFor="goalScoringScore"
-            >
-              Goal Scoring Score
-            </label>
-            <input
-              className="shadow appearance-none border text-xs sm:text-sm rounded w-[60px] py-1 px-1 md:w-[100px] md:p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="goalScoringScore"
-              type="number"
-              placeholder="1-10"
-              name="goalScoringScore"
-              value={playerData.goalScoringScore}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              htmlFor="attackScore"
-            >
-              Attack Score
-            </label>
-            <input
-              className="shadow appearance-none border text-xs sm:text-sm rounded w-[60px] py-1 px-1 md:w-[100px] md:p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="attackScore"
-              type="number"
-              placeholder="1-10"
-              name="attackScore"
-              value={playerData.attackScore}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              htmlFor="midfieldScore"
-            >
-              Midfield Score
-            </label>
-            <input
-              className="shadow appearance-none border text-xs sm:text-sm rounded w-[60px] py-1 px-1 md:w-[100px] md:p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="midfieldScore"
-              type="number"
-              placeholder="1-10"
-              name="midfieldScore"
-              value={playerData.midfieldScore}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              htmlFor="defenseScore"
-            >
-              Defense Score
-            </label>
-            <input
-              className="shadow appearance-none border text-xs sm:text-sm rounded w-[60px] py-1 px-1 md:w-[100px] md:p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="defenseScore"
-              type="number"
-              placeholder="1-10"
-              name="defenseScore"
-              value={playerData.defenseScore}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              htmlFor="fitnessScore"
-            >
-              Mobility/Stamina
-            </label>
-            <input
-              className="shadow appearance-none border text-xs sm:text-sm rounded w-[60px] py-1 px-1 md:w-[100px] md:p-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              id="fitnessScore"
-              type="number"
-              placeholder="1-10"
-              name="fitnessScore"
-              value={playerData.fitnessScore}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="flex-col gap-2 mb-2 md:gap-3 md:mb-3">
-            <label
-              className="block text-gray-700 text-xxs md:text-sm font-bold"
-              id="gender-label"
-            >
-              Gender
-            </label>
-            <Select
-              name="gender"
-              aria-labelledby="gender-label"
-              options={genderOptions}
-              className="text-xs sm:text-sm"
-              value={genderOptions.find(
-                option => option.value === playerData.gender
-              )}
-              onChange={selectedOption =>
-                setPlayerData({
-                  ...playerData,
-                  gender: selectedOption ? selectedOption.value : '',
-                })
-              }
-              placeholder="Select Gender"
-              isClearable
-              required
-            />
-          </div>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 mt-6 md:mt-8">
-            <Button
-              type="submit"
-              onClick={onClose}
-              text="Cancel"
-              variant="secondary"
-              testId="cancel-button"
-              classes="text-sm bg-white"
-            />
-            <Button
-              type="submit"
-              text="Add Player"
-              variant="primary"
-              testId="add-player-button"
-            />
+          {/* Footer - Fixed */}
+          <div className="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
+              <Button
+                onClick={onClose}
+                text="Cancel"
+                variant="secondary"
+                testId="cancel-button"
+                classes="text-sm w-full sm:w-auto"
+              />
+              <Button
+                type="submit"
+                text="Add Player"
+                variant="primary"
+                testId="add-player-button"
+                classes="text-sm w-full sm:w-auto"
+              />
+            </div>
           </div>
         </form>
       </div>

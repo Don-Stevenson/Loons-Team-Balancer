@@ -44,7 +44,11 @@ export const Button = ({
       onClick={onClick}
       data-testid="button-container"
     >
-      <button disabled={isLoading || disabled} data-testid={testId}>
+      <button
+        disabled={isLoading || disabled}
+        data-testid={testId}
+        className="w-[200px]"
+      >
         {isLoading ? (
           <div className="flex justify-center items-center gap-2 py-4">
             {loadingMessage}

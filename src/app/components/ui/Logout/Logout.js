@@ -27,7 +27,7 @@ export default function Logout({ variant }) {
       onClick={handleLogout}
       text="Logout"
       testId="logout-button"
-      classes="font-semibold w-full"
+      classes="font-semibold max-w-[100px] flex justify-center items-center"
       isLoading={isLoading}
     />
   )
