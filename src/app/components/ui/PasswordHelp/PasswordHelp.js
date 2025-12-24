@@ -74,6 +74,7 @@ const PasswordHelp = () => {
         text="Submit"
         disabled={loading}
         isLoading={loading}
+        classes="max-w-[100px] flex justify-center items-center"
         loadingMessage="Submitting"
         testId="submit-button"
       />

@@ -69,7 +69,7 @@ export default function LoginForm() {
               id="toggle-password-button"
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none max-w-[100px]"
               disabled={loginMutation.isPending}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
@@ -82,6 +82,7 @@ export default function LoginForm() {
             variant="secondary"
             text="Login"
             loadingMessage="Logging in"
+            classes="max-w-[100px] flex justify-center items-center"
             isLoading={loginMutation.isPending}
             testId="login-button"
           />
