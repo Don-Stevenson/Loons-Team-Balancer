@@ -53,7 +53,9 @@ describe('useResetPassword', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    expect(apiService.auth.resetPassword).toHaveBeenCalledWith(resetData)
+    // Verify only the first argument (actual data), ignoring React Query's internal parameters
+    expect(apiService.auth.resetPassword).toHaveBeenCalledTimes(1)
+    expect(apiService.auth.resetPassword.mock.calls[0][0]).toEqual(resetData)
     expect(result.current.data).toEqual(mockResponse)
   })
 
@@ -73,7 +75,9 @@ describe('useResetPassword', () => {
 
     await waitFor(() => expect(result.current.isError).toBe(true))
 
-    expect(apiService.auth.resetPassword).toHaveBeenCalledWith(resetData)
+    // Verify only the first argument (actual data), ignoring React Query's internal parameters
+    expect(apiService.auth.resetPassword).toHaveBeenCalledTimes(1)
+    expect(apiService.auth.resetPassword.mock.calls[0][0]).toEqual(resetData)
     expect(result.current.error).toEqual(mockError)
   })
 
@@ -104,12 +108,13 @@ describe('useResetPassword', () => {
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
-    // React Query mutation onSuccess receives (data, variables, context)
-    expect(onSuccessMock).toHaveBeenCalledWith(
-      mockResponse,
-      resetData,
-      undefined
-    )
+    // React Query mutation onSuccess receives (data, variables, context) + internal params
+    // Check only the first 3 arguments that matter to us, ignoring React Query's internal 4th parameter
+    expect(onSuccessMock).toHaveBeenCalledTimes(1)
+    const [data, variables, context] = onSuccessMock.mock.calls[0]
+    expect(data).toEqual(mockResponse)
+    expect(variables).toEqual(resetData)
+    expect(context).toBeUndefined()
   })
 
   it('should call onError callback when provided', async () => {
@@ -136,12 +141,13 @@ describe('useResetPassword', () => {
 
     await waitFor(() => expect(result.current.isError).toBe(true))
 
-    // React Query mutation onError receives (error, variables, context)
-    expect(onErrorMock).toHaveBeenCalledWith(
-      mockError,
-      resetData,
-      undefined
-    )
+    // React Query mutation onError receives (error, variables, context) + internal params
+    // Check only the first 3 arguments that matter to us, ignoring React Query's internal 4th parameter
+    expect(onErrorMock).toHaveBeenCalledTimes(1)
+    const [error, variables, context] = onErrorMock.mock.calls[0]
+    expect(error).toEqual(mockError)
+    expect(variables).toEqual(resetData)
+    expect(context).toBeUndefined()
   })
 
   it('should track isPending state correctly', async () => {
