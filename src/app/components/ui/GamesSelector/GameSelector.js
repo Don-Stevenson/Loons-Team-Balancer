@@ -18,8 +18,8 @@ export default function GameSelector({
 
   return (
     <div className="flex items-center justify-center mt-4 mb-4 print:hidden">
-      <div className="flex-col justify-center items-center">
-        <div className="text-lg mb-4">
+      <div className="flex flex-col justify-center items-center">
+        <div className="text-lg mb-4 text-center">
           Choose an upcoming game to see the players RSVP'd from Heja for that
           game
         </div>

@@ -82,6 +82,7 @@ export default function LoginForm() {
             variant="secondary"
             text="Login"
             loadingMessage="Logging in"
+            classes="max-w-[100px] flex justify-center items-center"
             isLoading={loginMutation.isPending}
             testId="login-button"
           />
