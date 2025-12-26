@@ -102,7 +102,9 @@ describe('useApi hooks', () => {
       })
 
       expect(result.current.data).toEqual(createdPlayer)
-      expect(apiService.players.create).toHaveBeenCalledWith(newPlayer)
+      // Verify only the first argument (actual data), ignoring React Query's internal parameters
+      expect(apiService.players.create).toHaveBeenCalledTimes(1)
+      expect(apiService.players.create.mock.calls[0][0]).toEqual(newPlayer)
     })
 
     it('should handle create player error', async () => {
@@ -150,7 +152,9 @@ describe('useApi hooks', () => {
       })
 
       expect(result.current.data).toEqual(updatedPlayer)
-      expect(apiService.players.update).toHaveBeenCalledWith({
+      // Verify only the first argument (actual data), ignoring React Query's internal parameters
+      expect(apiService.players.update).toHaveBeenCalledTimes(1)
+      expect(apiService.players.update.mock.calls[0][0]).toEqual({
         id: playerId,
         ...updatedData,
       })
@@ -176,7 +180,9 @@ describe('useApi hooks', () => {
         expect(result.current.isSuccess).toBe(true)
       })
 
-      expect(apiService.players.delete).toHaveBeenCalledWith(playerId)
+      // Verify only the first argument (actual data), ignoring React Query's internal parameters
+      expect(apiService.players.delete).toHaveBeenCalledTimes(1)
+      expect(apiService.players.delete.mock.calls[0][0]).toBe(playerId)
     })
   })
 
@@ -201,7 +207,9 @@ describe('useApi hooks', () => {
       })
 
       expect(result.current.data).toEqual(loginResponse)
-      expect(apiService.auth.login).toHaveBeenCalledWith(credentials)
+      // Verify only the first argument (actual data), ignoring React Query's internal parameters
+      expect(apiService.auth.login).toHaveBeenCalledTimes(1)
+      expect(apiService.auth.login.mock.calls[0][0]).toEqual(credentials)
     })
 
     it('should handle login failure', async () => {

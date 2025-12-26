@@ -47,7 +47,7 @@ export const Button = ({
       <button
         disabled={isLoading || disabled}
         data-testid={testId}
-        className="w-[200px]"
+        className="w-full"
       >
         {isLoading ? (
           <div className="flex justify-center items-center gap-2 py-4">
