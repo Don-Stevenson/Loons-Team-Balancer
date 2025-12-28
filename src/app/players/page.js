@@ -27,7 +27,7 @@ function Players() {
   const [players, setPlayers] = useState([])
   const [playerToEdit, setPlayerToEdit] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false)
   const [showLoadingMessage, setShowLoadingMessage] = useState(true)
   const [dataLoaded, setDataLoaded] = useState(false)
@@ -106,6 +106,7 @@ function Players() {
   }, [fetchPlayers])
 
   const addPlayer = async newPlayer => {
+    setIsLoading(true)
     try {
       const response = await api.post('/players', newPlayer)
       if (response?.data) {
@@ -125,6 +126,7 @@ function Players() {
           return newPlayers.sort((a, b) => a.name.localeCompare(b.name))
         })
 
+        setIsLoading(false)
         setIsAddPlayerModalOpen(false)
         showSuccessMessage('Player added successfully!')
 
@@ -137,12 +139,14 @@ function Players() {
   }
 
   const onDeletePlayer = async playerId => {
+    setIsLoading(true)
     try {
       await api.delete(`/players/${playerId}`)
 
       setPlayers(prevPlayers =>
         prevPlayers.filter(player => player._id !== playerId)
       )
+      setIsLoading(false)
     } catch (error) {
       if (error.response?.status === 404) {
         console.error('Player not found')
@@ -267,7 +271,7 @@ function Players() {
             variant="primary"
             onClick={() => setIsAddPlayerModalOpen(true)}
             text="Add A New Player"
-            loadingMessage="Adding player"
+            isLoading={isLoading}
             testId="add-player-button"
           />
           <AddPlayerModal
@@ -275,6 +279,7 @@ function Players() {
             onAddPlayer={addPlayer}
             playerAdded={!!successMessage}
             onClose={() => setIsAddPlayerModalOpen(false)}
+            isLoading={isLoading}
           />
           <SuccessMessage
             isVisible={!!successMessage}
@@ -318,6 +323,7 @@ function Players() {
         onClose={cancelDelete}
         onConfirm={confirmDelete}
         playerName={deleteState.playerToDelete?.name}
+        isLoading={isLoading}
       />
     </div>
   )
