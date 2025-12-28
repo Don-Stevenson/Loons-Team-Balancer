@@ -16,7 +16,7 @@ const customJestConfig = {
   testMatch: ['**/*.test.js'],
   // Configure the test environment to support React's concurrent mode
   testEnvironmentOptions: {
-    customExportConditions: [''],
+    customExportConditions: [],
   },
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you based on your tsconfig.json paths)
