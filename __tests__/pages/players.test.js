@@ -79,6 +79,11 @@ describe('Players Page', () => {
         renderWithQuery(<Players />)
       })
 
+      // Wait for the initial loading to complete
+      await waitFor(() => {
+        expect(screen.queryByText('Loading players')).not.toBeInTheDocument()
+      })
+
       expect(screen.getByText('Manage Players')).toBeInTheDocument()
       expect(screen.getByText('Add A New Player')).toBeInTheDocument()
       expect(screen.getByText('List of Players')).toBeInTheDocument()
@@ -174,15 +179,20 @@ describe('Players Page', () => {
         renderWithQuery(<Players />)
       })
 
-      const addButton = screen.getByText('Add A New Player')
+      // Wait for the initial loading to complete
+      await waitFor(() => {
+        expect(screen.queryByText('Loading players')).not.toBeInTheDocument()
+      })
+
       await act(async () => {
+        const addButton = screen.getByText('Add A New Player')
         await user.click(addButton)
       })
 
       expect(screen.getByTestId('add-player-form')).toBeInTheDocument()
 
       await act(async () => {
-        await user.click(screen.getByTestId('cancel-button'))
+        await user.click(screen.getAllByTestId('cancel-button')[0])
       })
 
       expect(screen.queryByTestId('add-player-form')).not.toBeInTheDocument()
@@ -208,7 +218,12 @@ describe('Players Page', () => {
         renderWithQuery(<Players />)
       })
 
-      const addButton = screen.getAllByText('Add A New Player')[0]
+      // Wait for the initial loading to complete
+      await waitFor(() => {
+        expect(screen.queryByText('Loading players')).not.toBeInTheDocument()
+      })
+
+      const addButton = screen.getByText('Add A New Player')
       await act(async () => {
         await user.click(addButton)
       })
