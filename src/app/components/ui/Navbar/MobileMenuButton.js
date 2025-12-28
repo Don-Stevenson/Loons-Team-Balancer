@@ -10,17 +10,17 @@ export const MobileMenuButton = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
         className={`block w-6 h-0.5 bg-loonsBeige transition-transform ${
           isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
         }`}
-      ></span>
+      />
       <span
         className={`block w-6 h-0.5 bg-loonsBeige transition-opacity ${
           isMobileMenuOpen ? 'opacity-0' : ''
         }`}
-      ></span>
+      />
       <span
         className={`block w-6 h-0.5 bg-loonsBeige transition-transform ${
           isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
         }`}
-      ></span>
+      />
     </button>
   )
 }

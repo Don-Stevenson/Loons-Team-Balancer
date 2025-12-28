@@ -1,7 +1,18 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }
-  }
+  },
+  "include": ["src", "utils", "__tests__", "*.js"],
+  "exclude": [
+    "node_modules",
+    "coverage",
+    ".next",
+    "playwright-report",
+    "test-results",
+    "**/node_modules/**",
+    "**/.next/**"
+  ]
 }
