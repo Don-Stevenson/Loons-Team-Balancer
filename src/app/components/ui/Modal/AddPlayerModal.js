@@ -7,6 +7,7 @@ export default function AddPlayerModal({
   onClose,
   isOpen,
   playerAdded,
+  isLoading,
 }) {
   const [playerData, setPlayerData] = useState({
     name: '',
@@ -148,7 +149,7 @@ export default function AddPlayerModal({
                 <input
                   type={field.type}
                   id={field.name}
-                  testId={field.name}
+                  data-testid={field.name}
                   name={field.name}
                   value={playerData[field.name]}
                   onChange={handleChange}
@@ -192,12 +193,13 @@ export default function AddPlayerModal({
 
           {/* Footer - Fixed */}
           <div className="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50">
-            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
+            <div className="flex flex-col-reverse sm:flex-row justify-around items-center gap-2 sm:gap-3">
               <Button
                 onClick={onClose}
                 text="Cancel"
                 variant="secondary"
                 testId="cancel-button"
+                isLoading={isLoading}
                 classes="text-sm w-full sm:w-auto"
               />
               <Button
@@ -205,6 +207,7 @@ export default function AddPlayerModal({
                 text="Add Player"
                 variant="primary"
                 testId="add-player-button"
+                isLoading={isLoading}
                 classes="text-sm w-full sm:w-auto"
               />
             </div>

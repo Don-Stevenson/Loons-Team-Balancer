@@ -6,6 +6,7 @@ const DeleteConfirmationModal = ({
   onClose,
   onConfirm,
   playerName,
+  isLoading,
 }) => {
   if (!isOpen) return null
 
@@ -27,6 +28,7 @@ const DeleteConfirmationModal = ({
             onClick={onConfirm}
             variant="primary"
             testId="delete-button"
+            isLoading={isLoading}
             classes="text-sm"
           />
         </div>
