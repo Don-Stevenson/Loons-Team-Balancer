@@ -149,7 +149,7 @@ export default function AddPlayerModal({
                 <input
                   type={field.type}
                   id={field.name}
-                  testId={field.name}
+                  data-testid={field.name}
                   name={field.name}
                   value={playerData[field.name]}
                   onChange={handleChange}

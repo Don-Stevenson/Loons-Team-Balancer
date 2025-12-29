@@ -123,14 +123,14 @@ const EditPlayerModal = ({ player, onUpdatePlayer, onClose }) => {
                 onClick={onClose}
                 text="Cancel"
                 variant="secondary"
-                testId="cancel-button"
+                testid="cancel-button"
                 classes="text-sm w-full sm:w-auto"
               />
               <Button
                 type="submit"
                 text="Save Changes"
                 variant="primary"
-                testId="save-changes-button"
+                testid="save-changes-button"
                 classes="text-sm w-full sm:w-auto"
               />
             </div>
