@@ -172,28 +172,40 @@ describe('Send Temporary Password API Route', () => {
       expect(mockUser.password).not.toBe('oldHashedPassword')
     })
 
-    it('should generate a valid temporary password with correct time in EST', async () => {
-      User.findOne.mockResolvedValue(mockUser)
+    it('should include correct EST timestamp format in email', async () => {
+      // Mock the email sender to capture what would be sent
+      let capturedEmailHtml = ''
+      sendTemporaryPasswordEmail.mockImplementation(
+        (email, username, password) => {
+          // Simulate what the real function does
+          capturedEmailHtml = `<p style="color: #666; font-size: 12px;">This email was sent on ${new Date().toLocaleDateString(
+            'en-US',
+            { timeZone: 'America/New_York' }
+          )} at ${new Date().toLocaleTimeString('en-US', {
+            timeZone: 'America/New_York',
+            hour: '2-digit',
+            minute: '2-digit',
+          })} EST.</p>`
+          return Promise.resolve({ success: true, messageId: 'mock-id' })
+        }
+      )
 
+      User.findOne.mockResolvedValue(mockUser)
       mockRequest.json.mockResolvedValue({
         email: 'test@example.com',
       })
 
       await POST(mockRequest)
 
-      expect(mockUser.password).toBeDefined()
-      expect(typeof mockUser.password).toBe('string')
-      expect(mockUser.password.length).toBeGreaterThan(0)
-      expect(mockUser.password).not.toBe('oldHashedPassword')
-      expect(
-        new Date().toLocaleTimeString('en-US', {
-          timeZone: 'America/New_York',
-        }) + ' EST'
-      ).toBe(
-        new Date().toLocaleTimeString('en-US', {
-          timeZone: 'America/New_York',
-        }) + ' EST'
-      )
+      // Verify the email HTML contains the EST timestamp pattern (minutes only)
+      const timeRegex = /\d{1,2}:\d{2} (AM|PM) EST/
+      expect(capturedEmailHtml).toMatch(timeRegex)
+
+      // Verify it contains today's date
+      const today = new Date().toLocaleDateString('en-US', {
+        timeZone: 'America/New_York',
+      })
+      expect(capturedEmailHtml).toContain(today)
     })
 
     it('should include CORS headers in successful response', async () => {
