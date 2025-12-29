@@ -27,6 +27,8 @@ function Players() {
   const [players, setPlayers] = useState([])
   const [playerToEdit, setPlayerToEdit] = useState(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [playersLoading, setPlayersLoading] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false)
   const [showLoadingMessage, setShowLoadingMessage] = useState(true)
@@ -106,7 +108,7 @@ function Players() {
   }, [fetchPlayers])
 
   const addPlayer = async newPlayer => {
-    setIsLoading(true)
+    setPlayersLoading(true)
     try {
       const response = await api.post('/players', newPlayer)
       if (response?.data) {
@@ -126,7 +128,7 @@ function Players() {
           return newPlayers.sort((a, b) => a.name.localeCompare(b.name))
         })
 
-        setIsLoading(false)
+        setPlayersLoading(false)
         setIsAddPlayerModalOpen(false)
         showSuccessMessage('Player added successfully!')
 
@@ -139,14 +141,14 @@ function Players() {
   }
 
   const onDeletePlayer = async playerId => {
-    setIsLoading(true)
+    setDeleteLoading(true)
     try {
       await api.delete(`/players/${playerId}`)
 
       setPlayers(prevPlayers =>
         prevPlayers.filter(player => player._id !== playerId)
       )
-      setIsLoading(false)
+      setDeleteLoading(false)
     } catch (error) {
       if (error.response?.status === 404) {
         console.error('Player not found')
@@ -271,7 +273,7 @@ function Players() {
             variant="primary"
             onClick={() => setIsAddPlayerModalOpen(true)}
             text="Add A New Player"
-            isLoading={isLoading}
+            isLoading={playersLoading}
             testId="add-player-button"
           />
           <AddPlayerModal
@@ -323,7 +325,7 @@ function Players() {
         onClose={cancelDelete}
         onConfirm={confirmDelete}
         playerName={deleteState.playerToDelete?.name}
-        isLoading={isLoading}
+        isLoading={deleteLoading}
       />
     </div>
   )

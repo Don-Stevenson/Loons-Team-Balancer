@@ -21,7 +21,6 @@ const DeleteConfirmationModal = ({
             text="Cancel"
             variant="secondary"
             testId="cancel-button"
-            isLoading={isLoading}
             classes="text-sm bg-white"
           />
           <Button
