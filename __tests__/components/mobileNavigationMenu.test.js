@@ -59,7 +59,7 @@ describe('MobileNavigationMenu', () => {
       name: 'Manage Players',
     })
     const aboutLink = screen.getByRole('link', { name: 'About' })
-    expect(createTeamsLink).toHaveAttribute('href', '/')
+    expect(createTeamsLink).toHaveAttribute('href', '/create-teams')
     expect(managePlayersLink).toHaveAttribute('href', '/players')
     expect(aboutLink).toHaveAttribute('href', '/about')
   })
