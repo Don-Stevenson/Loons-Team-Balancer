@@ -1,22 +1,26 @@
 import { screen, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import BalanceTeamsPage from '../../src/app/components/features/auth/AuthRedirect'
-import { checkAuth } from '../../utils/FEapi'
-import { renderWithQuery } from '../utils/test-utils'
+import AuthRedirect from '../../src/app/components/features/auth/AuthRedirect'
+import { renderWithQueryAndAuth } from '../utils/test-utils'
+
+const mockPush = jest.fn()
+const mockUseAuthCheck = jest.fn()
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: jest.fn(),
+    push: mockPush,
   }),
 }))
 
-jest.mock('../../utils/FEapi', () => ({
-  checkAuth: jest.fn(),
+jest.mock('../../src/app/hooks/useApi', () => ({
+  useAuthCheck: (options) => mockUseAuthCheck(options),
 }))
 
 describe('Home Page / balance teams', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    mockPush.mockClear()
+    mockUseAuthCheck.mockClear()
     // Mock localStorage to ensure consistent test environment
     const mockLocalStorage = {
       getItem: jest.fn(() => null),
@@ -31,102 +35,123 @@ describe('Home Page / balance teams', () => {
   })
 
   it('renders without crashing', async () => {
-    checkAuth.mockResolvedValue(true)
+    mockUseAuthCheck.mockReturnValue({
+      data: true,
+      isLoading: true,
+      error: null,
+    })
 
     await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
+      renderWithQueryAndAuth(<AuthRedirect />)
     })
 
     expect(screen.getByText('Loading Loons Team Balancer')).toBeInTheDocument()
   })
 
   it('shows loading message initially', async () => {
-    checkAuth.mockResolvedValue(true)
+    mockUseAuthCheck.mockReturnValue({
+      data: null,
+      isLoading: true,
+      error: null,
+    })
 
     await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
+      renderWithQueryAndAuth(<AuthRedirect />)
     })
 
     expect(screen.getByText('Loading Loons Team Balancer')).toBeInTheDocument()
   })
 
-  it('calls auth check on mount', async () => {
-    checkAuth.mockResolvedValue(true)
+  it('checks authentication on mount', async () => {
+    mockUseAuthCheck.mockReturnValue({
+      data: true,
+      isLoading: false,
+      error: null,
+    })
 
     await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
+      renderWithQueryAndAuth(<AuthRedirect />)
+    })
+
+    expect(mockUseAuthCheck).toHaveBeenCalled()
+  })
+
+  it('redirects to /create-teams when authenticated', async () => {
+    mockUseAuthCheck.mockReturnValue({
+      data: { username: 'testuser' },
+      isLoading: false,
+      error: null,
+    })
+
+    await act(async () => {
+      renderWithQueryAndAuth(<AuthRedirect />)
     })
 
     await waitFor(() => {
-      expect(checkAuth).toHaveBeenCalled()
+      expect(mockPush).toHaveBeenCalledWith('/create-teams')
     })
   })
 
-  it('handles authentication success', async () => {
-    checkAuth.mockResolvedValue(true)
+  it('redirects to /login when not authenticated', async () => {
+    mockUseAuthCheck.mockReturnValue({
+      data: null,
+      isLoading: false,
+      error: null,
+    })
 
     await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
+      renderWithQueryAndAuth(<AuthRedirect />)
     })
 
     await waitFor(() => {
-      expect(checkAuth).toHaveBeenCalled()
-    })
-  })
-
-  it('handles authentication failure', async () => {
-    checkAuth.mockResolvedValue(false)
-
-    await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
-    })
-
-    await waitFor(() => {
-      expect(checkAuth).toHaveBeenCalled()
+      expect(mockPush).toHaveBeenCalledWith('/login')
     })
   })
 
   it('handles authentication error', async () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
-    checkAuth.mockRejectedValue(new Error('Network error'))
+    mockUseAuthCheck.mockReturnValue({
+      data: null,
+      isLoading: false,
+      error: new Error('Network error'),
+    })
 
     await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
+      renderWithQueryAndAuth(<AuthRedirect />)
     })
 
     await waitFor(() => {
-      expect(checkAuth).toHaveBeenCalled()
-    })
-
-    consoleSpy.mockRestore()
-  })
-
-  it('uses direct auth check function', async () => {
-    checkAuth.mockResolvedValue(true)
-
-    await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
-    })
-
-    await waitFor(() => {
-      expect(checkAuth).toHaveBeenCalled()
+      expect(mockPush).toHaveBeenCalledWith('/login')
     })
   })
 
-  it('handles auth check retry logic', async () => {
-    // Mock the auth check to fail once
-    checkAuth.mockRejectedValueOnce(new Error('Network error'))
-
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+  it('does not redirect while loading', async () => {
+    mockUseAuthCheck.mockReturnValue({
+      data: null,
+      isLoading: true,
+      error: null,
+    })
 
     await act(async () => {
-      renderWithQuery(<BalanceTeamsPage />)
+      renderWithQueryAndAuth(<AuthRedirect />)
     })
+
+    expect(mockPush).not.toHaveBeenCalled()
+  })
+
+  it('renders null when not loading', async () => {
+    mockUseAuthCheck.mockReturnValue({
+      data: true,
+      isLoading: false,
+      error: null,
+    })
+
+    const { container } = renderWithQueryAndAuth(<AuthRedirect />)
 
     await waitFor(() => {
-      expect(checkAuth).toHaveBeenCalled()
+      expect(mockPush).toHaveBeenCalled()
     })
 
-    consoleSpy.mockRestore()
+    // After redirect, component renders null
+    expect(container.firstChild).toBeNull()
   })
 })

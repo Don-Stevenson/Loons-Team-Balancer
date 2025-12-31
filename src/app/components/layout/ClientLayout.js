@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import Footer from '../ui/Footer/Footer'
 import NavBar from '../ui/Navbar/NavBar'
+import { AuthProvider } from '../features/auth/AuthContext'
 
 // Create a client
 const queryClient = new QueryClient({
@@ -43,11 +44,13 @@ export default function ClientLayout({ children }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex flex-col min-h-screen">
-        {showNavBar && <NavBar />}
-        <main className="flex-grow">{children}</main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="flex flex-col min-h-screen">
+          {showNavBar && <NavBar />}
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </div>
+      </AuthProvider>
       <div className="print:hidden">
         <ReactQueryDevtools initialIsOpen={false} />
       </div>

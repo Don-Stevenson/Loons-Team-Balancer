@@ -14,7 +14,7 @@ export const MobileNavigatonMenu = ({
     >
       <div className="flex flex-col gap-2 p-4 border-t-2 border-loonsRed bg-loonsBrown">
         <Link
-          href="/"
+          href="/create-teams"
           onClick={() => setIsMobileMenuOpen(false)}
           className="bg-loonsRed hover:bg-red-900 text-loonsBeige border border-red-900 font-semibold py-3 px-4 rounded text-center transition-colors"
         >
