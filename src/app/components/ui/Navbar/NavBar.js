@@ -36,7 +36,7 @@ export default function NavBar() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-2 border-4 border-loonsRed rounded bg-loonsBrown p-2 flex-shrink-0">
             <Link
-              href="/"
+              href="/create-teams"
               className="bg-loonsRed hover:bg-red-900 text-loonsBeige border border-red-900 font-semibold py-2 px-3 rounded text-center whitespace-nowrap transition-colors text-sm"
             >
               Create Teams
