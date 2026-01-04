@@ -6,7 +6,6 @@ export default function AddPlayerModal({
   onAddPlayer,
   onClose,
   isOpen,
-  playerAdded,
   isLoading,
 }) {
   const [playerData, setPlayerData] = useState({
@@ -126,9 +125,6 @@ export default function AddPlayerModal({
           <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
             Add Player
           </h2>
-          {error && !playerAdded && (
-            <p className="text-red-500 text-xs mt-2">{error}</p>
-          )}
         </div>
 
         {/* Scrollable Content */}
