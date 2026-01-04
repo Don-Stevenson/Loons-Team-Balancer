@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import Players from '../../src/app/players/page'
 import { renderWithQuery } from '../utils/test-utils'
 import PlayerList from '../../src/app/components/ui/PlayerList/PlayerList'
+import toast from 'react-hot-toast'
 
 // Mock the API utility
 jest.mock('../../utils/FEapi', () => ({
@@ -40,7 +41,16 @@ jest.mock('../../src/app/hooks/useApi', () => ({
   useDeletePlayer: jest.fn(() => ({ mutate: jest.fn(), isLoading: false })),
 }))
 
-// Mock react-spinners
+// Mock react-hot-toast
+jest.mock('react-hot-toast', () => ({
+  __esModule: true,
+  default: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
+  Toaster: () => <div data-testid="toaster" />,
+}))
+
 jest.mock('react-spinners', () => ({
   PulseLoader: () => <div data-testid="pulse-loader">Loading...</div>,
 }))
@@ -389,26 +399,8 @@ describe('Players Page', () => {
 
       // Check that success message appears
       await waitFor(() => {
-        expect(
-          screen.getByText('Player added successfully!')
-        ).toBeInTheDocument()
+        expect(toast.success).toHaveBeenCalledWith('Player Added!')
       })
-    })
-
-    it('only one success message container exists', async () => {
-      await act(async () => {
-        renderWithQuery(<Players />)
-      })
-
-      await waitFor(() => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument()
-      })
-
-      // Find all success message containers
-      const container = screen.getByText('Manage Players').closest('div')
-      const successMessageElements = container.querySelectorAll('p.italic.h-6')
-
-      expect(successMessageElements).toHaveLength(1)
     })
 
     it('shows success message after editing a player', async () => {
@@ -461,9 +453,7 @@ describe('Players Page', () => {
 
       // Check that success message appears
       await waitFor(() => {
-        expect(
-          screen.getByText('Player updated successfully!')
-        ).toBeInTheDocument()
+        expect(toast.success).toHaveBeenCalledWith('Player Updated!')
       })
     })
 
@@ -498,96 +488,8 @@ describe('Players Page', () => {
 
       // Check that success message appears
       await waitFor(() => {
-        expect(
-          screen.getByText('Player deleted successfully!')
-        ).toBeInTheDocument()
+        expect(toast.success).toHaveBeenCalledWith('Player Deleted!')
       })
-    })
-
-    it('success message disappears after timeout', async () => {
-      jest.useFakeTimers()
-
-      const newPlayer = {
-        _id: '3',
-        name: 'New Player',
-        gameKnowledgeScore: 5,
-        goalScoringScore: 6,
-        attackScore: 7,
-        midfieldScore: 8,
-        defenseScore: 9,
-        fitnessScore: 10,
-        isPlayingThisWeek: true,
-      }
-
-      api.post.mockResolvedValueOnce({ data: newPlayer })
-
-      await act(async () => {
-        renderWithQuery(<Players />)
-      })
-
-      await waitFor(() => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument()
-      })
-
-      // Open add player modal and add player
-      const addButton = screen.getByText('Add A New Player')
-      await act(async () => {
-        userEvent.click(addButton)
-      })
-
-      await waitFor(() => {
-        expect(screen.getByTestId('add-player-form')).toBeInTheDocument()
-      })
-
-      // Fill out form quickly
-      const nameInput = screen.getByLabelText(/name/i)
-      await act(async () => {
-        fireEvent.change(nameInput, { target: { value: newPlayer.name } })
-        fireEvent.change(screen.getByLabelText(/game knowledge score/i), {
-          target: { value: newPlayer.gameKnowledgeScore.toString() },
-        })
-        fireEvent.change(screen.getByLabelText(/goal scoring score/i), {
-          target: { value: newPlayer.goalScoringScore.toString() },
-        })
-        fireEvent.change(screen.getByLabelText(/attack score/i), {
-          target: { value: newPlayer.attackScore.toString() },
-        })
-        fireEvent.change(screen.getByLabelText(/midfield score/i), {
-          target: { value: newPlayer.midfieldScore.toString() },
-        })
-        fireEvent.change(screen.getByLabelText(/defense score/i), {
-          target: { value: newPlayer.defenseScore.toString() },
-        })
-        fireEvent.change(screen.getByLabelText(/mobility\/stamina/i), {
-          target: { value: newPlayer.fitnessScore.toString() },
-        })
-      })
-
-      const form = screen.getByTestId('add-player-form')
-      await act(async () => {
-        fireEvent.submit(form)
-      })
-
-      // Check that success message appears
-      await waitFor(() => {
-        expect(
-          screen.getByText('Player added successfully!')
-        ).toBeInTheDocument()
-      })
-
-      // Fast forward time to trigger timeout
-      act(() => {
-        jest.advanceTimersByTime(2500)
-      })
-
-      // Check that success message disappears
-      await waitFor(() => {
-        expect(
-          screen.queryByText('Player added successfully!')
-        ).not.toBeInTheDocument()
-      })
-
-      jest.useRealTimers()
     })
   })
 
@@ -605,6 +507,7 @@ describe('Players Page', () => {
 
       await waitFor(() => {
         expect(api.get).toHaveBeenCalledWith('/players')
+        expect(toast.error).toHaveBeenCalledWith('Failed to fetch players')
       })
 
       consoleSpy.mockRestore()
@@ -654,6 +557,7 @@ describe('Players Page', () => {
 
       await waitFor(() => {
         expect(api.put).toHaveBeenCalled()
+        expect(toast.error).toHaveBeenCalledWith('Failed to update player')
       })
 
       consoleSpy.mockRestore()

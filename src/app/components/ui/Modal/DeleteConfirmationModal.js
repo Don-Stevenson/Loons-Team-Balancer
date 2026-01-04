@@ -25,7 +25,9 @@ const DeleteConfirmationModal = ({
           />
           <Button
             text="Delete"
-            onClick={onConfirm}
+            onClick={() => {
+              onConfirm()
+            }}
             variant="primary"
             testId="delete-button"
             isLoading={isLoading}

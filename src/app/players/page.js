@@ -8,6 +8,10 @@ import withAuth from '../components/features/auth/withAuthWrapper.js'
 import DeleteConfirmationModal from '../components/ui/Modal/DeleteConfirmationModal.js'
 import AddPlayerModal from '../components/ui/Modal/AddPlayerModal.js'
 import { PulseLoader } from 'react-spinners'
+import toast, { Toaster } from 'react-hot-toast'
+
+const successNotify = msg => toast.success(msg)
+const errorNotify = msg => toast.error(msg)
 // React Query hooks for background caching only
 import {
   usePlayers,
@@ -33,8 +37,6 @@ function Players() {
   const [isAddPlayerModalOpen, setIsAddPlayerModalOpen] = useState(false)
   const [showLoadingMessage, setShowLoadingMessage] = useState(true)
   const [dataLoaded, setDataLoaded] = useState(false)
-
-  const [successMessage, setSuccessMessage] = useState(null)
 
   const [deleteState, setDeleteState] = useState({
     isDeleting: false,
@@ -94,6 +96,7 @@ function Players() {
       console.error('Failed to fetch players:', error)
       setIsLoading(false)
       setShowLoadingMessage(false)
+      errorNotify('Failed to fetch players')
     }
   }, [])
 
@@ -130,13 +133,14 @@ function Players() {
 
         setPlayersLoading(false)
         setIsAddPlayerModalOpen(false)
-        showSuccessMessage('Player added successfully!')
+        successNotify('Player Added!')
 
         return formattedPlayer
       }
       throw new Error('Invalid response format')
     } catch (error) {
       console.error('Failed to add player:', error)
+      errorNotify('Failed to add player')
     }
   }
 
@@ -158,6 +162,7 @@ function Players() {
         console.error('Failed to delete player')
       }
       console.error('Failed to delete player:', error)
+      errorNotify('Failed to delete player')
     }
   }
 
@@ -165,7 +170,7 @@ function Players() {
     if (deleteState.playerToDelete) {
       try {
         await onDeletePlayer(deleteState.playerToDelete._id)
-        showSuccessMessage('Player deleted successfully!')
+        successNotify('Player Deleted!')
       } catch (error) {
         console.error('Delete failed', error)
       } finally {
@@ -209,9 +214,10 @@ function Players() {
       setIsEditModalOpen(false)
       setPlayerToEdit(null)
       await fetchPlayers(true)
-      showSuccessMessage('Player updated successfully!')
+      successNotify('Player Updated!')
     } catch (error) {
       console.error('Failed to update player:', error)
+      errorNotify('Failed to update player')
     }
   }
 
@@ -241,23 +247,6 @@ function Players() {
     })
   }
 
-  const showSuccessMessage = message => {
-    setSuccessMessage(message)
-    setTimeout(() => {
-      setSuccessMessage(null)
-    }, 2500)
-  }
-
-  const SuccessMessage = ({ isVisible, message, marginTop = 'mt-4' }) => (
-    <p
-      className={`italic ${marginTop} h-6 ${
-        isVisible ? 'text-green-600' : 'text-transparent'
-      }`}
-    >
-      {isVisible && message ? message : ''}
-    </p>
-  )
-
   const sortedPlayers = [...players].sort((a, b) =>
     a.name.localeCompare(b.name)
   )
@@ -279,17 +268,13 @@ function Players() {
           <AddPlayerModal
             isOpen={isAddPlayerModalOpen}
             onAddPlayer={addPlayer}
-            playerAdded={!!successMessage}
             onClose={() => setIsAddPlayerModalOpen(false)}
             isLoading={isLoading}
           />
-          <SuccessMessage
-            isVisible={!!successMessage}
-            message={successMessage}
-          />
+          <Toaster position="bottom-right" />
         </div>
         <div>
-          <h2 className="text-2xl font-semibold mb-4 text-black">
+          <h2 className="text-2xl font-semibold mb-4 text-black mt-4">
             List of Players
           </h2>
           <div className="flex-col text-black mb-4 gap-1">
