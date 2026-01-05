@@ -19,11 +19,14 @@ export async function POST(request) {
 
   try {
     await connectDB()
+    const body = await request.json()
 
-    const { username, password } = await request.json()
+    const { username, password } = body
 
     const user = await User.findOne({ username })
     if (!user) {
+      console.error('missing user')
+
       const response = NextResponse.json(
         { message: 'Invalid credentials' },
         { status: 401 }
