@@ -30,17 +30,6 @@ api.interceptors.request.use(
       config.params._t = Date.now()
     }
 
-    // Only stringify if data exists and is an object
-    if (config.data && typeof config.data === 'object') {
-      // Ensure arrays are properly stringified
-      if (Array.isArray(config.data.players)) {
-        config.data = {
-          ...config.data,
-          players: config.data.players,
-        }
-      }
-      config.data = JSON.stringify(config.data)
-    }
     return config
   },
   error => Promise.reject(error)
