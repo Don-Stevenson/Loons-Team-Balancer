@@ -2,7 +2,8 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useLogin } from '../../../hooks/useApi'
+import { useQueryClient } from '@tanstack/react-query' // Add this import
+import { useLogin, queryKeys } from '../../../hooks/useApi' // Import queryKeys
 import { Button } from '../Button/Button'
 import { Logo } from '../Logo/Logo'
 import Link from 'next/link'
@@ -15,13 +16,16 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState(false)
   const router = useRouter()
+  const queryClient = useQueryClient() // Add this line
 
   const loginMutation = useLogin({
-    onSuccess: data => {
+    onSuccess: async data => {
       if (data.success) {
         setError(false)
+        // Use the instance, not the class
+        await queryClient.invalidateQueries({ queryKey: queryKeys.auth })
+
         router.push('/create-teams')
-        router.refresh() // Force a refresh of the page to update authentication state
       } else {
         setError(true)
       }
