@@ -22,7 +22,7 @@ export default function LoginForm() {
     onSuccess: async data => {
       if (data.success) {
         setError(false)
-        // Use the instance, not the class
+        // invalidate the auth query
         await queryClient.invalidateQueries({ queryKey: queryKeys.auth })
 
         router.push('/create-teams')
