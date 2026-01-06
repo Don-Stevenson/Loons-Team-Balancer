@@ -118,20 +118,20 @@ const EditPlayerModal = ({ player, onUpdatePlayer, onClose }) => {
 
           {/* Footer - Fixed */}
           <div className="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50">
-            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-3">
+            <div className="flex flex-col sm:flex-row justify-around items-center gap-2 sm:gap-3">
               <Button
                 onClick={onClose}
                 text="Cancel"
                 variant="secondary"
                 testid="cancel-button"
-                classes="text-sm w-full sm:w-auto"
+                classes="text-sm w-full"
               />
               <Button
                 type="submit"
                 text="Save Changes"
                 variant="primary"
                 testid="save-changes-button"
-                classes="text-sm w-full sm:w-auto"
+                classes="text-sm w-full"
               />
             </div>
           </div>
