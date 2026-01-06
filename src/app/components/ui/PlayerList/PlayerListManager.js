@@ -28,7 +28,7 @@ export default function PlayerListManager({
             </p>
           </span>
         </div>
-        <div className="flex justify-center items-center mb-2">
+        <div className="flex justify-center items-center mb-4">
           <Button
             variant="primary"
             onClick={onTogglePlayerList}
@@ -38,7 +38,7 @@ export default function PlayerListManager({
         </div>
         {openPlayerList && (
           <>
-            <div className="flex md:justify-center mb-4 print:hidden">
+            <div className="flex justify-center mb-4 print:hidden">
               <label className="inline-flex items-center">
                 <input
                   type="checkbox"
