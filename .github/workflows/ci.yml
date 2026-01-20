@@ -9,23 +9,42 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      PERSON1: ${{ secrets.PERSON1  }}
-      PERSON2: ${{ secrets.PERSON2  }}
-      PERSON3: ${{ secrets.PERSON3  }}
-      PERSON4: ${{ secrets.PERSON4  }}
-      PERSON5: ${{ secrets.PERSON5  }}
-      PERSON6: ${{ secrets.PERSON6  }}
-      PERSON7: ${{ secrets.PERSON7  }}
-      PERSON8: ${{ secrets.PERSON8  }}
-      JWT_SECRET: test-secret-key
-      ATLAS_URI: mongodb://test-db
-      NODE_ENV: test
     steps:
       - uses: actions/checkout@v3
+      
       - uses: actions/setup-node@v3
         with:
           node-version: 22
+      
+      # Debug step - remove after confirming secrets work
+      - name: Verify secrets are loaded
+        run: |
+          echo "PERSON1 is set: $( [ -n "${{ secrets.PERSON1 }}" ] && echo 'yes' || echo 'NO' )"
+          echo "PERSON2 is set: $( [ -n "${{ secrets.PERSON2 }}" ] && echo 'yes' || echo 'NO' )"
+        
       - run: npm ci
+      
       - run: npm run test
+        env:
+          PERSON1: ${{ secrets.PERSON1 }}
+          PERSON2: ${{ secrets.PERSON2 }}
+          PERSON3: ${{ secrets.PERSON3 }}
+          PERSON4: ${{ secrets.PERSON4 }}
+          PERSON5: ${{ secrets.PERSON5 }}
+          PERSON6: ${{ secrets.PERSON6 }}
+          PERSON7: ${{ secrets.PERSON7 }}
+          PERSON8: ${{ secrets.PERSON8 }}
+          JWT_SECRET: test-secret-key
+          ATLAS_URI: mongodb://test-db
+          NODE_ENV: test
+          
       - run: npm run build
+        env:
+          PERSON1: ${{ secrets.PERSON1 }}
+          PERSON2: ${{ secrets.PERSON2 }}
+          PERSON3: ${{ secrets.PERSON3 }}
+          PERSON4: ${{ secrets.PERSON4 }}
+          PERSON5: ${{ secrets.PERSON5 }}
+          PERSON6: ${{ secrets.PERSON6 }}
+          PERSON7: ${{ secrets.PERSON7 }}
+          PERSON8: ${{ secrets.PERSON8 }}
