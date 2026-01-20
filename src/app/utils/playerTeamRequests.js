@@ -8,7 +8,6 @@ const PERSON6 = process.env.PERSON6
 const PERSON7 = process.env.PERSON7
 const PERSON8 = process.env.PERSON8
 
-console.log({PERSON3})
 /**
  * Helper function to find the best swap candidate based on skill level and gender
  * @param {Object} playerToMove - The player being moved
