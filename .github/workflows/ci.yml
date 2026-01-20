@@ -9,8 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container:
-      image: node:22-alpine
     env:
       PERSON1: ${{ secrets.PERSON1  }}
       PERSON2: ${{ secrets.PERSON2  }}
@@ -28,7 +26,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 22
-      - run: npm install
       - run: npm ci
       - run: npm run test
       - run: npm run build
