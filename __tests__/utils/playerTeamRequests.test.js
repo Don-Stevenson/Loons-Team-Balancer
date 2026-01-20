@@ -1,5 +1,12 @@
 import { applyPreBalanceRules, applyPostBalanceRules } from '../../src/app/utils/playerTeamRequests'
-
+const PERSON1 = process.env.PERSON1
+const PERSON2 = process.env.PERSON2
+const PERSON3 = process.env.PERSON3
+const PERSON4 = process.env.PERSON4
+const PERSON5 = process.env.PERSON5
+const PERSON6 = process.env.PERSON6
+const PERSON7 = process.env.PERSON7
+const PERSON8 = process.env.PERSON8
 // Mock the teamStats module
 jest.mock('../../src/app/utils/teamStats', () => ({
   calculatePlayerScore: jest.fn((player) => {
@@ -24,7 +31,7 @@ describe('playerTeamRequests', () => {
       allPlayers = [
         { 
           _id: '1', 
-          name: 'Aidan Butterworth', 
+          name: PERSON1, 
           gender: 'male',
           shooting: 3, 
           skating: 3, 
@@ -33,7 +40,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '2', 
-          name: 'Kim Butterworth', 
+          name: PERSON2, 
           gender: 'female',
           gameKnowledgeScore: 3, 
           goalScoringScore: 3, 
@@ -44,7 +51,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '3', 
-          name: 'Jan Dmowski', 
+          name: PERSON3, 
           gender: 'male',
           gameKnowledgeScore: 4, 
           goalScoringScore: 4, 
@@ -55,7 +62,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '4', 
-          name: 'Sandra Panajotow', 
+          name: PERSON4, 
           gender: 'female',
           gameKnowledgeScore: 2, 
           goalScoringScore: 2, 
@@ -69,11 +76,11 @@ describe('playerTeamRequests', () => {
       playingPlayers = []
     })
 
-    it('should add Kim Butterworth when Aidan Butterworth is playing', () => {
+    it('should add PERSON2 when PERSON1 is playing', () => {
       playingPlayers = [
         { 
           _id: '1', 
-          name: 'Aidan Butterworth', 
+          name: PERSON1,  
           gender: 'male',
           shooting: 3, 
           goalScoringScore: 3, 
@@ -84,7 +91,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '3', 
-          name: 'Jan Dmowski', 
+          name: PERSON3, 
           gender: 'male',
           gameKnowledgeScore: 4, 
           goalScoringScore: 4, 
@@ -98,15 +105,15 @@ describe('playerTeamRequests', () => {
       const result = applyPreBalanceRules(allPlayers, playingPlayers)
 
       expect(result).toHaveLength(3)
-      expect(result.find(p => p.name === 'Kim Butterworth')).toBeDefined()
-      expect(result.find(p => p.name === 'Kim Butterworth')?.isPlayingThisWeek).toBe(true)
+      expect(result.find(p => p.name === PERSON2)).toBeDefined()
+      expect(result.find(p => p.name === PERSON2)?.isPlayingThisWeek).toBe(true)
     })
 
-    it('should not add Kim Butterworth if she is already playing', () => {
+    it('should not add PERSON2 if she is already playing', () => {
       playingPlayers = [
         { 
           _id: '1', 
-          name: 'Aidan Butterworth', 
+          name: PERSON1, 
           gender: 'male',
           gameKnowledgeScore: 3, 
           goalScoringScore: 3, 
@@ -117,7 +124,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '2', 
-          name: 'Kim Butterworth', 
+          name: PERSON2, 
           gender: 'female',
           gameKnowledgeScore: 3, 
           goalScoringScore: 3, 
@@ -132,14 +139,14 @@ describe('playerTeamRequests', () => {
 
       // Should not add duplicate
       expect(result).toHaveLength(2)
-      expect(result.filter(p => p.name === 'Kim Butterworth')).toHaveLength(1)
+      expect(result.filter(p => p.name === PERSON2)).toHaveLength(1)
     })
 
-    it('should not modify players when Aidan Butterworth is not playing', () => {
+    it('should not modify players when PERSON1 is not playing', () => {
       playingPlayers = [
         { 
           _id: '3', 
-          name: 'Jan Dmowski', 
+          name: PERSON3, 
           gender: 'male',
           gameKnowledgeScore: 4, 
           goalScoringScore: 4, 
@@ -150,7 +157,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '4', 
-          name: 'Sandra Panajotow', 
+          name: PERSON4, 
           gender: 'female',
           gameKnowledgeScore: 2, 
           goalScoringScore: 2, 
@@ -167,12 +174,12 @@ describe('playerTeamRequests', () => {
       expect(result).toEqual(playingPlayers)
     })
 
-    it('should handle when Kim Butterworth is not in the database', () => {
-      const limitedAllPlayers = allPlayers.filter(p => p.name !== 'Kim Butterworth')
+    it('should handle when PERSON2 is not in the database', () => {
+      const limitedAllPlayers = allPlayers.filter(p => p.name !== PERSON2)
       playingPlayers = [
         { 
           _id: '1', 
-          name: 'Aidan Butterworth', 
+          name: PERSON1, 
           gender: 'male',
           gameKnowledgeScore: 3, 
           goalScoringScore: 3, 
@@ -188,8 +195,8 @@ describe('playerTeamRequests', () => {
       const result = applyPreBalanceRules(limitedAllPlayers, playingPlayers)
 
       expect(result).toHaveLength(1)
-      expect(result.find(p => p.name === 'Kim Butterworth')).toBeUndefined()
-      expect(consoleSpy).toHaveBeenCalledWith('Kim Butterworth not found in player database')
+      expect(result.find(p => p.name === PERSON2)).toBeUndefined()
+      expect(consoleSpy).toHaveBeenCalledWith(PERSON2 + ' not found in player database')
 
       consoleSpy.mockRestore()
     })
@@ -245,7 +252,7 @@ describe('playerTeamRequests', () => {
       players = [
         { 
           _id: '1', 
-          name: 'Kim Butterworth', 
+          name: PERSON2, 
           gender: 'female',
           gameKnowledgeScore: 3, 
           goalScoringScore: 3, 
@@ -256,7 +263,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '2', 
-          name: 'Jan Dmowski', 
+          name: PERSON3, 
           gender: 'male',
           gameKnowledgeScore: 4, 
           goalScoringScore: 4, 
@@ -267,7 +274,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '3', 
-          name: 'Sandra Panajotow', 
+          name: PERSON4, 
           gender: 'female',
           shootingScore: 2, 
           goalScoringScore: 2, 
@@ -278,7 +285,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '4', 
-          name: 'Rob Freeman', 
+          name: PERSON5, 
           gender: 'male',
           gameKnowledgeScore: 3, 
           goalScoringScore: 3, 
@@ -289,7 +296,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '5', 
-          name: 'Lawrence Davis', 
+          name: PERSON6, 
           gender: 'male',
           gameKnowledgeScore: 3, 
           goalScoringScore: 3, 
@@ -300,7 +307,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '6', 
-          name: 'Sam Masri', 
+          name: PERSON8, 
           gender: 'male',
           gameKnowledgeScore: 4, 
           goalScoringScore: 4, 
@@ -311,7 +318,7 @@ describe('playerTeamRequests', () => {
         },
         { 
           _id: '7', 
-          name: 'Joe Barbieri', 
+          name: PERSON7, 
           gender: 'male',
           goalScoringScore: 3, 
           attackScore: 3, 
@@ -353,185 +360,185 @@ describe('playerTeamRequests', () => {
       ]
     })
 
-    describe('Rule 2: Kim Butterworth and Jan Dmowski separation', () => {
-      it('should separate Kim Butterworth and Jan Dmowski when on same team', () => {
-        const kim = players.find(p => p.name === 'Kim Butterworth')
-        const jan = players.find(p => p.name === 'Jan Dmowski')
+    describe('Rule 2: PERSON2 and PERSON3 separation', () => {  
+      it('should separate PERSON2 and PERSON3 when on same team', () => {
+        const person2 = players.find(p => p.name === PERSON2)
+        const person3 = players.find(p => p.name === PERSON3)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [kim, jan]
+        teams[0].players = [person2, person3]
         teams[1].players = [playerA, playerB]
 
         const result = applyPostBalanceRules(players, teams)
 
-        const kimTeam = result.find(t => t.players.some(p => p.name === 'Kim Butterworth'))
-        const janTeam = result.find(t => t.players.some(p => p.name === 'Jan Dmowski'))
+        const person2Team = result.find(t => t.players.some(p => p.name === PERSON2))
+        const person3Team = result.find(t => t.players.some(p => p.name === PERSON3))
 
-        expect(kimTeam).not.toBe(janTeam)
+        expect(person2Team).not.toBe(person3Team)
       })
 
-      it('should not modify teams when Kim and Jan are already on different teams', () => {
-        const kim = players.find(p => p.name === 'Kim Butterworth')
-        const jan = players.find(p => p.name === 'Jan Dmowski')
+      it('should not modify teams when PERSON2 and PERSON3 are already on different teams', () => {
+        const person2 = players.find(p => p.name === PERSON2)
+        const person3 = players.find(p => p.name === PERSON3)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [kim, playerA]
-        teams[1].players = [jan, playerB]
+        teams[0].players = [person2, playerA]
+        teams[1].players = [person3, playerB]
 
         const result = applyPostBalanceRules(players, teams)
 
-        expect(result[0].players.some(p => p.name === 'Kim Butterworth')).toBe(true)
-        expect(result[1].players.some(p => p.name === 'Jan Dmowski')).toBe(true)
+        expect(result[0].players.some(p => p.name === PERSON2)).toBe(true)
+        expect(result[1].players.some(p => p.name === PERSON3)).toBe(true)
       })
 
-      it('should not apply rule when only Kim is playing', () => {
-        const kim = players.find(p => p.name === 'Kim Butterworth')
+      it('should not apply rule when only PERSON2 is playing', () => {
+        const person2 = players.find(p => p.name === PERSON2)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [kim, playerA]
+        teams[0].players = [person2, playerA]
         teams[1].players = [playerB]
 
-        const playersWithoutJan = players.filter(p => p.name !== 'Jan Dmowski')
-        const result = applyPostBalanceRules(playersWithoutJan, teams)
+        const playersWithoutPerson3 = players.filter(p => p.name !== PERSON3)
+        const result = applyPostBalanceRules(playersWithoutPerson3, teams)
 
         expect(result[0].players).toHaveLength(2)
         expect(result[1].players).toHaveLength(1)
       })
 
-      it('should not apply rule when only Jan is playing', () => {
-        const jan = players.find(p => p.name === 'Jan Dmowski')
+      it('should not apply rule when only PERSON3 is playing', () => {
+        const person3 = players.find(p => p.name === PERSON3)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [jan, playerA]
+        teams[0].players = [person3, playerA]
         teams[1].players = [playerB]
 
-        const playersWithoutKim = players.filter(p => p.name !== 'Kim Butterworth')
-        const result = applyPostBalanceRules(playersWithoutKim, teams)
-
-        expect(result[0].players).toHaveLength(2)
-        expect(result[1].players).toHaveLength(1)
-      })
-    })
-
-    describe('Rule 3: Sandra Panajotow and Rob Freeman together', () => {
-      it('should put Sandra Panajotow and Rob Freeman on same team', () => {
-        const sandra = players.find(p => p.name === 'Sandra Panajotow')
-        const rob = players.find(p => p.name === 'Rob Freeman')
-        const playerA = players.find(p => p.name === 'Player A')
-        const playerB = players.find(p => p.name === 'Player B')
-
-        teams[0].players = [sandra, playerA]
-        teams[1].players = [rob, playerB]
-
-        const result = applyPostBalanceRules(players, teams)
-
-        const sandraTeam = result.find(t => t.players.some(p => p.name === 'Sandra Panajotow'))
-        const robTeam = result.find(t => t.players.some(p => p.name === 'Rob Freeman'))
-
-        expect(sandraTeam).toBe(robTeam)
-      })
-
-      it('should not modify teams when Sandra and Rob are already together', () => {
-        const sandra = players.find(p => p.name === 'Sandra Panajotow')
-        const rob = players.find(p => p.name === 'Rob Freeman')
-        const playerA = players.find(p => p.name === 'Player A')
-        const playerB = players.find(p => p.name === 'Player B')
-
-        teams[0].players = [sandra, rob]
-        teams[1].players = [playerA, playerB]
-
-        const result = applyPostBalanceRules(players, teams)
-
-        expect(result[0].players.some(p => p.name === 'Sandra Panajotow')).toBe(true)
-        expect(result[0].players.some(p => p.name === 'Rob Freeman')).toBe(true)
-      })
-
-      it('should not apply rule when only Sandra is playing', () => {
-        const sandra = players.find(p => p.name === 'Sandra Panajotow')
-        const playerA = players.find(p => p.name === 'Player A')
-        const playerB = players.find(p => p.name === 'Player B')
-
-        teams[0].players = [sandra, playerA]
-        teams[1].players = [playerB]
-
-        const playersWithoutRob = players.filter(p => p.name !== 'Rob Freeman')
-        const result = applyPostBalanceRules(playersWithoutRob, teams)
+        const playersWithoutPerson2 = players.filter(p => p.name !== PERSON2)
+        const result = applyPostBalanceRules(playersWithoutPerson2, teams)
 
         expect(result[0].players).toHaveLength(2)
         expect(result[1].players).toHaveLength(1)
       })
     })
 
-    describe('Rule 4: Lawrence Davis separation from Sam and Joe', () => {
-      it('should separate Lawrence when on same team with both Sam Masri and Joe Barbieri', () => {
-        const lawrence = players.find(p => p.name === 'Lawrence Davis')
-        const sam = players.find(p => p.name === 'Sam Masri')
-        const joe = players.find(p => p.name === 'Joe Barbieri')
+    describe('Rule 3: PERSON4 and PERSON5 together', () => {
+      it('should put PERSON4 and PERSON5 on same team', () => {
+        const person4 = players.find(p => p.name === PERSON4)
+        const person5 = players.find(p => p.name === PERSON5)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [lawrence, sam, joe]
+        teams[0].players = [person4, playerA]
+        teams[1].players = [person5, playerB]
+
+        const result = applyPostBalanceRules(players, teams)
+
+        const person4Team = result.find(t => t.players.some(p => p.name === PERSON4))
+        const person5Team = result.find(t => t.players.some(p => p.name === PERSON5))
+
+        expect(person4Team).toBe(person5Team)
+      })
+
+      it('should not modify teams when PERSON4 and PERSON5 are already together', () => {
+        const person4 = players.find(p => p.name === PERSON4)
+        const person5 = players.find(p => p.name === PERSON5)
+        const playerA = players.find(p => p.name === 'Player A')
+        const playerB = players.find(p => p.name === 'Player B')
+
+        teams[0].players = [person4, person5]
         teams[1].players = [playerA, playerB]
 
         const result = applyPostBalanceRules(players, teams)
 
-        const lawrenceTeam = result.find(t => t.players.some(p => p.name === 'Lawrence Davis'))
-        const samTeam = result.find(t => t.players.some(p => p.name === 'Sam Masri'))
-        const joeTeam = result.find(t => t.players.some(p => p.name === 'Joe Barbieri'))
+        expect(result[0].players.some(p => p.name === PERSON4)).toBe(true)
+        expect(result[0].players.some(p => p.name === PERSON5)).toBe(true)
+      })
 
-        // Lawrence should not be on same team with BOTH Sam and Joe
-        const allOnSameTeam = lawrenceTeam === samTeam && lawrenceTeam === joeTeam
+      it('should not apply rule when only PERSON4 is playing', () => {
+        const person4 = players.find(p => p.name === PERSON4)
+        const playerA = players.find(p => p.name === 'Player A')
+        const playerB = players.find(p => p.name === 'Player B')
+
+        teams[0].players = [person4, playerA]
+        teams[1].players = [playerB]
+
+        const playersWithoutPerson5 = players.filter(p => p.name !== PERSON5)
+        const result = applyPostBalanceRules(playersWithoutPerson5, teams)
+
+        expect(result[0].players).toHaveLength(2)
+        expect(result[1].players).toHaveLength(1)
+      })
+    })
+
+    describe('Rule 4: PERSON6 separation from PERSON8 and PERSON7', () => {
+      it('should separate PERSON6 when on same team with both PERSON8 and PERSON7', () => {
+        const person6 = players.find(p => p.name === PERSON6)
+        const person8 = players.find(p => p.name === PERSON8)
+        const person7 = players.find(p => p.name === PERSON7)
+        const playerA = players.find(p => p.name === 'Player A')
+        const playerB = players.find(p => p.name === 'Player B')
+
+        teams[0].players = [person6, person8, person7]
+        teams[1].players = [playerA, playerB]
+
+        const result = applyPostBalanceRules(players, teams)
+
+        const person6Team = result.find(t => t.players.some(p => p.name === PERSON6))
+        const person8Team = result.find(t => t.players.some(p => p.name === PERSON8))
+        const person7Team = result.find(t => t.players.some(p => p.name === PERSON7))
+
+        // PERSON6 should not be on same team with BOTH PERSON8 and PERSON7
+        const allOnSameTeam = person6Team === person8Team && person6Team === person7Team
         expect(allOnSameTeam).toBe(false)
       })
 
-      it('should not apply rule when Lawrence is only with Sam (not Joe)', () => {
-        const lawrence = players.find(p => p.name === 'Lawrence Davis')
-        const sam = players.find(p => p.name === 'Sam Masri')
+      it('should not apply rule when PERSON6 is only with PERSON8 (not PERSON7)', () => {
+        const person6 = players.find(p => p.name === PERSON6)
+        const person8 = players.find(p => p.name === PERSON8)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [lawrence, sam]
+        teams[0].players = [person6, person8]
         teams[1].players = [playerA, playerB]
 
-        const playersWithoutJoe = players.filter(p => p.name !== 'Joe Barbieri')
+        const playersWithoutJoe = players.filter(p => p.name !== PERSON7)
         const result = applyPostBalanceRules(playersWithoutJoe, teams)
 
-        // Should not modify - Lawrence can be with Sam or Joe, just not both
-        expect(result[0].players.some(p => p.name === 'Lawrence Davis')).toBe(true)
-        expect(result[0].players.some(p => p.name === 'Sam Masri')).toBe(true)
+        // Should not modify - PERSON6 can be with PERSON8 or PERSON7, just not both PERSON8 and PERSON7
+        expect(result[0].players.some(p => p.name === PERSON6)).toBe(true)
+        expect(result[0].players.some(p => p.name === PERSON8)).toBe(true)
       })
 
-      it('should not apply rule when Lawrence is only with Joe (not Sam)', () => {
-        const lawrence = players.find(p => p.name === 'Lawrence Davis')
-        const joe = players.find(p => p.name === 'Joe Barbieri')
+      it('should not apply rule when PERSON6 is only with PERSON7 (not PERSON8)', () => {  
+        const person6 = players.find(p => p.name === PERSON6)
+        const person7 = players.find(p => p.name === PERSON7)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [lawrence, joe]
+        teams[0].players = [person6, person7]
         teams[1].players = [playerA, playerB]
 
-        const playersWithoutSam = players.filter(p => p.name !== 'Sam Masri')
-        const result = applyPostBalanceRules(playersWithoutSam, teams)
+        const playersWithoutPerson8 = players.filter(p => p.name !== PERSON8)
+        const result = applyPostBalanceRules(playersWithoutPerson8, teams)
 
-        // Should not modify - Lawrence can be with Sam or Joe, just not both
-        expect(result[0].players.some(p => p.name === 'Lawrence Davis')).toBe(true)
-        expect(result[0].players.some(p => p.name === 'Joe Barbieri')).toBe(true)
+        // Should not modify - PERSON6 can be with PERSON8 or PERSON7, just not both PERSON8 and PERSON7
+        expect(result[0].players.some(p => p.name === PERSON6)).toBe(true)
+        expect(result[0].players.some(p => p.name === PERSON7)).toBe(true)
       })
 
       it('should not apply rule when not all three are playing', () => {
-        const lawrence = players.find(p => p.name === 'Lawrence Davis')
+        const person6 = players.find(p => p.name === PERSON6)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [lawrence, playerA]
+        teams[0].players = [person6, playerA]
         teams[1].players = [playerB]
 
         const limitedPlayers = players.filter(
-          p => p.name !== 'Sam Masri' && p.name !== 'Joe Barbieri'
+          p => p.name !== PERSON8 && p.name !== PERSON7
         )
         const result = applyPostBalanceRules(limitedPlayers, teams)
 
@@ -541,43 +548,43 @@ describe('playerTeamRequests', () => {
     })
 
 
-    describe('Rule 4: Lawrence Davis separation from Joe', () => {
-        it('should separate Lawrence when on same team with both Sam Masri and Joe Barbieri', () => {
-          const lawrence = players.find(p => p.name === 'Lawrence Davis')
-          const sam = players.find(p => p.name === 'Sam Masri')
-          const joe = players.find(p => p.name === 'Joe Barbieri')
+    describe('Rule 4: PERSON6 separation from PERSON8 and PERSON7', () => {  
+        it('should separate PERSON6 when on same team with both PERSON8 and PERSON7', () => {
+          const person6 = players.find(p => p.name === PERSON6)
+          const person8 = players.find(p => p.name === PERSON8) 
+          const person7 = players.find(p => p.name === PERSON7) 
           const playerA = players.find(p => p.name === 'Player A')
           const playerB = players.find(p => p.name === 'Player B')
   
-          teams[0].players = [lawrence, sam, joe]
+          teams[0].players = [person6, person8, person7]
           teams[1].players = [playerA, playerB]
   
           const result = applyPostBalanceRules(players, teams)
   
-          const lawrenceTeam = result.find(t => t.players.some(p => p.name === 'Lawrence Davis'))
-          const samTeam = result.find(t => t.players.some(p => p.name === 'Sam Masri'))
-          const joeTeam = result.find(t => t.players.some(p => p.name === 'Joe Barbieri'))
+          const person6Team = result.find(t => t.players.some(p => p.name === PERSON6))
+          const person8Team = result.find(t => t.players.some(p => p.name === PERSON8))
+          const person7Team = result.find(t => t.players.some(p => p.name === PERSON7))
   
-          // Lawrence should not be on same team with BOTH Sam and Joe
-          const allOnSameTeam = lawrenceTeam === samTeam && lawrenceTeam === joeTeam
+          // PERSON6 should not be on same team with BOTH PERSON8 and PERSON7
+          const allOnSameTeam = person6Team === person8Team && person6Team === person7Team
           expect(allOnSameTeam).toBe(false)
         })
   
-        it('should not apply rule when Lawrence is only with Joe', () => {
-          const lawrence = players.find(p => p.name === 'Lawrence Davis')
-          const joe = players.find(p => p.name === 'Joe Barbieri')
+        it('should not apply rule when PERSON6 is only with PERSON7 (not PERSON8)', () => {
+          const person6 = players.find(p => p.name === PERSON6)
+          const person7 = players.find(p => p.name === PERSON7)
           const playerA = players.find(p => p.name === 'Player A')
           const playerB = players.find(p => p.name === 'Player B')
   
-          teams[0].players = [lawrence, joe]
+          teams[0].players = [person6, person7]
           teams[1].players = [playerA, playerB]
   
-          const playersWithoutSam = players.filter(p => p.name !== 'Sam Masri')
-          const result = applyPostBalanceRules(playersWithoutSam, teams)
+          const playersWithoutPerson8 = players.filter(p => p.name !== PERSON8)
+          const result = applyPostBalanceRules(playersWithoutPerson8, teams)
   
-          // Should not modify - Lawrence can be with Sam or Joe, just not both
-          expect(result[0].players.some(p => p.name === 'Lawrence Davis')).toBe(true)
-          expect(result[0].players.some(p => p.name === 'Joe Barbieri')).toBe(true)
+          // Should not modify - PERSON6 can be with PERSON8 or PERSON7, just not both PERSON8 and PERSON7
+          expect(result[0].players.some(p => p.name === PERSON6)).toBe(true)
+          expect(result[0].players.some(p => p.name === PERSON7)).toBe(true)
         })
          
       })
@@ -628,10 +635,10 @@ describe('playerTeamRequests', () => {
       })
 
       it('should return deep copy of teams to prevent mutations', () => {
-        const kim = players.find(p => p.name === 'Kim Butterworth')
+        const person2 = players.find(p => p.name === PERSON2)
         const playerA = players.find(p => p.name === 'Player A')
 
-        teams[0].players = [kim]
+        teams[0].players = [person2]
         teams[1].players = [playerA]
 
         const result = applyPostBalanceRules(players, teams)
@@ -671,14 +678,14 @@ describe('playerTeamRequests', () => {
       it('should handle when no suitable swap candidate exists', () => {
         const consoleSpy = jest.spyOn(console, 'warn').mockImplementation()
         
-        const kim = players.find(p => p.name === 'Kim Butterworth')
-        const jan = players.find(p => p.name === 'Jan Dmowski')
+        const person2 = players.find(p => p.name === PERSON2)
+        const person3 = players.find(p => p.name === PERSON3)
 
         // Create scenario with no other team to swap to
         const singleTeam = [
           {
             name: 'Team A',
-            players: [kim, jan]
+            players: [person2, person3]
           }
         ]
 
@@ -694,27 +701,27 @@ describe('playerTeamRequests', () => {
     describe('Multiple rules interaction', () => {
       it('should apply multiple rules when multiple conditions are met', () => {
         // Setup scenario where multiple rules apply
-        const kim = players.find(p => p.name === 'Kim Butterworth')
-        const jan = players.find(p => p.name === 'Jan Dmowski')
-        const sandra = players.find(p => p.name === 'Sandra Panajotow')
-        const rob = players.find(p => p.name === 'Rob Freeman')
+        const person2 = players.find(p => p.name === PERSON2)
+        const person3 = players.find(p => p.name === PERSON3)
+        const person4 = players.find(p => p.name === PERSON4)
+        const person5 = players.find(p => p.name === PERSON5)
         const playerA = players.find(p => p.name === 'Player A')
         const playerB = players.find(p => p.name === 'Player B')
 
-        teams[0].players = [kim, jan, sandra]
-        teams[1].players = [rob, playerA, playerB]
+        teams[0].players = [person2, person3, person4]
+        teams[1].players = [person5, playerA, playerB]
 
         const result = applyPostBalanceRules(players, teams)
 
-        // Rule 2: Kim and Jan should be separated
-        const kimTeam = result.find(t => t.players.some(p => p.name === 'Kim Butterworth'))
-        const janTeam = result.find(t => t.players.some(p => p.name === 'Jan Dmowski'))
-        expect(kimTeam).not.toBe(janTeam)
+        // Rule 2: PERSON2 and PERSON3 should be separated
+        const person2Team = result.find(t => t.players.some(p => p.name === PERSON2))
+        const person3Team = result.find(t => t.players.some(p => p.name === PERSON3))
+        expect(person2Team).not.toBe(person3Team)
 
-        // Rule 3: Sandra and Rob should be together
-        const sandraTeam = result.find(t => t.players.some(p => p.name === 'Sandra Panajotow'))
-        const robTeam = result.find(t => t.players.some(p => p.name === 'Rob Freeman'))
-        expect(sandraTeam).toBe(robTeam)
+        // Rule 3: PERSON4 and PERSON5 should be together
+        const person4Team = result.find(t => t.players.some(p => p.name === PERSON4))
+        const person5Team = result.find(t => t.players.some(p => p.name === PERSON5))
+        expect(person4Team).toBe(person5Team)
       })
     })
   })
