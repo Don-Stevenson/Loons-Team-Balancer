@@ -1,5 +1,14 @@
 import { calculatePlayerScore } from './teamStats'
+const PERSON1 = process.env.PERSON1
+const PERSON2 = process.env.PERSON2
+const PERSON3 = process.env.PERSON3
+const PERSON4 = process.env.PERSON4
+const PERSON5 = process.env.PERSON5
+const PERSON6 = process.env.PERSON6
+const PERSON7 = process.env.PERSON7
+const PERSON8 = process.env.PERSON8
 
+console.log({PERSON3})
 /**
  * Helper function to find the best swap candidate based on skill level and gender
  * @param {Object} playerToMove - The player being moved
@@ -64,22 +73,22 @@ export const applyPreBalanceRules = (allPlayers, playingPlayers) => {
         // Create a working copy
         let modifiedPlayers = [...playingPlayers]
 
-        // Rule 1: If Aidan Butterworth is playing, Kim Butterworth MUST also be playing
-        const aidanButterworth = playingPlayers.find(p => p.name === "Aidan Butterworth")
-        const kimButterworthPlaying = playingPlayers.find(p => p.name === "Kim Butterworth")
+        // Rule 1: If Person 1 is playing, PERSON2 MUST also be playing
+        const person1 = playingPlayers.find(p => p.name === PERSON1)
+        const person2Playing = playingPlayers.find(p => p.name === PERSON2)
 
-        if (aidanButterworth && !kimButterworthPlaying) {
-            // Find Kim in the full player list
-            const kimButterworthFromDB = allPlayers.find(p => p.name === "Kim Butterworth")
+        if (person1 && !person2Playing) {
+            // Find PERSON2 in the full player list
+            const person2FromDB = allPlayers.find(p => p.name === PERSON2)
 
-            if (kimButterworthFromDB) {
-                // Add Kim to the playing list with her stats
+            if (person2FromDB) {
+                // Add PERSON2 to the playing list with her stats
                 modifiedPlayers.push({
-                    ...kimButterworthFromDB,
+                    ...person2FromDB,
                     isPlayingThisWeek: true
                 })
             } else {
-                console.warn('Kim Butterworth not found in player database')
+                console.warn(PERSON2 + ' not found in player database')
             }
         }
 
@@ -112,153 +121,153 @@ export const applyPostBalanceRules = (players, teams) => {
 
     try {
         // Find players who are in the playing list
-        const kimButterworth = players.find(p => p.name === "Kim Butterworth")
-        const janDmowski = players.find(p => p.name === "Jan Dmowski")
-        const sandraPanajotow = players.find(p => p.name === "Sandra Panajotow")
-        const robFreeman = players.find(p => p.name === "Rob Freeman")
-        const lawrenceDavis = players.find(p => p.name === "Lawrence Davis")
-        const samMasri = players.find(p => p.name === "Sam Masri")
-        const joeBarbieri = players.find(p => p.name === "Joe Barbieri")
+        const person2 = players.find(p => p.name === PERSON2)
+        const person3 = players.find(p => p.name === PERSON3)
+        const person4 = players.find(p => p.name === PERSON4)
+        const person5 = players.find(p => p.name === PERSON5)
+        const person6 = players.find(p => p.name === PERSON6)
+        const samMasri = players.find(p => p.name === PERSON8)
+        const joeBarbieri = players.find(p => p.name === PERSON7)
 
-        // Rule 2: If Kim Butterworth is playing, make sure she is NOT on the same team as Jan Dmowski
-        if (kimButterworth && janDmowski) {
-            const kimButterworthTeam = teams.find(t => t?.players?.some(p => p.name === "Kim Butterworth"))
-            const janDmowskiTeam = teams.find(t => t?.players?.some(p => p.name === "Jan Dmowski"))
+        // Rule 2: If PERSON2 is playing, make sure she is NOT on the same team as PERSON3
+        if (person2 && person3) {
+            const person2Team = teams.find(t => t?.players?.some(p => p.name === PERSON2))
+            const person3Team = teams.find(t => t?.players?.some(p => p.name === PERSON3))
 
-            if (kimButterworthTeam && janDmowskiTeam && kimButterworthTeam === janDmowskiTeam) {
+            if (person2Team && person3Team && person2Team === person3Team) {
                 // They're on the same team, need to separate them by swapping
-                const janIndex = kimButterworthTeam.players.findIndex(p => p.name === "Jan Dmowski")
+                const person3Index = person2Team.players.findIndex(p => p.name === PERSON3)
 
-                if (janIndex !== -1) {
+                if (person3Index !== -1) {
                     // Find another team to swap with
-                        const otherTeam = teams.find(t => t !== kimButterworthTeam && Array.isArray(t?.players) && t.players.length > 0)
+                        const otherTeam = teams.find(t => t !== person2Team && Array.isArray(t?.players) && t.players.length > 0)
 
                     if (otherTeam) {
                         // Find best swap candidate from the other team
-                        const swapCandidate = findBestSwapCandidate(janDmowski, otherTeam.players)
+                        const swapCandidate = findBestSwapCandidate(person3, otherTeam.players)
 
                         if (swapCandidate) {
                             // Perform the swap
                             const swapCandidateIndex = otherTeam.players.findIndex(p => p.name === swapCandidate.name)
 
                             // Remove both players from their current teams
-                            kimButterworthTeam.players.splice(janIndex, 1)
+                            person2Team.players.splice(person3Index, 1)
                             otherTeam.players.splice(swapCandidateIndex, 1)
 
                             // Add them to their new teams
-                            otherTeam.players.push(janDmowski)
-                            kimButterworthTeam.players.push(swapCandidate)
+                            otherTeam.players.push(person3)
+                            person2Team.players.push(swapCandidate)
 
                         } else {
-                            console.warn('Could not find suitable swap candidate for Jan Dmowski')
+                            console.warn('Could not find suitable swap candidate for PERSON3')
                         }
                     } else {
-                        console.warn('Could not find another team to swap Jan Dmowski')
+                        console.warn('Could not find another team to swap PERSON3')
                     }
                 }
             }
         }
 
-        // Rule 3: If Sandra Panajotow and Rob Freeman are both playing, they should be on the SAME team
-        if (sandraPanajotow && robFreeman) {
-            const sandraPanajotowTeam = teams.find(t => t?.players?.some(p => p.name === "Sandra Panajotow"))
-            const robFreemanTeam = teams.find(t => t?.players?.some(p => p.name === "Rob Freeman"))
+        // Rule 3: If PERSON4 and PERSON5 are both playing, they should be on the SAME team
+        if (person4 && person5) {
+            const person4Team = teams.find(t => t?.players?.some(p => p.name === person4.name))
+            const person5Team = teams.find(t => t?.players?.some(p => p.name === person5.name))
 
-            if (sandraPanajotowTeam && robFreemanTeam && sandraPanajotowTeam !== robFreemanTeam) {
-                // They're on different teams, swap Rob with someone from Sandra's team
-                const robIndex = robFreemanTeam.players.findIndex(p => p.name === "Rob Freeman")
+            if (person4Team && person5Team && person4Team !== person5Team) {
+                // They're on different teams, swap PERSON5 with someone from PERSON4's team
+                const person5Index = person5Team.players.findIndex(p => p.name === person5.name)
 
-                if (robIndex !== -1) {
-                    // Find best swap candidate from Sandra's team
-                    const swapCandidate = findBestSwapCandidate(robFreeman, sandraPanajotowTeam.players)
+                if (person5Index !== -1) {
+                    // Find best swap candidate from PERSON4's team
+                    const swapCandidate = findBestSwapCandidate(person5, person4Team.players)
 
                     if (swapCandidate) {
-                        const swapCandidateIndex = sandraPanajotowTeam.players.findIndex(p => p.name === swapCandidate.name)
+                        const swapCandidateIndex = person4Team.players.findIndex(p => p.name === swapCandidate.name)
 
                         // Remove both players from their current teams
-                        robFreemanTeam.players.splice(robIndex, 1)
-                        sandraPanajotowTeam.players.splice(swapCandidateIndex, 1)
+                        person5Team.players.splice(person5Index, 1)
+                        person4Team.players.splice(swapCandidateIndex, 1)
 
                         // Add them to their new teams
-                        sandraPanajotowTeam.players.push(robFreeman)
-                        robFreemanTeam.players.push(swapCandidate)
+                        person4Team.players.push(person5)
+                        person5Team.players.push(swapCandidate)
 
                     } else {
-                        console.warn('Could not find suitable swap candidate for Rob Freeman')
+                        console.warn('Could not find suitable swap candidate for PERSON5')
                     }
                 }
             }
         }
 
-        // Rule 4: If Lawrence Davis is playing, make sure he is NOT on the same team as BOTH Sam Masri AND Joe Barbieri
-        if (lawrenceDavis && samMasri && joeBarbieri) {
-            const lawrenceDavisTeam = teams.find(t => t?.players?.some(p => p.name === "Lawrence Davis"))
-            const samMasriTeam = teams.find(t => t?.players?.some(p => p.name === "Sam Masri"))
-            const joeBarbieriTeam = teams.find(t => t?.players?.some(p => p.name === "Joe Barbieri"))
+        // Rule 4: If PERSON6 is playing, make sure he is NOT on the same team as BOTH PERSON8 AND PERSON7
+        if (person6 && samMasri && joeBarbieri) {
+            const person6Team = teams.find(t => t?.players?.some(p => p.name === PERSON6))
+            const samMasriTeam = teams.find(t => t?.players?.some(p => p.name === PERSON8))
+            const joeBarbieriTeam = teams.find(t => t?.players?.some(p => p.name === PERSON7))
 
             // Check if all three are on the same team
-            if (lawrenceDavisTeam && samMasriTeam && joeBarbieriTeam &&
-                lawrenceDavisTeam === samMasriTeam &&
-                lawrenceDavisTeam === joeBarbieriTeam) {
+            if (person6Team && samMasriTeam && joeBarbieriTeam &&
+                person6Team === samMasriTeam &&
+                person6Team === joeBarbieriTeam) {
 
-                // All three are on the same team - swap Lawrence with someone from a different team
-                const lawrenceIndex = lawrenceDavisTeam.players.findIndex(p => p.name === "Lawrence Davis")
+                // All three are on the same team - swap PERSON6 with someone from a different team
+                const person6Index = person6Team.players.findIndex(p => p.name === PERSON6)
 
-                if (lawrenceIndex !== -1) {
-                    // Find a different team (one that doesn't have Sam AND Joe together)
-                    const otherTeam = teams.find(t => t !== lawrenceDavisTeam && Array.isArray(t?.players) && t.players.length > 0)
+                if (person6Index !== -1) {
+                    // Find a different team (one that doesn't have PERSON8 AND PERSON7 together)
+                    const otherTeam = teams.find(t => t !== person6Team && Array.isArray(t?.players) && t.players.length > 0)
 
                     if (otherTeam) {
                         // Find best swap candidate from the other team
-                        const swapCandidate = findBestSwapCandidate(lawrenceDavis, otherTeam.players)
+                        const swapCandidate = findBestSwapCandidate(person6, otherTeam.players)
 
                         if (swapCandidate) {
                             const swapCandidateIndex = otherTeam.players.findIndex(p => p.name === swapCandidate.name)
 
                             // Remove both players from their current teams
-                            lawrenceDavisTeam.players.splice(lawrenceIndex, 1)
+                            person6Team.players.splice(person6Index, 1)
                             otherTeam.players.splice(swapCandidateIndex, 1)
 
                             // Add them to their new teams
-                            otherTeam.players.push(lawrenceDavis)
-                            lawrenceDavisTeam.players.push(swapCandidate)
+                            otherTeam.players.push(person6)
+                            person6Team.players.push(swapCandidate)
 
                         } else {
-                            console.warn('Could not find suitable swap candidate for Lawrence Davis')
+                            console.warn('Could not find suitable swap candidate for PERSON6')
                         }
                     } else {
-                        console.warn('Could not find another team to swap Lawrence Davis')
+                        console.warn('Could not find another team to swap PERSON6')
                     }
                 }
             }
-            if (lawrenceDavisTeam && joeBarbieriTeam  &&
-                lawrenceDavisTeam === joeBarbieriTeam) {
-                    const lawrenceIndex = lawrenceDavisTeam.players.findIndex(p => p.name === "Lawrence Davis")
+            if (person6Team && joeBarbieriTeam  &&
+                person6Team === joeBarbieriTeam) {
+                    const person6Index = person6Team.players.findIndex(p => p.name === PERSON6)
 
-                    if (lawrenceIndex !== -1) {
-                        // Find a different team (one that doesn't have Sam AND Joe together)
-                        const otherTeam = teams.find(t => t !== lawrenceDavisTeam && Array.isArray(t?.players) && t.players.length > 0)
+                    if (person6Index !== -1) {
+                        // Find a different team (one that doesn't have PERSON8 AND PERSON7 together)
+                        const otherTeam = teams.find(t => t !== person6Team && Array.isArray(t?.players) && t.players.length > 0)
     
                         if (otherTeam) {
                             // Find best swap candidate from the other team
-                            const swapCandidate = findBestSwapCandidate(lawrenceDavis, otherTeam.players)
+                            const swapCandidate = findBestSwapCandidate(person6, otherTeam.players)
     
                             if (swapCandidate) {
                                 const swapCandidateIndex = otherTeam.players.findIndex(p => p.name === swapCandidate.name)
     
                                 // Remove both players from their current teams
-                                lawrenceDavisTeam.players.splice(lawrenceIndex, 1)
+                                person6Team.players.splice(person6Index, 1)
                                 otherTeam.players.splice(swapCandidateIndex, 1)
     
                                 // Add them to their new teams
-                                otherTeam.players.push(lawrenceDavis)
-                                lawrenceDavisTeam.players.push(swapCandidate)
+                                otherTeam.players.push(person6)
+                                person6Team.players.push(swapCandidate)
     
                             } else {
-                                console.warn('Could not find suitable swap candidate for Lawrence Davis')
+                                console.warn('Could not find suitable swap candidate for PERSON6')
                             }
                         } else {
-                            console.warn('Could not find another team to swap Lawrence Davis')
+                            console.warn('Could not find another team to swap PERSON6')
                         }
                     }
                 }

@@ -270,7 +270,7 @@ export default function CreateTeams() {
       // Get only the players that are marked as playing
       let playingPlayers = players.filter(player => player.isPlayingThisWeek)
 
-      // PHASE 1: Apply pre-balance rules (e.g., add Kim if Aidan is playing)
+      // PHASE 1: Apply pre-balance rules (e.g., add PERSON2 if PERSON1 is playing)
       playingPlayers = applyPreBalanceRules(players, playingPlayers)
 
       if (playingPlayers.length === 0) {
