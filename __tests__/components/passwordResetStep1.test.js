@@ -209,7 +209,7 @@ describe('PasswordResetStep1', () => {
 
   it('disables form inputs while verifying credentials', async () => {
     let resolveVerification
-    const verificationPromise = new Promise(resolve => {
+    const verificationPromise = new Promise((resolve) => {
       resolveVerification = resolve
     })
     apiService.auth.verifyCredentials.mockReturnValue(verificationPromise)

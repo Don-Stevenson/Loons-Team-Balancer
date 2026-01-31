@@ -38,9 +38,9 @@ jest.mock('../../src/app/hooks/useApi', () => ({
   useLogin: jest.fn(),
   queryKeys: {
     players: ['players'],
-    player: id => ['players', id],
+    player: (id) => ['players', id],
     games: ['games'],
-    gameRsvps: gameId => ['games', gameId, 'rsvps'],
+    gameRsvps: (gameId) => ['games', gameId, 'rsvps'],
     auth: ['auth'],
   },
 }))
@@ -108,7 +108,7 @@ describe('LoginForm', () => {
     useLogin.mockImplementation(({ onSuccess, onError }) => {
       capturedOnSuccess = onSuccess
       return {
-        mutate: jest.fn(async credentials => {
+        mutate: jest.fn(async (credentials) => {
           // Simulate successful login by calling the captured onSuccess
           await capturedOnSuccess({ success: true })
         }),
@@ -138,7 +138,7 @@ describe('LoginForm', () => {
   })
 
   it('handles failed login correctly', async () => {
-    const mockMutate = jest.fn(credentials => {
+    const mockMutate = jest.fn((credentials) => {
       // Simulate failed login by calling onSuccess with failure
       const mockOnSuccess = useLogin.mock.calls[0][0].onSuccess
       mockOnSuccess({ success: false })
@@ -171,7 +171,7 @@ describe('LoginForm', () => {
   })
 
   it('clears error message when input is focused', async () => {
-    const mockMutate = jest.fn(credentials => {
+    const mockMutate = jest.fn((credentials) => {
       // Simulate failed login by calling onSuccess with failure
       const mockOnSuccess = useLogin.mock.calls[0][0].onSuccess
       mockOnSuccess({ success: false })
@@ -231,7 +231,7 @@ describe('LoginForm', () => {
   })
 
   it('handles network errors correctly', async () => {
-    const mockMutate = jest.fn(credentials => {
+    const mockMutate = jest.fn((credentials) => {
       // Simulate network error by calling onError
       const mockOnError = useLogin.mock.calls[0][0].onError
       mockOnError(new Error('Network error'))

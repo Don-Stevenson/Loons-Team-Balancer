@@ -67,7 +67,7 @@ export async function PUT(request) {
     }
 
     // Ensure all playerIds are strings
-    const sanitizedPlayerIds = playerIds.map(id => String(id))
+    const sanitizedPlayerIds = playerIds.map((id) => String(id))
 
     // Update the players
     const result = await Player.updateMany(

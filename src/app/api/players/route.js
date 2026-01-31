@@ -154,7 +154,7 @@ export async function POST(request) {
 
     if (error.name === 'ValidationError') {
       const message = Object.values(error.errors)
-        .map(err => err.message)
+        .map((err) => err.message)
         .join(', ')
       return NextResponse.json({ message }, { status: 400 })
     }

@@ -19,7 +19,7 @@ async function connectDB() {
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
     }
 
-    cached.promise = mongoose.connect(uri, opts).then(mongoose => {
+    cached.promise = mongoose.connect(uri, opts).then((mongoose) => {
       console.log('Connected to MongoDB successfully!')
       return mongoose
     })

@@ -18,13 +18,13 @@ const PlayerListToggleIsPlaying = ({ players, onTogglePlayingThisWeek }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {sortedInitials.map(initial => (
+      {sortedInitials.map((initial) => (
         <div key={initial} className="flex flex-col gap-1 print:hidden">
           <div className="text-2xl font-bold text-slate-700 px-2">
             {initial}
           </div>
           <ul className="grid grid-cols-[repeat(auto-fill,_minmax(15rem,_1fr))] xl:grid-cols-[repeat(auto-fill,_minmax(16rem,_max-content))] gap-4 w-full p-2">
-            {playersByInitial[initial].map(player => (
+            {playersByInitial[initial].map((player) => (
               <button
                 key={player._id}
                 className={`flex items-center gap-4 p-3 w-full max-w-[20rem] min-w-[15rem] border-2 border-gray-300 rounded hover:border-[#b1c1de] cursor-pointer ${

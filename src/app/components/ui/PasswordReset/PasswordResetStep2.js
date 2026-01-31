@@ -20,7 +20,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
   const router = useRouter()
 
   const resetPasswordMutation = useResetPassword({
-    onSuccess: data => {
+    onSuccess: (data) => {
       if (data.success) {
         setSuccess(true)
         setError('')
@@ -32,13 +32,13 @@ export default function PasswordResetStep2({ username, currentPassword }) {
         setError(data.message || 'Failed to reset password')
       }
     },
-    onError: err => {
+    onError: (err) => {
       setError('An error occurred. Please try again')
       console.error('Password reset error:', err)
     },
   })
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
 
@@ -92,7 +92,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
               id="new-password"
               type={showNewPassword ? 'text' : 'password'}
               value={newPassword}
-              onChange={e => setNewPassword(e.target.value)}
+              onChange={(e) => setNewPassword(e.target.value)}
               onFocus={() => setError('')}
               placeholder="New Password"
               required
@@ -115,7 +115,7 @@ export default function PasswordResetStep2({ username, currentPassword }) {
             <input
               type={showConfirmPassword ? 'text' : 'password'}
               value={confirmNewPassword}
-              onChange={e => setConfirmNewPassword(e.target.value)}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
               onFocus={() => setError('')}
               placeholder="Confirm New PW"
               required

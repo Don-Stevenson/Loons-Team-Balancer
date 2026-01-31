@@ -91,7 +91,7 @@ describe('HoverPlayerStats Component', () => {
 
       // Find the stat value spans by their font-medium class
       const statValues = screen.getAllByText(/^[0-9]+$/)
-      statValues.forEach(value => {
+      statValues.forEach((value) => {
         expect(value).toHaveClass('font-medium')
       })
     })
@@ -213,7 +213,7 @@ describe('HoverPlayerStats Component', () => {
       expect(playerName).toHaveClass('text-gray-800')
 
       const labels = screen.getAllByText(/:$/)
-      labels.forEach(label => {
+      labels.forEach((label) => {
         expect(label).toHaveClass('text-gray-600')
       })
     })

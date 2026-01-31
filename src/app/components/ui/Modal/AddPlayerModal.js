@@ -80,7 +80,7 @@ export default function AddPlayerModal({
     },
   ]
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
     try {
@@ -105,7 +105,7 @@ export default function AddPlayerModal({
     }
   }
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setPlayerData({ ...playerData, [e.target.name]: e.target.value })
   }
 
@@ -118,7 +118,7 @@ export default function AddPlayerModal({
     >
       <div
         className="bg-white rounded-lg w-full max-w-md max-h-[90vh] flex flex-col shadow-xl"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed */}
         <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
@@ -134,7 +134,7 @@ export default function AddPlayerModal({
           className="flex flex-col flex-1 overflow-hidden"
         >
           <div className="overflow-y-auto px-4 sm:px-6 py-4 space-y-3 sm:space-y-4">
-            {formFields.map(field => (
+            {formFields.map((field) => (
               <div key={field.name}>
                 <label
                   htmlFor={field.name}
@@ -172,9 +172,9 @@ export default function AddPlayerModal({
                 options={genderOptions}
                 className="text-xs sm:text-sm"
                 value={genderOptions.find(
-                  option => option.value === playerData.gender
+                  (option) => option.value === playerData.gender
                 )}
-                onChange={selectedOption =>
+                onChange={(selectedOption) =>
                   setPlayerData({
                     ...playerData,
                     gender: selectedOption ? selectedOption.value : '',

@@ -12,7 +12,7 @@ export default function GameSelector({
   gamesError,
   gamesErrorMessage,
 }) {
-  const handleGameSelect = gameId => {
+  const handleGameSelect = (gameId) => {
     onGameSelect(gameId)
   }
 
@@ -24,7 +24,7 @@ export default function GameSelector({
           game
         </div>
         <UpcomingGamesDropDown
-          upcomingGames={upcomingGames.map(game => ({
+          upcomingGames={upcomingGames.map((game) => ({
             value: game._id,
             label: `${game.title} - ${new Date(
               game.meetdate
@@ -52,7 +52,7 @@ export default function GameSelector({
                     .map((player, index) => {
                       // Check if the player exists in the players list
                       const playerExists = players.some(
-                        p => normalizeName(p.name) === normalizeName(player)
+                        (p) => normalizeName(p.name) === normalizeName(player)
                       )
                       return (
                         <li
@@ -74,9 +74,9 @@ export default function GameSelector({
                     })}
                 </ul>
                 {queryRsvpsForGame.some(
-                  player =>
+                  (player) =>
                     !players.some(
-                      p => normalizeName(p.name) === normalizeName(player)
+                      (p) => normalizeName(p.name) === normalizeName(player)
                     )
                 ) && (
                   <div className="text-red-600 text-xs max-w-sm mt-5">

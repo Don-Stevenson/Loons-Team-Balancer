@@ -35,12 +35,12 @@ jest.mock('../../utils/FEapi', () => ({
 // Mock the useResetPassword hook
 jest.mock('../../src/app/hooks/useApi', () => ({
   useResetPassword: jest.fn(({ onSuccess, onError }) => ({
-    mutate: jest.fn(data => {
+    mutate: jest.fn((data) => {
       // Call the mocked resetPassword API
       apiService.auth
         .resetPassword(data)
-        .then(response => onSuccess && onSuccess(response))
-        .catch(error => onError && onError(error))
+        .then((response) => onSuccess && onSuccess(response))
+        .catch((error) => onError && onError(error))
     }),
     isPending: false,
     isError: false,

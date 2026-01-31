@@ -9,10 +9,10 @@ const WEIGHTS = {
 }
 
 // Add randomization to prevent identical team formations
-const fudge = score => score + (Math.random() - 0.5) * 1.4
+const fudge = (score) => score + (Math.random() - 0.5) * 1.4
 
 // Helper function to calculate weighted player score
-const calculatePlayerScore = player => {
+const calculatePlayerScore = (player) => {
   return (
     player.gameKnowledgeScore * WEIGHTS.gameKnowledge +
     player.goalScoringScore * WEIGHTS.goalScoring +
@@ -24,7 +24,7 @@ const calculatePlayerScore = player => {
 }
 
 // Helper function to calculate fudged player score for sorting
-const calculateFudgedPlayerScore = player => {
+const calculateFudgedPlayerScore = (player) => {
   return fudge(calculatePlayerScore(player))
 }
 
@@ -40,7 +40,7 @@ function balanceTeams(players, numTeams) {
   }
 
   // Ensure all required player properties exist and are of correct type
-  const validPlayers = players.filter(player => {
+  const validPlayers = players.filter((player) => {
     // Convert all numeric fields to numbers
     const gameKnowledgeScore = Number(player.gameKnowledgeScore)
     const goalScoringScore = Number(player.goalScoringScore)
@@ -137,10 +137,10 @@ function balanceTeams(players, numTeams) {
   }))
 
   // Separate players by gender to distribute women and non-binary first
-  const femaleAndNonBinaryPlayers = validPlayers.filter(player =>
+  const femaleAndNonBinaryPlayers = validPlayers.filter((player) =>
     ['female', 'nonBinary'].includes(player.gender)
   )
-  const malePlayers = validPlayers.filter(player => player.gender === 'male')
+  const malePlayers = validPlayers.filter((player) => player.gender === 'male')
 
   // Sort each group by fudged total score in descending order
   femaleAndNonBinaryPlayers.sort(
@@ -159,8 +159,8 @@ function balanceTeams(players, numTeams) {
 
     // Find teams with the minimum number of players
     const eligibleTeams = teams.filter(
-      team =>
-        team.players.length === Math.min(...teams.map(t => t.players.length))
+      (team) =>
+        team.players.length === Math.min(...teams.map((t) => t.players.length))
     )
 
     // Among eligible teams, find the one with the lowest total score
@@ -181,7 +181,7 @@ function balanceTeams(players, numTeams) {
   }
 
   // Calculate final team stats
-  const finalTeams = teams.map(team => ({
+  const finalTeams = teams.map((team) => ({
     ...team,
     totalScore: Number(team.totalScore.toFixed(2)),
     totalGameKnowledgeScore: Number(team.totalGameKnowledgeScore.toFixed(2)),

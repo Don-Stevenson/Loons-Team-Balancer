@@ -9,7 +9,7 @@ export const todaysDate = new Date().toLocaleDateString(
   dateFormatOptions
 )
 
-export const getMeetDate = meetdate => {
+export const getMeetDate = (meetdate) => {
   // If no meetdate is provided, show today's date
   const formattedMeetDate = new Date(meetdate).toLocaleDateString(
     'en-US',

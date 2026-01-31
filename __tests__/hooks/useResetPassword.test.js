@@ -152,7 +152,7 @@ describe('useResetPassword', () => {
 
   it('should track isPending state correctly', async () => {
     let resolveReset
-    const resetPromise = new Promise(resolve => {
+    const resetPromise = new Promise((resolve) => {
       resolveReset = resolve
     })
 
@@ -180,7 +180,10 @@ describe('useResetPassword', () => {
   it('should handle multiple reset attempts', async () => {
     apiService.auth.resetPassword
       .mockResolvedValueOnce({ success: false, message: 'Invalid password' })
-      .mockResolvedValueOnce({ success: true, message: 'Password reset successfully' })
+      .mockResolvedValueOnce({
+        success: true,
+        message: 'Password reset successfully',
+      })
 
     const { result } = renderHook(() => useResetPassword(), { wrapper })
 
@@ -194,7 +197,10 @@ describe('useResetPassword', () => {
     result.current.mutate(resetData1)
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true))
-    expect(result.current.data).toEqual({ success: false, message: 'Invalid password' })
+    expect(result.current.data).toEqual({
+      success: false,
+      message: 'Invalid password',
+    })
 
     // Second attempt
     const resetData2 = {
@@ -261,4 +267,3 @@ describe('useResetPassword', () => {
     expect(result.current.error.code).toBe('ETIMEDOUT')
   })
 })
-

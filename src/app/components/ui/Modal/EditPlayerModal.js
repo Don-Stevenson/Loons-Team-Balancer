@@ -9,15 +9,15 @@ const EditPlayerModal = ({ player, onUpdatePlayer, onClose }) => {
     setEditedPlayer(player)
   }, [player])
 
-  const handleInputChange = e => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
-    setEditedPlayer(prev => ({
+    setEditedPlayer((prev) => ({
       ...prev,
       [name]: value,
     }))
   }
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     onUpdatePlayer(editedPlayer)
   }
@@ -77,7 +77,7 @@ const EditPlayerModal = ({ player, onUpdatePlayer, onClose }) => {
     >
       <div
         className="bg-white rounded-lg w-full max-w-md max-h-[90vh] flex flex-col shadow-xl"
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed */}
         <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
@@ -93,7 +93,7 @@ const EditPlayerModal = ({ player, onUpdatePlayer, onClose }) => {
           className="flex flex-col flex-1 overflow-hidden"
         >
           <div className="overflow-y-auto px-4 sm:px-6 py-4 space-y-3 sm:space-y-4">
-            {formFields.map(field => (
+            {formFields.map((field) => (
               <div key={field.name}>
                 <label
                   htmlFor={field.name}

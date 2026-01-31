@@ -15,13 +15,13 @@ const PlayerList = ({ players, onEditPlayer, onDeletePlayer }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      {sortedInitials.map(initial => (
+      {sortedInitials.map((initial) => (
         <div key={initial} className="flex flex-col gap-1">
           <div className="text-2xl font-bold text-slate-700 px-2">
             {initial}
           </div>
           <div className="grid grid-cols-[repeat(auto-fill,_minmax(16rem,_1fr))] xl:grid-cols-[repeat(auto-fill,_minmax(17.5rem,_max-content))] gap-4 w-full p-2">
-            {playersByInitial[initial].map(player => (
+            {playersByInitial[initial].map((player) => (
               <PlayerCard
                 key={player._id}
                 player={player}
