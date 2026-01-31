@@ -12,14 +12,6 @@ jobs:
     container:
       image: node:22-alpine
     env:
-      PERSON1: ${{ secrets.PERSON1 || 'TestPerson1' }}
-      PERSON2: ${{ secrets.PERSON2 || 'TestPerson2' }}
-      PERSON3: ${{ secrets.PERSON3 || 'TestPerson3' }}
-      PERSON4: ${{ secrets.PERSON4 || 'TestPerson4' }}
-      PERSON5: ${{ secrets.PERSON5 || 'TestPerson5' }}
-      PERSON6: ${{ secrets.PERSON6 || 'TestPerson6' }}
-      PERSON7: ${{ secrets.PERSON7 || 'TestPerson7' }}
-      PERSON8: ${{ secrets.PERSON8 || 'TestPerson8' }}
       JWT_SECRET: test-secret-key
       ATLAS_URI: mongodb://test-db
       NODE_ENV: test
