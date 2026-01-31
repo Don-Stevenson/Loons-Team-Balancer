@@ -11,6 +11,7 @@ import {
   useBalanceTeams,
 } from '../../../hooks/useApi'
 
+
 export default function CreateTeams() {
   const [numTeams, setNumTeams] = useState(2)
   const [balancedTeams, setBalancedTeams] = useState(null)
@@ -393,7 +394,7 @@ export default function CreateTeams() {
         onGameSelect={handleGameSelect}
         normalizeName={normalizeName}
       />
-      <div className="flex flex-col rounded pt-6 pb-8 mb-4 print:pt-0 print:mb-0 print:px-0 print:pb-0">
+      <div className="flex flex-col rounded pt-6 pb-8 mb-4 gap-4 print:pt-0 print:mb-0 print:px-0 print:pb-0">
         {error && (
           <p className="text-center text-red-500 text-sm mt-2">{error}</p>
         )}
