@@ -17,6 +17,7 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
   })
   const autoScrollIntervalRef = useRef(null)
 
+
   const handleDragStart = (e, teamIndex, playerIndex, playerId) => {
     // Store the dragged player info
     setDraggedPlayer({ teamIndex, playerIndex, playerId })
@@ -333,6 +334,8 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
   }
 }
 
+
+
 const Teams = ({
   balancedTeams,
   setBalancedTeams,
@@ -341,6 +344,8 @@ const Teams = ({
 }) => {
   const [hoveredPlayer, setHoveredPlayer] = useState(null)
   const hoverTimeoutRef = useRef(null)
+  const [customColorInput, setCustomColorInput] = useState('');
+  const [parsedCustomColors, setParsedCustomColors] = useState([]);
 
   const handleMouseEnter = player => {
     // Clear any existing timeout
@@ -376,46 +381,101 @@ const Teams = ({
     handleTouchEnd,
   } = useDragAndDrop(balancedTeams, setBalancedTeams)
 
+  // Parse custom colors from input string
+  const parseCustomColors = (input) => {
+    if (!input || input.trim() === '') return [];
+    
+    // Split by comma and clean up
+    const colorNames = input.split(',').map(c => c.trim().toLowerCase());
+    
+    // Map common color names to Tailwind classes
+    const colorMap = {
+      'red': 'border-loonsRed bg-red-100 print:bg-white',
+      'blue': 'border-blue-500 bg-blue-100 print:bg-white',
+      'green': 'border-green-500 bg-green-100 print:bg-white',
+      'yellow': 'border-yellow-500 bg-yellow-100 print:bg-white',
+      'purple': 'border-purple-500 bg-purple-100 print:bg-white',
+      'orange': 'border-orange-500 bg-orange-100 print:bg-white',
+      'pink': 'border-pink-500 bg-pink-100 print:bg-white',
+      'black': 'border-gray-800 bg-gray-100 print:bg-white',
+      'white': 'border-gray-400 bg-white print:bg-white',
+    };
+    
+    return colorNames.map(name => colorMap[name] || null).filter(Boolean);
+  };
+
+  // Handle input changes
+  const handleColorInputChange = (e) => {
+    const input = e.target.value;
+    setCustomColorInput(input);
+    setParsedCustomColors(parseCustomColors(input));
+  };
+
   const getTeamColorClasses = (index, totalTeams) => {
-    const isThreeColorSystem = totalTeams === 3
-
+    // If we have a custom color for this team index, use it
+    if (parsedCustomColors.length > 0 && parsedCustomColors[index]) {
+      return parsedCustomColors[index];
+    }
+    
+    // Otherwise fall back to default logic
+    const isThreeColorSystem = totalTeams === 3;
+    
     if (isThreeColorSystem) {
-      const colorIndex = index % 3
-
-      if (colorIndex === 0) {
-        return 'border-loonsRed bg-red-200 print:bg-red-100'
-      }
-      if (colorIndex === 1) {
-        return 'border-gray-500 bg-gray-200 print:bg-gray-100'
-      }
-      return 'border-gray-800 bg-white print:bg-gray-50'
+      const colorIndex = index % 3;
+      if (colorIndex === 0) return 'border-loonsRed bg-red-100 print:bg-red-100';
+      if (colorIndex === 1) return 'border-gray-500 bg-gray-200 print:bg-gray-100';
+      return 'border-gray-800 bg-white print:bg-gray-50';
     }
-
+    
     return index % 2 === 0
-      ? 'border-loonsRed bg-red-200 print:bg-red-100'
-      : 'border-gray-500 bg-gray-200 print:bg-gray-100'
-  }
+      ? 'border-loonsRed bg-red-100 print:bg-red-100'
+      : 'border-gray-500 bg-gray-200 print:bg-gray-100';
+  };
 
-  const getTeamName = index => {
-    const totalTeams = balancedTeams.length
-
+  const getTeamName = (index) => {
+    const totalTeams = balancedTeams.length;
+    
+    // If we have custom colors, use custom names
+    if (parsedCustomColors.length > 0 && parsedCustomColors[index]) {
+      const colorNames = customColorInput.split(',').map(c => c.trim()).filter(c => c.length > 0);
+      
+      if (colorNames[index]) {
+        const colorName = colorNames[index];
+        const capitalizedColor = colorName.charAt(0).toUpperCase() + colorName.slice(1);
+        
+        // Count occurrences before this index + 1 for current
+        const occurrenceNumber = colorNames
+          .slice(0, index + 1)
+          .filter(c => c.toLowerCase() === colorName.toLowerCase())
+          .length;
+        
+        // Check if this color appears more than once in total
+        const totalOccurrences = colorNames.filter(c => c.toLowerCase() === colorName.toLowerCase()).length;
+        
+        return totalOccurrences > 1 
+          ? `${capitalizedColor} Team ${occurrenceNumber}`
+          : `${capitalizedColor} Team`;
+      }
+    }
+    
+    // Fall back to default naming logic
     if (totalTeams === 3) {
-      const colorIndex = index % 3
-      if (colorIndex === 0) return 'Red Team'
-      if (colorIndex === 1) return 'Black Team'
-      if (colorIndex === 2) return 'White Team'
+      const colorIndex = index % 3;
+      if (colorIndex === 0) return 'Red Team';
+      if (colorIndex === 1) return 'Black Team';
+      if (colorIndex === 2) return 'White Team';
     }
-
+    
     if (totalTeams === 2) {
-      return index === 0 ? 'Red Team' : 'Black Team'
+      return index === 0 ? 'Red Team' : 'Black Team';
     }
-
-    const isRedTeam = index % 2 === 0
-    const teamNumber = Math.floor(index / 2) + 1
-    const color = isRedTeam ? 'Red' : 'Black'
-
-    return `${color} Team ${teamNumber}`
-  }
+    
+    const isRedTeam = index % 2 === 0;
+    const teamNumber = Math.floor(index / 2) + 1;
+    const color = isRedTeam ? 'Red' : 'Black';
+    
+    return `${color} Team ${teamNumber}`;
+  };
 
   const hasLargeTeams = balancedTeams.some(team => team.players.length > 12)
 
@@ -429,7 +489,6 @@ const Teams = ({
     const endIdx = Math.min(startIdx + teamsPerPage, balancedTeams.length)
     teamGroups.push(balancedTeams.slice(startIdx, endIdx))
   }
-
   return (
     <>
       {/* Game name for print - only visible when printing */}
@@ -453,6 +512,30 @@ const Teams = ({
           <GameMeetDate meetdate={todaysDate} />
         )}
       </div>
+
+          {/* ADD THIS: Custom Colors Input */}
+    <div className="print:hidden max-w-2xl mx-auto mb-6 px-4">
+      <label 
+        htmlFor="customColors" 
+        className="block text-sm font-medium text-gray-700 mb-2"
+      >
+        Customize Team Colors (Optional)
+      </label>
+      <input
+        id="customColors"
+        type="text"
+        value={customColorInput}
+        onChange={handleColorInputChange}
+        placeholder="e.g., blue, yellow, green, purple"
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+      />
+      <p className="mt-1 text-xs text-gray-500">
+        Enter color names separated by commas. Available: red, blue, green, yellow, purple, orange, pink, black, white
+      </p>
+      <p className="mt-2 text-sm text-green-600 leading-tight min-h-[2.5rem]">
+        {parsedCustomColors.length > 0 ? `✓ ${parsedCustomColors.length} custom color(s) applied` : ''}
+      </p>
+    </div>
       <div className="flex justify-center mb-4 flex-wrap text-xl print:hidden text-center sm:text-start">
         Total Number of People Playing: {totalPlayers}
       </div>
