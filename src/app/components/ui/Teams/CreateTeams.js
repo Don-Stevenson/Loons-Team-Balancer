@@ -10,8 +10,6 @@ import {
   useBulkUpdatePlayers,
   useBalanceTeams,
 } from '../../../hooks/useApi'
-import { applyPreBalanceRules, applyPostBalanceRules } from '../../../utils/playerTeamRequests'
-import { calculateTeamStats } from '../../../utils/teamStats'
 
 export default function CreateTeams() {
   const [numTeams, setNumTeams] = useState(2)
@@ -268,10 +266,14 @@ export default function CreateTeams() {
       const minimumDuration = new Promise(resolve => setTimeout(resolve, 2000))
 
       // Get only the players that are marked as playing
+<<<<<<< HEAD
       let playingPlayers = players.filter(player => player.isPlayingThisWeek)
 
       // PHASE 1: Apply pre-balance rules (e.g., add PERSON2 if PERSON1 is playing)
       playingPlayers = applyPreBalanceRules(players, playingPlayers)
+=======
+      const playingPlayers = players.filter(player => player.isPlayingThisWeek)
+>>>>>>> parent of 46e93ec (Add player team requests (#318))
 
       if (playingPlayers.length === 0) {
         setError('Please select at least one player to create teams')
@@ -323,11 +325,7 @@ export default function CreateTeams() {
         ])
 
         setTotalPlayers(cleanPlayers.length)
-
-        // PHASE 2: Apply post-balance rules (e.g., separate/group specific players)
-        const modifiedTeams = applyPostBalanceRules(cleanPlayers, res.teams)
-        const teamsWithUpdatedStats = modifiedTeams.map(team => calculateTeamStats(team))
-        setBalancedTeams(teamsWithUpdatedStats)
+        setBalancedTeams(res.teams)
         setIsLoading(false)
         setShowLoadingMessage(false)
         setOpenPlayerList(false)
