@@ -13,12 +13,12 @@ jest.mock('next/server', () => ({
       // Make headers.set chainable and store headers properly
       const headersMap = new Map()
       response.headers = {
-        get: name => headersMap.get(name.toLowerCase()),
+        get: (name) => headersMap.get(name.toLowerCase()),
         set: (name, value) => {
           headersMap.set(name.toLowerCase(), value)
           return response.headers
         },
-        has: name => headersMap.has(name.toLowerCase()),
+        has: (name) => headersMap.has(name.toLowerCase()),
       }
       return response
     },

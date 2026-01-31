@@ -15,14 +15,14 @@ const UpcomingGamesDropDown = ({
     setIsOpen(!isOpen)
   }
 
-  const handleOptionClick = option => {
+  const handleOptionClick = (option) => {
     setSelectedValue(option.label)
     setIsOpen(false)
     onSelect(option.value)
   }
 
   useEffect(() => {
-    const handleClickOutside = event => {
+    const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false)
       }
@@ -63,7 +63,7 @@ const UpcomingGamesDropDown = ({
               No upcoming games available
             </li>
           ) : (
-            upcomingGames.map(game => (
+            upcomingGames.map((game) => (
               <li
                 className="border-2 border-white hover:border-2 hover:bg-[#cedaf0] rounded-md px-4 list-disc list-inside cursor-pointer w-full"
                 key={game.value}

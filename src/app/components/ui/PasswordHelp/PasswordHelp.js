@@ -10,7 +10,7 @@ const PasswordHelp = () => {
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setMessage('')
@@ -65,7 +65,7 @@ const PasswordHelp = () => {
         type="email"
         placeholder="Username/email"
         value={username}
-        onChange={e => setUsername(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
         disabled={loading}
         className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
       />

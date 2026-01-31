@@ -4,9 +4,9 @@ import { apiService } from '../../../utils/FEapi'
 // Query Keys - centralized for cache management
 export const queryKeys = {
   players: ['players'],
-  player: id => ['players', id],
+  player: (id) => ['players', id],
   games: ['games'],
-  gameRsvps: gameId => ['games', gameId, 'rsvps'],
+  gameRsvps: (gameId) => ['games', gameId, 'rsvps'],
   auth: ['auth'],
 }
 
@@ -33,7 +33,7 @@ export const useCreatePlayer = (options = {}) => {
 
   return useMutation({
     mutationFn: apiService.players.create,
-    onSuccess: newPlayer => {
+    onSuccess: (newPlayer) => {
       // Add the new player to the cache
       queryClient.setQueryData(queryKeys.players, (oldPlayers = []) => {
         const newPlayers = [...oldPlayers, newPlayer]
@@ -49,10 +49,10 @@ export const useUpdatePlayer = (options = {}) => {
 
   return useMutation({
     mutationFn: apiService.players.update,
-    onSuccess: updatedPlayer => {
+    onSuccess: (updatedPlayer) => {
       // Update the player in the cache
       queryClient.setQueryData(queryKeys.players, (oldPlayers = []) =>
-        oldPlayers.map(player =>
+        oldPlayers.map((player) =>
           player._id === updatedPlayer._id ? updatedPlayer : player
         )
       )
@@ -75,7 +75,7 @@ export const useDeletePlayer = (options = {}) => {
     onSuccess: (_, playerId) => {
       // Remove the player from the cache
       queryClient.setQueryData(queryKeys.players, (oldPlayers = []) =>
-        oldPlayers.filter(player => player._id !== playerId)
+        oldPlayers.filter((player) => player._id !== playerId)
       )
 
       // Remove individual player cache

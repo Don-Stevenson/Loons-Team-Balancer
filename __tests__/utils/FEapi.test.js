@@ -22,7 +22,7 @@ import axios from 'axios'
 import api, { login, logout, checkAuth, apiService } from '../../utils/FEapi'
 
 // --- BEGIN: Real response interceptor logic from FEapi.js ---
-const realResponseInterceptor = async error => {
+const realResponseInterceptor = async (error) => {
   const originalRequest = error.config
   // Handle 401 Unauthorized errors, but don't retry auth/check calls
   if (
@@ -151,14 +151,19 @@ describe('API Utils', () => {
 
       it('should verify credentials via apiService', async () => {
         const mockInstance = axios.mockInstance
-        const mockResponse = { data: { success: true, message: 'Credentials verified' } }
+        const mockResponse = {
+          data: { success: true, message: 'Credentials verified' },
+        }
         mockInstance.post.mockResolvedValue(mockResponse)
 
         const result = await apiService.auth.verifyCredentials({
           username: 'testuser',
           password: 'testpass',
         })
-        expect(result).toEqual({ success: true, message: 'Credentials verified' })
+        expect(result).toEqual({
+          success: true,
+          message: 'Credentials verified',
+        })
         expect(mockInstance.post).toHaveBeenCalledWith('/verify-credentials', {
           username: 'testuser',
           password: 'testpass',
@@ -167,7 +172,9 @@ describe('API Utils', () => {
 
       it('should handle verify credentials error', async () => {
         const mockInstance = axios.mockInstance
-        const error = { response: { status: 401, data: { message: 'Invalid credentials' } } }
+        const error = {
+          response: { status: 401, data: { message: 'Invalid credentials' } },
+        }
         mockInstance.post.mockRejectedValue(error)
 
         await expect(
@@ -180,7 +187,9 @@ describe('API Utils', () => {
 
       it('should reset password via apiService', async () => {
         const mockInstance = axios.mockInstance
-        const mockResponse = { data: { success: true, message: 'Password reset successfully' } }
+        const mockResponse = {
+          data: { success: true, message: 'Password reset successfully' },
+        }
         mockInstance.post.mockResolvedValue(mockResponse)
 
         const result = await apiService.auth.resetPassword({
@@ -188,7 +197,10 @@ describe('API Utils', () => {
           currentPassword: 'oldpass',
           newPassword: 'newpass123',
         })
-        expect(result).toEqual({ success: true, message: 'Password reset successfully' })
+        expect(result).toEqual({
+          success: true,
+          message: 'Password reset successfully',
+        })
         expect(mockInstance.post).toHaveBeenCalledWith('/reset-password', {
           username: 'testuser',
           currentPassword: 'oldpass',
@@ -198,7 +210,9 @@ describe('API Utils', () => {
 
       it('should handle reset password error', async () => {
         const mockInstance = axios.mockInstance
-        const error = { response: { status: 401, data: { message: 'Invalid credentials' } } }
+        const error = {
+          response: { status: 401, data: { message: 'Invalid credentials' } },
+        }
         mockInstance.post.mockRejectedValue(error)
 
         await expect(
@@ -212,23 +226,33 @@ describe('API Utils', () => {
 
       it('should force reset password via apiService', async () => {
         const mockInstance = axios.mockInstance
-        const mockResponse = { data: { success: true, message: 'Password force-reset successfully' } }
+        const mockResponse = {
+          data: { success: true, message: 'Password force-reset successfully' },
+        }
         mockInstance.post.mockResolvedValue(mockResponse)
 
         const result = await apiService.auth.forceResetPassword({
           username: 'testuser',
           newPassword: 'newpass123',
         })
-        expect(result).toEqual({ success: true, message: 'Password force-reset successfully' })
-        expect(mockInstance.post).toHaveBeenCalledWith('/force-reset-password', {
-          username: 'testuser',
-          newPassword: 'newpass123',
+        expect(result).toEqual({
+          success: true,
+          message: 'Password force-reset successfully',
         })
+        expect(mockInstance.post).toHaveBeenCalledWith(
+          '/force-reset-password',
+          {
+            username: 'testuser',
+            newPassword: 'newpass123',
+          }
+        )
       })
 
       it('should handle force reset password error', async () => {
         const mockInstance = axios.mockInstance
-        const error = { response: { status: 404, data: { message: 'User not found' } } }
+        const error = {
+          response: { status: 404, data: { message: 'User not found' } },
+        }
         mockInstance.post.mockRejectedValue(error)
 
         await expect(

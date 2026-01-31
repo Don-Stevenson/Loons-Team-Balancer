@@ -19,7 +19,7 @@ export default function LoginForm() {
   const queryClient = useQueryClient() // Add this line
 
   const loginMutation = useLogin({
-    onSuccess: async data => {
+    onSuccess: async (data) => {
       if (data.success) {
         setError(false)
         // invalidate the auth query
@@ -30,13 +30,13 @@ export default function LoginForm() {
         setError(true)
       }
     },
-    onError: error => {
+    onError: (error) => {
       setError(true)
       console.error('Login error:', error)
     },
   })
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     loginMutation.mutate({ username, password })
   }
@@ -49,7 +49,7 @@ export default function LoginForm() {
           <input
             type="text"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             onFocus={() => setError(false)}
             placeholder="Username"
             required
@@ -61,7 +61,7 @@ export default function LoginForm() {
             <input
               type={showPassword ? 'text' : 'password'}
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               onFocus={() => setError(false)}
               placeholder="Password"
               required

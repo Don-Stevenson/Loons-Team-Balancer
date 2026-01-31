@@ -23,7 +23,7 @@ export default function TeamGenerator({
           min="2"
           max="10"
           value={numTeams}
-          onChange={e => onNumTeamsChange(e.target.value)}
+          onChange={(e) => onNumTeamsChange(e.target.value)}
         />
       </div>
       <div className="flex items-center justify-between print:hidden mt-4 mb-4">

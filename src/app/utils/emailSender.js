@@ -81,8 +81,8 @@ export async function sendTemporaryPasswordEmail(
                'en-US',
                { timeZone: 'America/New_York' }
              )} at ${new Date().toLocaleTimeString('en-US', {
-        timeZone: 'America/New_York',
-      })} EST.</p>
+               timeZone: 'America/New_York',
+             })} EST.</p>
       `,
     })
 
