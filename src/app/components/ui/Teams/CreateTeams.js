@@ -266,6 +266,7 @@ export default function CreateTeams() {
       const minimumDuration = new Promise(resolve => setTimeout(resolve, 2000))
 
       // Get only the players that are marked as playing
+
       const playingPlayers = players.filter(player => player.isPlayingThisWeek)
 
       if (playingPlayers.length === 0) {
@@ -393,7 +394,7 @@ export default function CreateTeams() {
         onGameSelect={handleGameSelect}
         normalizeName={normalizeName}
       />
-      <div className="flex flex-col rounded pt-6 pb-8 mb-4 print:pt-0 print:mb-0 print:px-0 print:pb-0">
+      <div className="flex flex-col rounded pt-6 pb-8 mb-4 gap-4 print:pt-0 print:mb-0 print:px-0 print:pb-0">
         {error && (
           <p className="text-center text-red-500 text-sm mt-2">{error}</p>
         )}

@@ -4,6 +4,8 @@ import TeamHeader from './TeamsHeader'
 import TeamStats from './TeamsStats'
 import TeamsPlayerList from './TeamsPlayerList'
 import GameMeetDate, { todaysDate } from '../GamesSelector/GameMeetDate'
+import { getTeamName } from '../../../utils/getTeamName'
+import { parseCustomColours } from '../../../utils/parseCustomColours'
 
 // Custom hook for drag and drop functionality (supports both mouse and touch)
 const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
@@ -16,6 +18,7 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     ghostElement: null,
   })
   const autoScrollIntervalRef = useRef(null)
+
 
   const handleDragStart = (e, teamIndex, playerIndex, playerId) => {
     // Store the dragged player info
@@ -333,6 +336,8 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
   }
 }
 
+
+
 const Teams = ({
   balancedTeams,
   setBalancedTeams,
@@ -341,6 +346,8 @@ const Teams = ({
 }) => {
   const [hoveredPlayer, setHoveredPlayer] = useState(null)
   const hoverTimeoutRef = useRef(null)
+  const [customColourInput, setCustomColourInput] = useState('');
+  const [parsedCustomColours, setParsedCustomColours] = useState([]);
 
   const handleMouseEnter = player => {
     // Clear any existing timeout
@@ -376,46 +383,35 @@ const Teams = ({
     handleTouchEnd,
   } = useDragAndDrop(balancedTeams, setBalancedTeams)
 
-  const getTeamColorClasses = (index, totalTeams) => {
-    const isThreeColorSystem = totalTeams === 3
 
+
+  // Handle input changes
+  const handleColourInputChange = (e) => {
+    const input = e.target.value;
+    setCustomColourInput(input);
+    setParsedCustomColours(parseCustomColours(input));
+  };
+
+  const getTeamColourClasses = (index, totalTeams) => {
+    // If we have a custom colour for this team index, use it
+    if (parsedCustomColours.length > 0 && parsedCustomColours[index]) {
+      return parsedCustomColours[index];
+    }
+    
+    // Otherwise fall back to default logic
+    const isThreeColorSystem = totalTeams === 3;
+    
     if (isThreeColorSystem) {
-      const colorIndex = index % 3
-
-      if (colorIndex === 0) {
-        return 'border-loonsRed bg-red-200 print:bg-red-100'
-      }
-      if (colorIndex === 1) {
-        return 'border-gray-500 bg-gray-200 print:bg-gray-100'
-      }
-      return 'border-gray-800 bg-white print:bg-gray-50'
+      const colourIndex = index % 3;
+      if (colourIndex === 0) return 'border-loonsRed bg-red-200 print:bg-white';
+      if (colourIndex === 1) return 'border-gray-800 bg-gray-200 print:bg-white';
+      return 'border-gray-500 bg-white print:bg-white';
     }
-
+    
     return index % 2 === 0
-      ? 'border-loonsRed bg-red-200 print:bg-red-100'
-      : 'border-gray-500 bg-gray-200 print:bg-gray-100'
-  }
-
-  const getTeamName = index => {
-    const totalTeams = balancedTeams.length
-
-    if (totalTeams === 3) {
-      const colorIndex = index % 3
-      if (colorIndex === 0) return 'Red Team'
-      if (colorIndex === 1) return 'Black Team'
-      if (colorIndex === 2) return 'White Team'
-    }
-
-    if (totalTeams === 2) {
-      return index === 0 ? 'Red Team' : 'Black Team'
-    }
-
-    const isRedTeam = index % 2 === 0
-    const teamNumber = Math.floor(index / 2) + 1
-    const color = isRedTeam ? 'Red' : 'Black'
-
-    return `${color} Team ${teamNumber}`
-  }
+      ? 'border-loonsRed bg-red-200 print:bg-white'
+      : 'border-gray-800 bg-gray-200 print:bg-white';
+  };
 
   const hasLargeTeams = balancedTeams.some(team => team.players.length > 12)
 
@@ -429,6 +425,15 @@ const Teams = ({
     const endIdx = Math.min(startIdx + teamsPerPage, balancedTeams.length)
     teamGroups.push(balancedTeams.slice(startIdx, endIdx))
   }
+
+  const getColourStatusMessage = () => {
+    if (parsedCustomColours.length > 0 && parsedCustomColours.length <= balancedTeams.length) {
+      return `✓ ${parsedCustomColours.length} custom colour(s) applied`;
+    } else if (parsedCustomColours.length > balancedTeams.length) {
+      return 'you have more colours than teams; more team colours cannot be applied';
+    }
+    return null;
+  };
 
   return (
     <>
@@ -453,6 +458,30 @@ const Teams = ({
           <GameMeetDate meetdate={todaysDate} />
         )}
       </div>
+
+          {/* ADD THIS: Custom Colors Input */}
+    <div className="print:hidden max-w-2xl mx-auto mb-6 px-4">
+      <label 
+        htmlFor="customColours" 
+        className="block text-sm font-medium text-gray-700 mb-2"
+      >
+        Customize Team Colours (Optional)
+      </label>
+      <input
+        id="customColours"
+        type="text"
+        value={customColourInput}
+        onChange={handleColourInputChange}
+        placeholder="e.g., blue, yellow, green, purple"
+        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+      />
+      <p className="mt-1 text-xs text-gray-500">
+        Enter colour names separated by commas. Available: red, blue, green, yellow, purple, orange, pink, black, white
+      </p>
+      <p className="mt-2 text-sm text-green-600 leading-tight min-h-[2.5rem]">
+        {getColourStatusMessage()}
+      </p>
+    </div>
       <div className="flex justify-center mb-4 flex-wrap text-xl print:hidden text-center sm:text-start">
         Total Number of People Playing: {totalPlayers}
       </div>
@@ -471,7 +500,7 @@ const Teams = ({
                 key={actualIndex}
                 data-team-drop-zone="true"
                 data-team-index={actualIndex}
-                className={`flex flex-col p-2 rounded max-w-[600px] border-4 print:w-full print:p-1 print:text-sm print:border-1 ${getTeamColorClasses(
+                className={`flex flex-col p-2 rounded max-w-[600px] border-4 print:w-full print:p-1 print:text-sm print:border-1 ${getTeamColourClasses(
                   actualIndex,
                   balancedTeams.length
                 )}`}
@@ -482,7 +511,9 @@ const Teams = ({
                 <TeamHeader
                   team={team}
                   index={actualIndex}
-                  getTeamName={getTeamName}
+                  balancedTeams={balancedTeams}
+                  parsedCustomColours={parsedCustomColours}
+                  customColourInput={customColourInput}
                 />
                 <TeamStats
                   team={team}
@@ -490,7 +521,7 @@ const Teams = ({
                   totalTeams={balancedTeams.length}
                 />
                 <h4 className="font-semibold mt-2 print:hidden">
-                  {getTeamName(actualIndex)} Players:
+                  {getTeamName(actualIndex, balancedTeams, parsedCustomColours, customColourInput)} Players:
                 </h4>
                 <TeamsPlayerList
                   team={team}
