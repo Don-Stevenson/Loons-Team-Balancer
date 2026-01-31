@@ -12,7 +12,7 @@ const allowedOrigins = [
 function isAllowedOrigin(origin) {
   if (!origin) return true // Allow requests without origin (same origin)
 
-  return allowedOrigins.some(allowedOrigin => {
+  return allowedOrigins.some((allowedOrigin) => {
     if (typeof allowedOrigin === 'string') {
       return allowedOrigin === origin
     }

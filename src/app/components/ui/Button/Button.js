@@ -14,7 +14,7 @@ const quaternaryStyles =
 const logoutStyles =
   'bg-loonsRed hover:bg-red-900 text-loonsBeige border border-red-900 font-semibold py-2 px-3 rounded text-center whitespace-nowrap transition-colors text-lg md:text-sm'
 
-const getVariantStyles = variant => {
+const getVariantStyles = (variant) => {
   if (variant === 'primary') {
     return primaryStyles
   } else if (variant === 'secondary') {

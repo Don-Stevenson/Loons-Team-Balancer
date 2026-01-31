@@ -106,7 +106,7 @@ describe('calculateTeamStats', () => {
     const result = calculateTeamStats(mockTeam)
 
     expect(
-      result.players.every(player => typeof player.totalScore === 'number')
+      result.players.every((player) => typeof player.totalScore === 'number')
     ).toBe(true)
 
     expect(result.totalGameKnowledgeScore).toBe(255)

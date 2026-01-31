@@ -7,7 +7,7 @@ const WEIGHTS = {
   fitness: 0.1,
 }
 
-export const calculatePlayerScore = player => {
+export const calculatePlayerScore = (player) => {
   return (player.totalScore =
     player.gameKnowledgeScore * WEIGHTS.gameKnowledge +
     player.goalScoringScore * WEIGHTS.goalScoring +
@@ -17,7 +17,7 @@ export const calculatePlayerScore = player => {
     player.fitnessScore * WEIGHTS.fitness)
 }
 
-export const calculateTeamStats = team => {
+export const calculateTeamStats = (team) => {
   const stats = team.players.reduce(
     (acc, player) => {
       const playerScore = calculatePlayerScore(player)

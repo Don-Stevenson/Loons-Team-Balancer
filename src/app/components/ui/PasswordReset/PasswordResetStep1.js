@@ -19,7 +19,7 @@ export default function PasswordResetStep1() {
   const [isVerifying, setIsVerifying] = useState(false)
   const [credentialsVerified, setCredentialsVerified] = useState(false)
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setIsVerifying(true)
     setError(false)
@@ -67,7 +67,7 @@ export default function PasswordResetStep1() {
             id="username"
             type="text"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={(e) => setUsername(e.target.value)}
             onFocus={() => setError(false)}
             placeholder="Username / Email"
             required
@@ -80,7 +80,7 @@ export default function PasswordResetStep1() {
               id="current-password"
               type={showCurrentPassword ? 'text' : 'password'}
               value={currentPassword}
-              onChange={e => setCurrentPassword(e.target.value)}
+              onChange={(e) => setCurrentPassword(e.target.value)}
               onFocus={() => setError(false)}
               placeholder="Current Password"
               required

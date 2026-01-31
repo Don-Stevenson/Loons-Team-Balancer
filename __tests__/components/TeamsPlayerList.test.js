@@ -135,7 +135,7 @@ describe('TeamsPlayerList Component', () => {
       )
 
       const playerItems = screen.getAllByRole('listitem')
-      playerItems.forEach(item => {
+      playerItems.forEach((item) => {
         expect(item).toHaveAttribute('draggable', 'true')
       })
     })
@@ -375,7 +375,7 @@ describe('TeamsPlayerList Component', () => {
       )
 
       const playerItems = screen.getAllByRole('listitem')
-      playerItems.forEach(item => {
+      playerItems.forEach((item) => {
         expect(item).toHaveClass('cursor-grab')
         expect(item).toHaveClass('active:cursor-grabbing')
         expect(item).toHaveClass('border-transparent')
@@ -394,7 +394,7 @@ describe('TeamsPlayerList Component', () => {
       )
 
       const playerItems = screen.getAllByRole('listitem')
-      playerItems.forEach(item => {
+      playerItems.forEach((item) => {
         expect(item).toHaveClass('print:border-0')
         expect(item).toHaveClass('print:max-w-none')
         expect(item).toHaveClass('print:text-xl')
@@ -412,7 +412,7 @@ describe('TeamsPlayerList Component', () => {
       )
 
       const playerItems = screen.getAllByRole('listitem')
-      playerItems.forEach(item => {
+      playerItems.forEach((item) => {
         expect(item).toHaveClass('[touch-action:pan-y]')
         expect(item).toHaveClass('[-webkit-touch-callout:none]')
         expect(item).toHaveClass('[-webkit-user-select:none]')
@@ -471,7 +471,7 @@ describe('TeamsPlayerList Component', () => {
       )
 
       const listItems = container.querySelectorAll('li')
-      const keys = Array.from(listItems).map(item => item.getAttribute('key'))
+      const keys = Array.from(listItems).map((item) => item.getAttribute('key'))
 
       // Keys should be unique (though React doesn't expose them in the DOM, we can verify via structure)
       expect(listItems).toHaveLength(3)

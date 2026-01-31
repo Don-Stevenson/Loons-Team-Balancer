@@ -18,8 +18,8 @@ jest.mock('../../utils/FEapi', () => ({
 }))
 
 jest.mock('../../src/app/components/features/auth/withAuthWrapper', () => {
-  return jest.fn(Component => {
-    const WithAuthComponent = props => <Component {...props} />
+  return jest.fn((Component) => {
+    const WithAuthComponent = (props) => <Component {...props} />
     WithAuthComponent.displayName = `WithAuth(${
       Component.displayName || Component.name || 'Component'
     })`
@@ -117,7 +117,7 @@ describe('Players Page', () => {
       // Make the API call take some time
       api.get.mockImplementation(
         () =>
-          new Promise(resolve =>
+          new Promise((resolve) =>
             setTimeout(() => resolve({ data: mockPlayers }), 100)
           )
       )
@@ -140,7 +140,7 @@ describe('Players Page', () => {
     })
 
     it('handles loading state during data fetch', async () => {
-      const delay = new Promise(resolve => setTimeout(resolve, 100))
+      const delay = new Promise((resolve) => setTimeout(resolve, 100))
       api.get.mockImplementationOnce(() =>
         delay.then(() => ({ data: mockPlayers }))
       )

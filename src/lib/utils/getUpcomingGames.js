@@ -150,7 +150,7 @@ async function upcomingGames({ teamId, cursor = null, past = false }) {
       query: ACTIVITIES_QUERY,
     })
 
-    return response.data.activities.edges.map(edge => edge.node)
+    return response.data.activities.edges.map((edge) => edge.node)
   } catch (error) {
     console.error('Error getting upcoming games:', error)
     throw error
@@ -178,8 +178,8 @@ export async function rsvpsForGame({ teamId, gameId }) {
     const members = response.data.activity.node.members
 
     return members
-      .filter(member => member.attending)
-      .map(member => member.user.fullName)
+      .filter((member) => member.attending)
+      .map((member) => member.user.fullName)
   } catch (error) {
     console.error('Error getting RSVPs for game:', error)
     throw error

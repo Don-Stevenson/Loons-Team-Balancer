@@ -15,7 +15,7 @@ function errorHandler(err, req, res) {
   // Mongoose validation error
   if (err.name === 'ValidationError') {
     const message = Object.values(err.errors)
-      .map(val => val.message)
+      .map((val) => val.message)
       .join(', ')
     return res.status(400).json({ message })
   }

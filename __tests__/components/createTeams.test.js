@@ -82,7 +82,7 @@ jest.mock(
     }) {
       return (
         <div data-testid="player-list">
-          {players.map(player => (
+          {players.map((player) => (
             <div key={player._id} data-testid={`player-${player._id}`}>
               <button onClick={() => onTogglePlayingThisWeek(player._id)}>
                 Toggle {player.name}
@@ -98,7 +98,7 @@ jest.mock(
 jest.mock('../../src/app/components/ui/Teams/Teams', () => {
   return function MockTeams({ balancedTeams, totalPlayers }) {
     // Helper function to get team name - matches the actual component logic
-    const getTeamName = index => {
+    const getTeamName = (index) => {
       const totalTeams = balancedTeams.length
 
       if (totalTeams === 3) {
@@ -125,7 +125,7 @@ jest.mock('../../src/app/components/ui/Teams/Teams', () => {
         {balancedTeams?.map((team, index) => (
           <div key={index} data-testid={`team-${index}`}>
             <div data-testid={`team-${index}-name`}>{getTeamName(index)}</div>
-            {team.players.map(player => (
+            {team.players.map((player) => (
               <div
                 key={player.name}
                 data-testid={`team-${index}-player-${player.name}`}
@@ -149,9 +149,9 @@ jest.mock('../../src/app/components/ui/GamesSelector/GameSelector', () => {
   }) {
     return (
       <div data-testid="upcoming-games">
-        <select onChange={e => onGameSelect && onGameSelect(e.target.value)}>
+        <select onChange={(e) => onGameSelect && onGameSelect(e.target.value)}>
           <option value="">Select a game</option>
-          {upcomingGames.map(game => (
+          {upcomingGames.map((game) => (
             <option key={game._id} value={game._id}>
               {game.title} - {new Date(game.meetdate).toLocaleDateString()}
             </option>
@@ -255,7 +255,7 @@ describe('CreateTeams Component', () => {
     })
 
     // Mock API responses (keeping for backward compatibility)
-    api.get.mockImplementation(url => {
+    api.get.mockImplementation((url) => {
       if (url === '/players') {
         return Promise.resolve({ data: mockPlayers })
       }
@@ -411,7 +411,7 @@ describe('CreateTeams Component', () => {
 
   it('handles toggle all functionality - deselect all', async () => {
     // Start with all players selected by mocking them as playing
-    const playingPlayers = mockPlayers.map(player => ({
+    const playingPlayers = mockPlayers.map((player) => ({
       ...player,
       isPlayingThisWeek: true,
     }))

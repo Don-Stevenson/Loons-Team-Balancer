@@ -1,10 +1,21 @@
 import { getTeamName } from '../../../utils/getTeamName'
 
-const TeamHeader = ({ team, index, balancedTeams, parsedCustomColours, customColourInput }) => {
+const TeamHeader = ({
+  team,
+  index,
+  balancedTeams,
+  parsedCustomColours,
+  customColourInput,
+}) => {
   return (
     <>
       <h3 className="text-xl text-black font-semibold print:text-lg print:mb-[2px] text-center">
-        {getTeamName(index, balancedTeams, parsedCustomColours, customColourInput)}
+        {getTeamName(
+          index,
+          balancedTeams,
+          parsedCustomColours,
+          customColourInput
+        )}
       </h3>
       <p className="text-sm print:hidden underline">Team Totals</p>
       <p className="pb-1 print:hidden text-xxs xs:text-sm">

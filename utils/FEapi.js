@@ -16,7 +16,7 @@ const api = axios.create({
 
 // Request interceptor
 api.interceptors.request.use(
-  config => {
+  (config) => {
     // Add cache-busting headers for GET requests in production
     if (config.method === 'get' && process.env.NODE_ENV === 'production') {
       config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
@@ -32,13 +32,13 @@ api.interceptors.request.use(
 
     return config
   },
-  error => Promise.reject(error)
+  (error) => Promise.reject(error)
 )
 
 // Response interceptor
 api.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     const originalRequest = error.config
 
     // Handle 401 Unauthorized errors, but don't retry auth/check calls, logout calls, or verify-credentials calls
@@ -99,18 +99,18 @@ export const apiService = {
   players: {
     getAll: async () => {
       const response = await api.get('/players')
-      return response.data.map(player => ({
+      return response.data.map((player) => ({
         ...player,
         isPlayingThisWeek: Boolean(player.isPlayingThisWeek),
       }))
     },
 
-    getById: async id => {
+    getById: async (id) => {
       const response = await api.get(`/players/${id}`)
       return response.data
     },
 
-    create: async playerData => {
+    create: async (playerData) => {
       const response = await api.post('/players', playerData)
       return {
         ...response.data,
@@ -143,7 +143,7 @@ export const apiService = {
       }
     },
 
-    delete: async id => {
+    delete: async (id) => {
       await api.delete(`/players/${id}`)
       return { id }
     },
@@ -171,7 +171,7 @@ export const apiService = {
         : response.data?.games || []
     },
 
-    getRsvps: async gameId => {
+    getRsvps: async (gameId) => {
       const response = await api.get(`/rsvps-for-game/${gameId}`)
       return response.data
     },

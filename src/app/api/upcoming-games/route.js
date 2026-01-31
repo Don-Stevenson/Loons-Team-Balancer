@@ -61,9 +61,8 @@ export async function GET(request) {
 
     // Lazy load the games utility to avoid errors at startup
     try {
-      const { getUpcomingGamesList } = await import(
-        '../../../lib/utils/getUpcomingGames'
-      )
+      const { getUpcomingGamesList } =
+        await import('../../../lib/utils/getUpcomingGames')
       const games = await getUpcomingGamesList()
 
       // Create response with no-cache headers to prevent browser caching

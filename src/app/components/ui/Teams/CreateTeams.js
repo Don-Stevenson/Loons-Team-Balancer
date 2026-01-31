@@ -50,7 +50,7 @@ export default function CreateTeams() {
   const bulkUpdateMutation = useBulkUpdatePlayers()
   const balanceTeamsMutation = useBalanceTeams()
 
-  const normalizeName = name => {
+  const normalizeName = (name) => {
     return name.toLowerCase().trim().replace(/\s+/g, ' ')
   }
 
@@ -66,7 +66,7 @@ export default function CreateTeams() {
   useEffect(() => {
     if (queryPlayers.length > 0 || !playersLoading) {
       // Initialize players with their current playing status from the database
-      const fetchedPlayers = queryPlayers.map(player => {
+      const fetchedPlayers = queryPlayers.map((player) => {
         // Default to false unless explicitly set to true in the database
         const isPlaying =
           player.isPlayingThisWeek === true ||
@@ -80,7 +80,7 @@ export default function CreateTeams() {
 
       setPlayers(fetchedPlayers)
       const playingCount = fetchedPlayers.filter(
-        player => player.isPlayingThisWeek
+        (player) => player.isPlayingThisWeek
       ).length
       setSelectAll(playingCount === fetchedPlayers.length)
       setSelectedPlayerCount(playingCount)
@@ -118,11 +118,11 @@ export default function CreateTeams() {
 
         // Create a Set of normalized RSVP'd player names for faster lookup
         const rsvpNames = new Set(
-          queryRsvpsForGame.map(name => normalizeName(name))
+          queryRsvpsForGame.map((name) => normalizeName(name))
         )
 
         // Update local state immediately to prevent re-renders during API calls
-        const updatedPlayers = players.map(player => {
+        const updatedPlayers = players.map((player) => {
           const normalizedName = normalizeName(player.name)
           return {
             ...player,
@@ -132,7 +132,7 @@ export default function CreateTeams() {
 
         setPlayers(updatedPlayers)
         const selectedCount = updatedPlayers.filter(
-          p => p.isPlayingThisWeek
+          (p) => p.isPlayingThisWeek
         ).length
         setSelectedPlayerCount(selectedCount)
         setSelectAll(selectedCount === players.length)
@@ -141,7 +141,7 @@ export default function CreateTeams() {
         setProcessedGameId(selectedGameId)
 
         // First, set all players to not playing
-        const allPlayerIds = players.map(player => player._id)
+        const allPlayerIds = players.map((player) => player._id)
 
         await bulkUpdateMutation.mutateAsync({
           isPlayingThisWeek: false,
@@ -150,11 +150,11 @@ export default function CreateTeams() {
 
         // Then set only RSVP'd players to playing (if any)
         const playingPlayerIds = players
-          .filter(player => {
+          .filter((player) => {
             const normalizedName = normalizeName(player.name)
             return rsvpNames.has(normalizedName)
           })
-          .map(player => player._id)
+          .map((player) => player._id)
 
         if (playingPlayerIds.length > 0) {
           await bulkUpdateMutation.mutateAsync({
@@ -184,11 +184,11 @@ export default function CreateTeams() {
     return () => clearTimeout(timeoutId)
   }, [selectedGameId, queryRsvpsForGame, rsvpsLoading]) // Removed players.length dependency to prevent infinite loop
 
-  const handleTogglePlayingThisWeek = async playerId => {
-    const playerToUpdate = players.find(player => player._id === playerId)
+  const handleTogglePlayingThisWeek = async (playerId) => {
+    const playerToUpdate = players.find((player) => player._id === playerId)
     const newPlayingState = !playerToUpdate.isPlayingThisWeek
 
-    const updatedPlayers = players.map(player =>
+    const updatedPlayers = players.map((player) =>
       player._id === playerId
         ? { ...player, isPlayingThisWeek: newPlayingState }
         : player
@@ -196,9 +196,9 @@ export default function CreateTeams() {
 
     setPlayers(updatedPlayers)
     setSelectedPlayerCount(
-      updatedPlayers.filter(p => p.isPlayingThisWeek).length
+      updatedPlayers.filter((p) => p.isPlayingThisWeek).length
     )
-    setSelectAll(updatedPlayers.every(player => player.isPlayingThisWeek))
+    setSelectAll(updatedPlayers.every((player) => player.isPlayingThisWeek))
 
     try {
       await bulkUpdateMutation.mutateAsync({
@@ -208,16 +208,16 @@ export default function CreateTeams() {
     } catch (error) {
       console.error('Failed to update player:', error)
       // Revert the change on error
-      const revertedPlayers = players.map(player =>
+      const revertedPlayers = players.map((player) =>
         player._id === playerId
           ? { ...player, isPlayingThisWeek: !newPlayingState }
           : player
       )
       setPlayers(revertedPlayers)
       setSelectedPlayerCount(
-        revertedPlayers.filter(p => p.isPlayingThisWeek).length
+        revertedPlayers.filter((p) => p.isPlayingThisWeek).length
       )
-      setSelectAll(revertedPlayers.every(player => player.isPlayingThisWeek))
+      setSelectAll(revertedPlayers.every((player) => player.isPlayingThisWeek))
       setError('Failed to update player status')
     }
   }
@@ -225,7 +225,7 @@ export default function CreateTeams() {
   const handleSelectAll = async () => {
     const newSelectAllState = !selectAll
 
-    const updatedPlayers = players.map(player => ({
+    const updatedPlayers = players.map((player) => ({
       ...player,
       isPlayingThisWeek: newSelectAllState,
     }))
@@ -236,7 +236,7 @@ export default function CreateTeams() {
 
     try {
       // Get all player IDs
-      const playerIds = players.map(player => player._id)
+      const playerIds = players.map((player) => player._id)
 
       await bulkUpdateMutation.mutateAsync({
         isPlayingThisWeek: newSelectAllState,
@@ -245,7 +245,7 @@ export default function CreateTeams() {
     } catch (error) {
       console.error('Failed to update all players:', error)
       // Revert the change on error
-      const revertedPlayers = players.map(player => ({
+      const revertedPlayers = players.map((player) => ({
         ...player,
         isPlayingThisWeek: !newSelectAllState,
       }))
@@ -263,11 +263,15 @@ export default function CreateTeams() {
       setShowLoadingMessage(true)
 
       // Minimum duration of 2 seconds for loading message
-      const minimumDuration = new Promise(resolve => setTimeout(resolve, 2000))
+      const minimumDuration = new Promise((resolve) =>
+        setTimeout(resolve, 2000)
+      )
 
       // Get only the players that are marked as playing
 
-      const playingPlayers = players.filter(player => player.isPlayingThisWeek)
+      const playingPlayers = players.filter(
+        (player) => player.isPlayingThisWeek
+      )
 
       if (playingPlayers.length === 0) {
         setError('Please select at least one player to create teams')
@@ -363,9 +367,9 @@ export default function CreateTeams() {
   }
 
   // Handle game selection
-  const handleGameSelect = gameId => {
+  const handleGameSelect = (gameId) => {
     setOpenPlayerList(true) // Set to true first
-    const selectedGame = upcomingGames.find(game => game._id === gameId)
+    const selectedGame = upcomingGames.find((game) => game._id === gameId)
     setSelectedDate(new Date(selectedGame.meetdate))
     setSelectedGameId(gameId)
     setSelectedGameInfo(selectedGame) // Store the full game info for printout

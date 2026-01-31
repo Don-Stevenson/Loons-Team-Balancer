@@ -11,7 +11,7 @@ const allowedOrigins = [
 ]
 
 export function corsHeaders(origin) {
-  const isAllowed = allowedOrigins.some(allowedOrigin => {
+  const isAllowed = allowedOrigins.some((allowedOrigin) => {
     if (typeof allowedOrigin === 'string') {
       return allowedOrigin === origin
     }

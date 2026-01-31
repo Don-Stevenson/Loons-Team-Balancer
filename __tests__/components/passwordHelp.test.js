@@ -364,7 +364,7 @@ describe('PasswordHelp', () => {
   describe('Loading State', () => {
     it('shows loading text on submit button during API call', async () => {
       let resolvePromise
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         resolvePromise = resolve
       })
 
@@ -399,7 +399,7 @@ describe('PasswordHelp', () => {
 
     it('disables input field during submission', async () => {
       let resolvePromise
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         resolvePromise = resolve
       })
 
@@ -430,7 +430,7 @@ describe('PasswordHelp', () => {
 
     it('disables submit button during submission', async () => {
       let resolvePromise
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         resolvePromise = resolve
       })
 
@@ -812,7 +812,7 @@ describe('PasswordHelp', () => {
 
     it('handles rapid consecutive clicks on submit button', async () => {
       let resolvePromise
-      const promise = new Promise(resolve => {
+      const promise = new Promise((resolve) => {
         resolvePromise = resolve
       })
 

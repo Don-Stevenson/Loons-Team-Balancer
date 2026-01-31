@@ -19,7 +19,6 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
   })
   const autoScrollIntervalRef = useRef(null)
 
-
   const handleDragStart = (e, teamIndex, playerIndex, playerId) => {
     // Store the dragged player info
     setDraggedPlayer({ teamIndex, playerIndex, playerId })
@@ -36,7 +35,7 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     e.dataTransfer.effectAllowed = 'move'
   }
 
-  const handleDragEnd = e => {
+  const handleDragEnd = (e) => {
     e.target.classList.remove('opacity-50')
     e.target.classList.remove('border-indigo-500')
 
@@ -50,7 +49,7 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     e.currentTarget.classList.add('drag-over-highlight')
   }
 
-  const handleDragLeave = e => {
+  const handleDragLeave = (e) => {
     e.currentTarget.classList.remove('drag-over-highlight')
   }
 
@@ -141,7 +140,7 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
         }px`
         document.body.appendChild(ghostElement)
 
-        setTouchState(prev => ({ ...prev, isDragging: true, ghostElement }))
+        setTouchState((prev) => ({ ...prev, isDragging: true, ghostElement }))
 
         // Add visual feedback to original element
         if (touchState.currentElement) {
@@ -213,7 +212,7 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
       const teamContainer = elementAtPoint?.closest('[data-team-drop-zone]')
 
       // Remove highlight from all team containers
-      document.querySelectorAll('[data-team-drop-zone]').forEach(el => {
+      document.querySelectorAll('[data-team-drop-zone]').forEach((el) => {
         el.classList.remove('drag-over-highlight')
       })
 
@@ -244,7 +243,7 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
     }
 
     // Remove highlight from all team containers
-    document.querySelectorAll('[data-team-drop-zone]').forEach(el => {
+    document.querySelectorAll('[data-team-drop-zone]').forEach((el) => {
       el.classList.remove('drag-over-highlight')
     })
 
@@ -336,8 +335,6 @@ const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
   }
 }
 
-
-
 const Teams = ({
   balancedTeams,
   setBalancedTeams,
@@ -346,10 +343,10 @@ const Teams = ({
 }) => {
   const [hoveredPlayer, setHoveredPlayer] = useState(null)
   const hoverTimeoutRef = useRef(null)
-  const [customColourInput, setCustomColourInput] = useState('');
-  const [parsedCustomColours, setParsedCustomColours] = useState([]);
+  const [customColourInput, setCustomColourInput] = useState('')
+  const [parsedCustomColours, setParsedCustomColours] = useState([])
 
-  const handleMouseEnter = player => {
+  const handleMouseEnter = (player) => {
     // Clear any existing timeout
     if (hoverTimeoutRef.current) {
       clearTimeout(hoverTimeoutRef.current)
@@ -383,37 +380,35 @@ const Teams = ({
     handleTouchEnd,
   } = useDragAndDrop(balancedTeams, setBalancedTeams)
 
-
-
   // Handle input changes
   const handleColourInputChange = (e) => {
-    const input = e.target.value;
-    setCustomColourInput(input);
-    setParsedCustomColours(parseCustomColours(input));
-  };
+    const input = e.target.value
+    setCustomColourInput(input)
+    setParsedCustomColours(parseCustomColours(input))
+  }
 
   const getTeamColourClasses = (index, totalTeams) => {
     // If we have a custom colour for this team index, use it
     if (parsedCustomColours.length > 0 && parsedCustomColours[index]) {
-      return parsedCustomColours[index];
+      return parsedCustomColours[index]
     }
-    
+
     // Otherwise fall back to default logic
-    const isThreeColorSystem = totalTeams === 3;
-    
+    const isThreeColorSystem = totalTeams === 3
+
     if (isThreeColorSystem) {
-      const colourIndex = index % 3;
-      if (colourIndex === 0) return 'border-loonsRed bg-red-200 print:bg-white';
-      if (colourIndex === 1) return 'border-gray-800 bg-gray-200 print:bg-white';
-      return 'border-gray-500 bg-white print:bg-white';
+      const colourIndex = index % 3
+      if (colourIndex === 0) return 'border-loonsRed bg-red-200 print:bg-white'
+      if (colourIndex === 1) return 'border-gray-800 bg-gray-200 print:bg-white'
+      return 'border-gray-500 bg-white print:bg-white'
     }
-    
+
     return index % 2 === 0
       ? 'border-loonsRed bg-red-200 print:bg-white'
-      : 'border-gray-800 bg-gray-200 print:bg-white';
-  };
+      : 'border-gray-800 bg-gray-200 print:bg-white'
+  }
 
-  const hasLargeTeams = balancedTeams.some(team => team.players.length > 12)
+  const hasLargeTeams = balancedTeams.some((team) => team.players.length > 12)
 
   const teamsPerPage = hasLargeTeams ? 2 : 4
 
@@ -427,13 +422,16 @@ const Teams = ({
   }
 
   const getColourStatusMessage = () => {
-    if (parsedCustomColours.length > 0 && parsedCustomColours.length <= balancedTeams.length) {
-      return `✓ ${parsedCustomColours.length} custom colour(s) applied`;
+    if (
+      parsedCustomColours.length > 0 &&
+      parsedCustomColours.length <= balancedTeams.length
+    ) {
+      return `✓ ${parsedCustomColours.length} custom colour(s) applied`
     } else if (parsedCustomColours.length > balancedTeams.length) {
-      return 'you have more colours than teams; more team colours cannot be applied';
+      return 'you have more colours than teams; more team colours cannot be applied'
     }
-    return null;
-  };
+    return null
+  }
 
   return (
     <>
@@ -459,29 +457,30 @@ const Teams = ({
         )}
       </div>
 
-          {/* ADD THIS: Custom Colors Input */}
-    <div className="print:hidden max-w-2xl mx-auto mb-6 px-4">
-      <label 
-        htmlFor="customColours" 
-        className="block text-sm font-medium text-gray-700 mb-2"
-      >
-        Customize Team Colours (Optional)
-      </label>
-      <input
-        id="customColours"
-        type="text"
-        value={customColourInput}
-        onChange={handleColourInputChange}
-        placeholder="e.g., blue, yellow, green, purple"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-      />
-      <p className="mt-1 text-xs text-gray-500">
-        Enter colour names separated by commas. Available: red, blue, green, yellow, purple, orange, pink, black, white
-      </p>
-      <p className="mt-2 text-sm text-green-600 leading-tight min-h-[2.5rem]">
-        {getColourStatusMessage()}
-      </p>
-    </div>
+      {/* ADD THIS: Custom Colors Input */}
+      <div className="print:hidden max-w-2xl mx-auto mb-6 px-4">
+        <label
+          htmlFor="customColours"
+          className="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Customize Team Colours (Optional)
+        </label>
+        <input
+          id="customColours"
+          type="text"
+          value={customColourInput}
+          onChange={handleColourInputChange}
+          placeholder="e.g., blue, yellow, green, purple"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+        />
+        <p className="mt-1 text-xs text-gray-500">
+          Enter colour names separated by commas. Available: red, blue, green,
+          yellow, purple, orange, pink, black, white
+        </p>
+        <p className="mt-2 text-sm text-green-600 leading-tight min-h-[2.5rem]">
+          {getColourStatusMessage()}
+        </p>
+      </div>
       <div className="flex justify-center mb-4 flex-wrap text-xl print:hidden text-center sm:text-start">
         Total Number of People Playing: {totalPlayers}
       </div>
@@ -504,9 +503,9 @@ const Teams = ({
                   actualIndex,
                   balancedTeams.length
                 )}`}
-                onDragOver={e => handleDragOver(e, actualIndex)}
+                onDragOver={(e) => handleDragOver(e, actualIndex)}
                 onDragLeave={handleDragLeave}
-                onDrop={e => handleDrop(e, actualIndex)}
+                onDrop={(e) => handleDrop(e, actualIndex)}
               >
                 <TeamHeader
                   team={team}
@@ -521,7 +520,13 @@ const Teams = ({
                   totalTeams={balancedTeams.length}
                 />
                 <h4 className="font-semibold mt-2 print:hidden">
-                  {getTeamName(actualIndex, balancedTeams, parsedCustomColours, customColourInput)} Players:
+                  {getTeamName(
+                    actualIndex,
+                    balancedTeams,
+                    parsedCustomColours,
+                    customColourInput
+                  )}{' '}
+                  Players:
                 </h4>
                 <TeamsPlayerList
                   team={team}

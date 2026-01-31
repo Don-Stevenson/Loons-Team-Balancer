@@ -10,8 +10,8 @@ import AddPlayerModal from '../components/ui/Modal/AddPlayerModal.js'
 import { PulseLoader } from 'react-spinners'
 import toast, { Toaster } from 'react-hot-toast'
 
-const successNotify = msg => toast.success(msg)
-const errorNotify = msg => toast.error(msg)
+const successNotify = (msg) => toast.success(msg)
+const errorNotify = (msg) => toast.error(msg)
 // React Query hooks for background caching only
 import {
   usePlayers,
@@ -77,12 +77,12 @@ function Players() {
       setIsLoading(true)
       setShowLoadingMessage(true)
 
-      const minimumDuration = new Promise(resolve => setTimeout(resolve, 400))
+      const minimumDuration = new Promise((resolve) => setTimeout(resolve, 400))
 
       const [res] = await Promise.all([api.get('/players'), minimumDuration])
 
       setPlayers(
-        res.data.map(player => ({
+        res.data.map((player) => ({
           ...player,
           isPlayingThisWeek: Boolean(player.isPlayingThisWeek),
         }))
@@ -110,7 +110,7 @@ function Players() {
     }
   }, [fetchPlayers])
 
-  const addPlayer = async newPlayer => {
+  const addPlayer = async (newPlayer) => {
     setPlayersLoading(true)
     try {
       const response = await api.post('/players', newPlayer)
@@ -126,7 +126,7 @@ function Players() {
           fitnessScore: parseInt(response.data.fitnessScore),
         }
 
-        setPlayers(prevPlayers => {
+        setPlayers((prevPlayers) => {
           const newPlayers = [...prevPlayers, formattedPlayer]
           return newPlayers.sort((a, b) => a.name.localeCompare(b.name))
         })
@@ -144,13 +144,13 @@ function Players() {
     }
   }
 
-  const onDeletePlayer = async playerId => {
+  const onDeletePlayer = async (playerId) => {
     setDeleteLoading(true)
     try {
       await api.delete(`/players/${playerId}`)
 
-      setPlayers(prevPlayers =>
-        prevPlayers.filter(player => player._id !== playerId)
+      setPlayers((prevPlayers) =>
+        prevPlayers.filter((player) => player._id !== playerId)
       )
       setDeleteLoading(false)
     } catch (error) {
@@ -182,7 +182,7 @@ function Players() {
     }
   }
 
-  const handlePlayerUpdate = async updatedPlayer => {
+  const handlePlayerUpdate = async (updatedPlayer) => {
     try {
       const playerData = {
         ...updatedPlayer,
@@ -205,8 +205,8 @@ function Players() {
         isPlayingThisWeek: Boolean(res.data.isPlayingThisWeek),
       }
 
-      setPlayers(prevPlayers =>
-        prevPlayers.map(player =>
+      setPlayers((prevPlayers) =>
+        prevPlayers.map((player) =>
           player._id === updatedPlayer._id ? updatedPlayerData : player
         )
       )
@@ -221,8 +221,8 @@ function Players() {
     }
   }
 
-  const handleEditPlayer = playerId => {
-    const playerToEdit = players.find(p => p._id === playerId)
+  const handleEditPlayer = (playerId) => {
+    const playerToEdit = players.find((p) => p._id === playerId)
     setPlayerToEdit(playerToEdit)
     setIsEditModalOpen(true)
   }
@@ -232,8 +232,8 @@ function Players() {
     setPlayerToEdit(null)
   }
 
-  const handleDeleteConfirmation = playerId => {
-    const playerToDelete = players.find(p => p._id === playerId)
+  const handleDeleteConfirmation = (playerId) => {
+    const playerToDelete = players.find((p) => p._id === playerId)
     setDeleteState({
       isDeleting: true,
       playerToDelete,

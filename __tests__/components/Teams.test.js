@@ -8,42 +8,50 @@ jest.mock('../../src/app/utils/getTeamName', () => ({
   getTeamName: jest.fn((index, teams, customColours, input) => {
     const totalTeams = teams.length
     let currentColour = ''
-    
+
     if (customColours && customColours.length > 0 && customColours[index]) {
-      const colourNames = input.split(',').map(c => c.trim()).filter(c => c.length > 0)
+      const colourNames = input
+        .split(',')
+        .map((c) => c.trim())
+        .filter((c) => c.length > 0)
       currentColour = colourNames[index]?.toLowerCase()
     } else {
       if (totalTeams === 3) {
         const colourIndex = index % 3
-        currentColour = colourIndex === 0 ? 'red' : colourIndex === 1 ? 'black' : 'white'
+        currentColour =
+          colourIndex === 0 ? 'red' : colourIndex === 1 ? 'black' : 'white'
       } else if (totalTeams === 2) {
         currentColour = index === 0 ? 'red' : 'black'
       } else {
         currentColour = index % 2 === 0 ? 'red' : 'black'
       }
     }
-    
+
     // Count occurrences
     let totalOccurrences = 0
     let occurrenceNumber = 0
-    
+
     for (let i = 0; i < totalTeams; i++) {
       let teamColour = ''
-      
+
       if (customColours && customColours.length > 0 && customColours[i]) {
-        const colourNames = input.split(',').map(c => c.trim()).filter(c => c.length > 0)
+        const colourNames = input
+          .split(',')
+          .map((c) => c.trim())
+          .filter((c) => c.length > 0)
         teamColour = colourNames[i]?.toLowerCase()
       } else {
         if (totalTeams === 3) {
           const colourIndex = i % 3
-          teamColour = colourIndex === 0 ? 'red' : colourIndex === 1 ? 'black' : 'white'
+          teamColour =
+            colourIndex === 0 ? 'red' : colourIndex === 1 ? 'black' : 'white'
         } else if (totalTeams === 2) {
           teamColour = i === 0 ? 'red' : 'black'
         } else {
           teamColour = i % 2 === 0 ? 'red' : 'black'
         }
       }
-      
+
       if (teamColour === currentColour) {
         totalOccurrences++
         if (i === index) {
@@ -51,9 +59,10 @@ jest.mock('../../src/app/utils/getTeamName', () => ({
         }
       }
     }
-    
-    const capitalizedColour = currentColour.charAt(0).toUpperCase() + currentColour.slice(1)
-    return totalOccurrences > 1 
+
+    const capitalizedColour =
+      currentColour.charAt(0).toUpperCase() + currentColour.slice(1)
+    return totalOccurrences > 1
       ? `${capitalizedColour} Team ${occurrenceNumber}`
       : `${capitalizedColour} Team`
   }),
@@ -62,7 +71,7 @@ jest.mock('../../src/app/utils/getTeamName', () => ({
 jest.mock('../../src/app/utils/parseCustomColours', () => ({
   parseCustomColours: jest.fn((input) => {
     if (!input || input.trim() === '') return []
-    const colours = input.split(',').map(c => c.trim().toLowerCase())
+    const colours = input.split(',').map((c) => c.trim().toLowerCase())
     const colourMap = {
       red: 'border-loonsRed bg-red-200 print:bg-white',
       blue: 'border-blue-500 bg-blue-200 print:bg-white',
@@ -74,13 +83,18 @@ jest.mock('../../src/app/utils/parseCustomColours', () => ({
       black: 'border-gray-800 bg-gray-200 print:bg-white',
       white: 'border-gray-500 bg-white print:bg-white',
     }
-    return colours.map(c => colourMap[c] || null).filter(Boolean)
+    return colours.map((c) => colourMap[c] || null).filter(Boolean)
   }),
 }))
 
 // Mock the child components
 jest.mock('../../src/app/components/ui/Teams/TeamsHeader', () => {
-  return function MockTeamHeader({ team, index, parsedCustomColours, customColourInput }) {
+  return function MockTeamHeader({
+    team,
+    index,
+    parsedCustomColours,
+    customColourInput,
+  }) {
     return (
       <div data-testid={`team-header-${index}`}>
         <h3>Team {index}</h3>
@@ -109,8 +123,8 @@ jest.mock('../../src/app/components/ui/Teams/TeamsStats', () => {
 })
 
 jest.mock('../../src/app/components/ui/Teams/TeamsPlayerList', () => {
-  return function MockTeamsPlayerList({ 
-    team, 
+  return function MockTeamsPlayerList({
+    team,
     teamIndex,
     handleDragStart,
     handleDragEnd,
@@ -119,7 +133,7 @@ jest.mock('../../src/app/components/ui/Teams/TeamsPlayerList', () => {
     handleTouchEnd,
     hoveredPlayer,
     handleMouseEnter,
-    handleMouseLeave
+    handleMouseLeave,
   }) {
     return (
       <ul data-testid={`team-${teamIndex}-players`}>
@@ -192,7 +206,7 @@ describe('Teams Component', () => {
     gender: 'female',
   }
 
-  const createTeamWithStats = players => {
+  const createTeamWithStats = (players) => {
     return calculateTeamStats({ players })
   }
 
@@ -724,7 +738,9 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
       expect(input).toBeInTheDocument()
       expect(input).toHaveAttribute('type', 'text')
     })
@@ -761,10 +777,12 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       fireEvent.change(input, { target: { value: 'blue, yellow' } })
-      
+
       expect(input).toHaveValue('blue, yellow')
     })
 
@@ -783,12 +801,16 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       fireEvent.change(input, { target: { value: 'blue, yellow' } })
-      
+
       // Check for success message
-      expect(screen.getByText(/✓ 2 custom colour\(s\) applied/i)).toBeInTheDocument()
+      expect(
+        screen.getByText(/✓ 2 custom colour\(s\) applied/i)
+      ).toBeInTheDocument()
     })
 
     it('displays warning when more colours than teams', () => {
@@ -803,10 +825,12 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       fireEvent.change(input, { target: { value: 'blue, yellow, green' } })
-      
+
       // Check for warning message
       expect(
         screen.getByText(/you have more colours than teams/i)
@@ -828,10 +852,12 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       fireEvent.change(input, { target: { value: 'blue, green' } })
-      
+
       // Check that team containers have custom colour classes
       const teamContainers = container.querySelectorAll('[data-team-drop-zone]')
       expect(teamContainers[0]).toHaveClass('border-blue-500')
@@ -858,7 +884,7 @@ describe('Teams Component', () => {
       )
 
       const teamContainers = container.querySelectorAll('[data-team-drop-zone]')
-      
+
       // Default colours for 2 teams: red and black
       expect(teamContainers[0]).toHaveClass('border-loonsRed')
       expect(teamContainers[0]).toHaveClass('bg-red-200')
@@ -878,10 +904,12 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       fireEvent.change(input, { target: { value: 'blue' } })
-      
+
       // The mock TeamHeader should receive the props and display custom colour indicator
       expect(screen.getByTestId('custom-colour-0')).toBeInTheDocument()
     })
@@ -898,13 +926,19 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       // Enter invalid colour names
-      fireEvent.change(input, { target: { value: 'notacolour, alsonotacolour' } })
-      
+      fireEvent.change(input, {
+        target: { value: 'notacolour, alsonotacolour' },
+      })
+
       // Should not crash and should not show success message
-      expect(screen.queryByText(/✓ \d+ custom colour\(s\) applied/i)).not.toBeInTheDocument()
+      expect(
+        screen.queryByText(/✓ \d+ custom colour\(s\) applied/i)
+      ).not.toBeInTheDocument()
     })
 
     it('applies custom colours to three-team setup', () => {
@@ -923,12 +957,14 @@ describe('Teams Component', () => {
         />
       )
 
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       fireEvent.change(input, { target: { value: 'purple, orange, pink' } })
-      
+
       const teamContainers = container.querySelectorAll('[data-team-drop-zone]')
-      
+
       // Check custom colours are applied to all three teams
       expect(teamContainers[0]).toHaveClass('border-purple-500')
       expect(teamContainers[0]).toHaveClass('bg-purple-100')
@@ -951,8 +987,10 @@ describe('Teams Component', () => {
       )
 
       const inputContainer = container.querySelector('.print\\:hidden')
-      const input = screen.getByPlaceholderText(/e.g., blue, yellow, green, purple/i)
-      
+      const input = screen.getByPlaceholderText(
+        /e.g., blue, yellow, green, purple/i
+      )
+
       // Check that the input is within a print:hidden container
       expect(inputContainer).toContainElement(input)
     })

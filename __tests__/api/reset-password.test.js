@@ -13,12 +13,12 @@ jest.mock('next/server', () => {
         })
       }
       this.headers = {
-        get: name => headersMap.get(name.toLowerCase()),
+        get: (name) => headersMap.get(name.toLowerCase()),
         set: (name, value) => {
           headersMap.set(name.toLowerCase(), value)
           return this.headers
         },
-        has: name => headersMap.has(name.toLowerCase()),
+        has: (name) => headersMap.has(name.toLowerCase()),
       }
     }
 
