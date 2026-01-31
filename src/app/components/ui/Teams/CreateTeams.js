@@ -266,14 +266,8 @@ export default function CreateTeams() {
       const minimumDuration = new Promise(resolve => setTimeout(resolve, 2000))
 
       // Get only the players that are marked as playing
-<<<<<<< HEAD
-      let playingPlayers = players.filter(player => player.isPlayingThisWeek)
 
-      // PHASE 1: Apply pre-balance rules (e.g., add PERSON2 if PERSON1 is playing)
-      playingPlayers = applyPreBalanceRules(players, playingPlayers)
-=======
       const playingPlayers = players.filter(player => player.isPlayingThisWeek)
->>>>>>> parent of 46e93ec (Add player team requests (#318))
 
       if (playingPlayers.length === 0) {
         setError('Please select at least one player to create teams')
