@@ -456,8 +456,6 @@ const Teams = ({
           <GameMeetDate meetdate={todaysDate} />
         )}
       </div>
-
-      {/* ADD THIS: Custom Colors Input */}
       <div className="print:hidden max-w-2xl mx-auto mb-6 px-4">
         <label
           htmlFor="customColours"
