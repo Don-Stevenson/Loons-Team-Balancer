@@ -6,6 +6,7 @@ import TeamsPlayerList from './TeamsPlayerList'
 import GameMeetDate, { todaysDate } from '../GamesSelector/GameMeetDate'
 import { getTeamName } from '../../../utils/getTeamName'
 import { parseCustomColours } from '../../../utils/parseCustomColours'
+import CustomizeTeamColours from './CustomizeTeamColours'
 
 // Custom hook for drag and drop functionality (supports both mouse and touch)
 const useDragAndDrop = (balancedTeams, setBalancedTeams) => {
@@ -421,18 +422,6 @@ const Teams = ({
     teamGroups.push(balancedTeams.slice(startIdx, endIdx))
   }
 
-  const getColourStatusMessage = () => {
-    if (
-      parsedCustomColours.length > 0 &&
-      parsedCustomColours.length <= balancedTeams.length
-    ) {
-      return `✓ ${parsedCustomColours.length} custom colour(s) applied`
-    } else if (parsedCustomColours.length > balancedTeams.length) {
-      return 'you have more colours than teams; more team colours cannot be applied'
-    }
-    return null
-  }
-
   return (
     <>
       {/* Game name for print - only visible when printing */}
@@ -456,29 +445,13 @@ const Teams = ({
           <GameMeetDate meetdate={todaysDate} />
         )}
       </div>
-      <div className="print:hidden max-w-2xl mx-auto mb-6 px-4">
-        <label
-          htmlFor="customColours"
-          className="block text-sm font-medium text-gray-700 mb-2"
-        >
-          Customize Team Colours (Optional)
-        </label>
-        <input
-          id="customColours"
-          type="text"
-          value={customColourInput}
-          onChange={handleColourInputChange}
-          placeholder="e.g., blue, yellow, green, purple"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg"
-        />
-        <p className="mt-1 text-xs text-gray-500">
-          Enter colour names separated by commas. Available: red, blue, green,
-          yellow, purple, orange, pink, black, white
-        </p>
-        <p className="mt-2 text-sm text-green-600 leading-tight min-h-[2.5rem]">
-          {getColourStatusMessage()}
-        </p>
-      </div>
+      <CustomizeTeamColours
+        customColourInput={customColourInput}
+        handleColourInputChange={handleColourInputChange}
+        parsedCustomColours={parsedCustomColours}
+        balancedTeams={balancedTeams}
+      />
+
       <div className="flex justify-center mb-4 flex-wrap text-xl print:hidden text-center sm:text-start">
         Total Number of People Playing: {totalPlayers}
       </div>
