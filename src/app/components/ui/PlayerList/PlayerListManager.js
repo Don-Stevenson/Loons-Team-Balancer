@@ -18,17 +18,17 @@ export default function PlayerListManager({
   return (
     <div className="print:hidden">
       <div className="flex-col flex-wrap">
-        <h2 className="text-2xl text-center font-bold mb-4 print:hidden text-loonsDarkBrown">
+        <h2 className="mb-4 text-center text-2xl font-bold text-loonsDarkBrown print:hidden">
           Player List
         </h2>
-        <div className="flex mb-4 print:hidden sticky top-0 z-10 justify-center">
-          <span className="font-bold text-xl bg-white p-2 rounded-lg opacity-70 relative">
+        <div className="sticky top-0 z-10 mb-4 flex justify-center print:hidden">
+          <span className="relative rounded-lg bg-white p-2 text-xl font-bold opacity-70">
             <p clasname=" text-gray-800">
               {`Total Players Selected: ${selectedPlayerCount}`}
             </p>
           </span>
         </div>
-        <div className="flex justify-center items-center mb-4">
+        <div className="mb-4 flex items-center justify-center">
           <Button
             variant="primary"
             onClick={onTogglePlayerList}
@@ -38,7 +38,7 @@ export default function PlayerListManager({
         </div>
         {openPlayerList && (
           <>
-            <div className="flex justify-center mb-4 print:hidden">
+            <div className="mb-4 flex justify-center print:hidden">
               <label className="inline-flex items-center">
                 <input
                   type="checkbox"
@@ -47,7 +47,7 @@ export default function PlayerListManager({
                   onChange={onSelectAll}
                   disabled={bulkUpdateMutation.isPending}
                 />
-                <span className="ml-2 text-gray-700 text-sm">
+                <span className="ml-2 text-sm text-gray-700">
                   Toggle All Players Playing / Not Playing
                 </span>
               </label>

@@ -53,12 +53,12 @@ const PasswordHelp = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col items-center justify-center mt-20 gap-2"
+      className="mt-20 flex flex-col items-center justify-center gap-2"
       role="form"
     >
       <Logo />
-      <h1 className="text-2xl text-center">Password Help</h1>
-      <p className="text-sm text-gray-600 mb-2 text-center">
+      <h1 className="text-center text-2xl">Password Help</h1>
+      <p className="mb-2 text-center text-sm text-gray-600">
         Enter your username/email address to receive temporary password.
       </p>
       <input
@@ -67,7 +67,7 @@ const PasswordHelp = () => {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         disabled={loading}
-        className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
+        className="h-8 w-40 rounded border border-gray-300 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
       />
       <Button
         variant="secondary"
@@ -79,22 +79,22 @@ const PasswordHelp = () => {
         testId="submit-button"
       />
       {error && (
-        <p className="text-red-500 text-sm text-center max-w-xs h-4">
+        <p className="h-4 max-w-xs text-center text-sm text-red-500">
           {'' || error}
         </p>
       )}
       {message && (
-        <p className="text-green-600 text-sm text-center max-w-xs h-12">
+        <p className="h-12 max-w-xs text-center text-sm text-green-600">
           {'' || message}
         </p>
       )}
-      <div className="flex justify-center items-center text-loonsRed hover:cursor-pointer hover:text-[#f38686] transition-colors duration-300 text-lg mt-10">
-        <Link href="/password-reset" className="text-lg text-center">
+      <div className="mt-10 flex items-center justify-center text-lg text-loonsRed transition-colors duration-300 hover:cursor-pointer hover:text-[#f38686]">
+        <Link href="/password-reset" className="text-center text-lg">
           Already know your username and password? Reset your password here
         </Link>
       </div>
 
-      <div className="flex justify-center text-center items-center h-10 text-xs gap-2">
+      <div className="flex h-10 items-center justify-center gap-2 text-center text-xs">
         <BackArrow />
         <Link href="/login">Back to login</Link>
       </div>

@@ -13,9 +13,9 @@ const PlayerCard = ({ player, onEditPlayer, onDeletePlayer }) => {
   ]
 
   return (
-    <div className="flex justify-between items-center p-3 w-full max-w-[17.5rem] min-w-[16rem] max-h-[6rem] border-2 border-gray-200 rounded hover:border-[#c1d2f1] hover:bg-[#edf2f8] gap-2">
-      <div className="flex-1 min-w-0 mx-1">
-        <div className="text-[0.9rem] mb-1 truncate">{player.name}</div>
+    <div className="flex max-h-[6rem] w-full min-w-[16rem] max-w-[17.5rem] items-center justify-between gap-2 rounded border-2 border-gray-200 p-3 hover:border-[#c1d2f1] hover:bg-[#edf2f8]">
+      <div className="mx-1 min-w-0 flex-1">
+        <div className="mb-1 truncate text-[0.9rem]">{player.name}</div>
         <div className="flex justify-between gap-1">
           {scores.slice(0, 3).map((score, index) => (
             <ScoreItem key={index} label={score.label} value={score.value} />
@@ -31,7 +31,7 @@ const PlayerCard = ({ player, onEditPlayer, onDeletePlayer }) => {
           ))}
         </div>
       </div>
-      <div className="flex gap-1 items-center justify-center pt-3.5 flex-shrink-0">
+      <div className="flex flex-shrink-0 items-center justify-center gap-1 pt-3.5">
         <Button
           onClick={() => onEditPlayer(player._id)}
           variant="quaternary"

@@ -2,10 +2,10 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <div className="flex flex-col justify-center items-center text-xs p-4 print:hidden">
+    <div className="flex flex-col items-center justify-center p-4 text-xs print:hidden">
       <Link
         href={'/about'}
-        className="flex justify-center text-center items-center text-xs text-loonsRed h-8 uppercase hover:cursor-pointer hover:text-[#f38686] transition-colors duration-300 font-bold"
+        className="flex h-8 items-center justify-center text-center text-xs font-bold uppercase text-loonsRed transition-colors duration-300 hover:cursor-pointer hover:text-[#f38686]"
       >
         Learn more about Loons Team Balancer
       </Link>

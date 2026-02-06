@@ -383,8 +383,8 @@ export default function CreateTeams() {
   }
 
   return (
-    <div className="flex flex-col mx-6">
-      <h2 className="text-3xl font-semibold mb-4 print:hidden md:justify-center text-loonsDarkBrown mt-6">
+    <div className="mx-6 flex flex-col">
+      <h2 className="mb-4 mt-6 text-3xl font-semibold text-loonsDarkBrown md:justify-center print:hidden">
         Create Teams
       </h2>
       <GameSelector
@@ -398,9 +398,9 @@ export default function CreateTeams() {
         onGameSelect={handleGameSelect}
         normalizeName={normalizeName}
       />
-      <div className="flex flex-col rounded pt-6 pb-8 mb-4 gap-4 print:pt-0 print:mb-0 print:px-0 print:pb-0">
+      <div className="mb-4 flex flex-col gap-4 rounded pb-8 pt-6 print:mb-0 print:px-0 print:pb-0 print:pt-0">
         {error && (
-          <p className="text-center text-red-500 text-sm mt-2">{error}</p>
+          <p className="mt-2 text-center text-sm text-red-500">{error}</p>
         )}
         <PlayerListManager
           players={players}

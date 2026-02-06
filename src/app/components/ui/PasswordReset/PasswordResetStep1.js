@@ -56,13 +56,13 @@ export default function PasswordResetStep1() {
 
   return (
     <form onSubmit={handleSubmit} data-testid="login-form">
-      <div className="flex flex-col items-center justify-center mt-20 gap-2">
+      <div className="mt-20 flex flex-col items-center justify-center gap-2">
         <Logo />
-        <h1 className="text-2xl text-center">Password Reset</h1>
-        <p className="text-sm text-gray-600 mb-2">
+        <h1 className="text-center text-2xl">Password Reset</h1>
+        <p className="mb-2 text-sm text-gray-600">
           Step 1: Verify your identity
         </p>
-        <div className="flex flex-col items-center justify-center sm:flex-row gap-3 mb-3 text-sm">
+        <div className="mb-3 flex flex-col items-center justify-center gap-3 text-sm sm:flex-row">
           <input
             id="username"
             type="text"
@@ -73,7 +73,7 @@ export default function PasswordResetStep1() {
             required
             disabled={isVerifying}
             autoComplete="username"
-            className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
+            className="h-8 w-40 rounded border border-gray-300 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
           />
           <div className="relative flex items-center justify-between">
             <input
@@ -86,7 +86,7 @@ export default function PasswordResetStep1() {
               required
               disabled={isVerifying}
               autoComplete="current-password"
-              className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 pr-1"
+              className="h-8 w-40 rounded border border-gray-300 pr-1 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
             />
             <button
               id="toggle password button"
@@ -106,7 +106,7 @@ export default function PasswordResetStep1() {
             </button>
           </div>
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex items-center justify-center">
           <Button
             variant="secondary"
             text="Next"
@@ -116,11 +116,11 @@ export default function PasswordResetStep1() {
           />
         </div>
       </div>
-      <div className="flex justify-center text-center items-center h-10 text-xs gap-2">
+      <div className="flex h-10 items-center justify-center gap-2 text-center text-xs">
         <BackArrow />
         <Link href="/login">Back to login</Link>
       </div>
-      <div className="flex justify-center text-center items-center text-loonsRed text-sm h-4">
+      <div className="flex h-4 items-center justify-center text-center text-sm text-loonsRed">
         {error ? 'Invalid credentials. Please try again' : ''}
       </div>
     </form>
