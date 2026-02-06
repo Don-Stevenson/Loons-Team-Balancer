@@ -43,9 +43,9 @@ export default function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} data-testid="login-form">
-      <div className="flex flex-col items-center justify-center mt-20 gap-2">
+      <div className="mt-20 flex flex-col items-center justify-center gap-2">
         <Logo />
-        <div className="flex flex-col justify-center xs:flex-row gap-3 mb-3">
+        <div className="mb-3 flex flex-col justify-center gap-3 xs:flex-row">
           <input
             type="text"
             value={username}
@@ -55,7 +55,7 @@ export default function LoginForm() {
             required
             disabled={loginMutation.isPending}
             autoComplete="current-username"
-            className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
+            className="h-8 w-40 rounded border border-gray-300 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
           />
           <div className="relative flex items-center">
             <input
@@ -67,7 +67,7 @@ export default function LoginForm() {
               required
               disabled={loginMutation.isPending}
               autoComplete="current-password"
-              className="border border-gray-300 rounded w-40 h-8 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50 "
+              className="h-8 w-40 rounded border border-gray-300 text-center focus:outline-none focus:ring-2 focus:ring-loonsRed disabled:opacity-50"
             />
             <button
               id="toggle-password-button"
@@ -81,7 +81,7 @@ export default function LoginForm() {
             </button>
           </div>
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex items-center justify-center">
           <Button
             variant="secondary"
             text="Login"
@@ -92,10 +92,10 @@ export default function LoginForm() {
           />
         </div>
       </div>
-      <div className="flex justify-center text-center items-center text-loonsBrown hover:cursor-pointer hover:text-[#f38686] transition-colors duration-300 text-xs mt-4">
+      <div className="mt-4 flex items-center justify-center text-center text-xs text-loonsBrown transition-colors duration-300 hover:cursor-pointer hover:text-[#f38686]">
         <Link href="/password-help">Need help with your password?</Link>
       </div>
-      <div className="flex justify-center text-center items-center text-loonsRed h-10">
+      <div className="flex h-10 items-center justify-center text-center text-loonsRed">
         {error ? "There's been an error. Please try again" : ''}
       </div>
     </form>

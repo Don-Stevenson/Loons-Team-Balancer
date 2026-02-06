@@ -16,10 +16,10 @@ export default function CustomizeTeamColours({
   }
 
   return (
-    <div className="print:hidden max-w-2xl mx-auto mb-6 px-4">
+    <div className="mx-auto mb-6 max-w-2xl px-4 print:hidden">
       <label
         htmlFor="customColours"
-        className="block text-sm font-medium text-gray-700 mb-2"
+        className="mb-2 block text-sm font-medium text-gray-700"
       >
         Customize Team Colours (Optional)
       </label>
@@ -29,14 +29,14 @@ export default function CustomizeTeamColours({
         value={customColourInput}
         onChange={handleColourInputChange}
         placeholder="e.g., blue, yellow, green, purple"
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+        className="w-full rounded-lg border border-gray-300 px-4 py-2"
       />
       <p className="mt-1 text-xs text-gray-500">
         Enter colour names separated by commas. Available: red, blue, green,
         yellow, purple, orange, pink, black, white
       </p>
       <p
-        className={`mt-2 text-lg leading-tight min-h-[2.5rem] ${getColourStatusMessage()?.charAt(0) === '✓' ? 'text-green-600' : 'text-orange-400'}`}
+        className={`mt-2 min-h-[2.5rem] text-lg leading-tight ${getColourStatusMessage()?.charAt(0) === '✓' ? 'text-green-600' : 'text-orange-400'}`}
       >
         {getColourStatusMessage()}
       </p>

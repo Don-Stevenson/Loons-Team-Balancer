@@ -21,7 +21,7 @@ export default function AuthRedirect() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen items gap-2 text-gray-700 text-xl py-4">
+      <div className="flex min-h-screen items-center justify-center gap-2 py-4 text-xl text-gray-700">
         Loading Loons Team Balancer
         <PulseLoader color="black" size={6} />
       </div>

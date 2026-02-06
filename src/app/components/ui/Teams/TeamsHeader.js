@@ -9,7 +9,7 @@ const TeamHeader = ({
 }) => {
   return (
     <>
-      <h3 className="text-xl text-black font-semibold print:text-lg print:mb-[2px] text-center">
+      <h3 className="text-center text-xl font-semibold text-black print:mb-[2px] print:text-lg">
         {getTeamName(
           index,
           balancedTeams,
@@ -17,8 +17,8 @@ const TeamHeader = ({
           customColourInput
         )}
       </h3>
-      <p className="text-sm print:hidden underline">Team Totals</p>
-      <p className="pb-1 print:hidden text-xxs xs:text-sm">
+      <p className="text-sm underline print:hidden">Team Totals</p>
+      <p className="pb-1 text-xxs xs:text-sm print:hidden">
         Team Score: {team.totalScore?.toFixed(1)}
       </p>
       <p className="text-xxs xs:text-xs print:hidden">

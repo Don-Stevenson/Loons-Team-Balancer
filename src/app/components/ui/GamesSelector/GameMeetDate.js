@@ -30,5 +30,5 @@ export const getMeetDate = (meetdate) => {
 }
 
 export default function GameMeetDate({ meetdate }) {
-  return <p className="text-lg text-gray-700 mt-1">{getMeetDate(meetdate)}</p>
+  return <p className="mt-1 text-lg text-gray-700">{getMeetDate(meetdate)}</p>
 }

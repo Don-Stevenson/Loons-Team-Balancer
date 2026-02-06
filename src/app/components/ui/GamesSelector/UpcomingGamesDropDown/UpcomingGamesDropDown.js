@@ -37,21 +37,21 @@ const UpcomingGamesDropDown = ({
 
   return (
     <div
-      className="border-[1px] border-black rounded-md px-3 py-1 z-50 w-[80%] md:w-[65%] lg:w-[75%]"
+      className="z-50 w-[80%] rounded-md border-[1px] border-black px-3 py-1 md:w-[65%] lg:w-[75%]"
       ref={dropdownRef}
     >
       <button
         onClick={handleTriggerClick}
-        className="flex font-bold text-lg text-black items-center justify-between w-full"
+        className="flex w-full items-center justify-between text-lg font-bold text-black"
       >
         {selectedValue || 'Select an upcoming game'}
         <ChevronDownIcon />
       </button>
       {isOpen && (
-        <ul className="absolute left-1/2 -translate-x-1/2 mt-1 bg-white border border-black rounded-md shadow-lg w-[80%] md:w-[60%] lg:w-[40%] z-50 max-w-[450px]">
+        <ul className="absolute left-1/2 z-50 mt-1 w-[80%] max-w-[450px] -translate-x-1/2 rounded-md border border-black bg-white shadow-lg md:w-[60%] lg:w-[40%]">
           {gamesError ? (
-            <li className="flex items-center gap-2 px-4 py-3 text-red-600 bg-red-50 rounded-md w-full">
-              <div className="font-semibold mb-1 text-center">
+            <li className="flex w-full items-center gap-2 rounded-md bg-red-50 px-4 py-3 text-red-600">
+              <div className="mb-1 text-center font-semibold">
                 ⚠️ Heja Service Unavailable
               </div>
               <div className="text-sm">
@@ -65,7 +65,7 @@ const UpcomingGamesDropDown = ({
           ) : (
             upcomingGames.map((game) => (
               <li
-                className="border-2 border-white hover:border-2 hover:bg-[#cedaf0] rounded-md px-4 list-disc list-inside cursor-pointer w-full"
+                className="w-full cursor-pointer list-inside list-disc rounded-md border-2 border-white px-4 hover:border-2 hover:bg-[#cedaf0]"
                 key={game.value}
                 onClick={() => handleOptionClick(game)}
               >

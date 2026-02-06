@@ -1,10 +1,7 @@
 export default function HoverPlayerStats({ hoveredPlayer }) {
   return (
-    <div
-      className="absolute top-[110%] lg:left-full lg:top-0 lg:ml-2 bg-white border border-gray-300 rounded-lg shadow-lg p-3 z-10 w-64 print:hidden 
-    hidden md:block"
-    >
-      <h3 className="text-sm font-bold mb-2 text-gray-800">
+    <div className="absolute top-[110%] z-10 hidden w-64 rounded-lg border border-gray-300 bg-white p-3 shadow-lg md:block lg:left-full lg:top-0 lg:ml-2 print:hidden">
+      <h3 className="mb-2 text-sm font-bold text-gray-800">
         {hoveredPlayer.name}
       </h3>
       <div className="grid grid-cols-2 gap-2 text-xs">

@@ -11,11 +11,11 @@ const DeleteConfirmationModal = ({
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="p-6 rounded-lg bg-white w-[260px] sm:w-[350px]">
-        <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="w-[260px] rounded-lg bg-white p-6 sm:w-[350px]">
+        <h2 className="mb-4 text-xl font-bold">Confirm Deletion</h2>
         <p>Are you sure you want to delete {playerName}?</p>
-        <div className="flex flex-col sm:flex-row sm:justify-end justify-between mt-4 gap-2">
+        <div className="mt-4 flex flex-col justify-between gap-2 sm:flex-row sm:justify-end">
           <Button
             onClick={onClose}
             text="Cancel"
