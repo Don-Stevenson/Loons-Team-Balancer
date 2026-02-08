@@ -34,7 +34,7 @@ function balanceTeams(players, numTeams) {
     console.error('Invalid players data:', players)
     throw new Error('Invalid players data')
   }
-  if (!numTeams || numTeams < 2) {
+  if (!numTeams || numTeams < 2 || numTeams > 20) {
     console.error('Invalid number of teams:', numTeams)
     throw new Error('Invalid number of teams')
   }

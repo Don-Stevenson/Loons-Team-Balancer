@@ -72,7 +72,7 @@ export async function POST(request) {
     }
 
     const parsedNumTeams = parseInt(numTeams, 10)
-    if (isNaN(parsedNumTeams) || parsedNumTeams < 2) {
+    if (isNaN(parsedNumTeams) || parsedNumTeams < 2 || parsedNumTeams > 20) {
       console.error('Invalid number of teams:', numTeams)
       return NextResponse.json(
         { error: 'Invalid number of teams' },
