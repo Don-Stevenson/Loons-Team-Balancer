@@ -21,7 +21,7 @@ export default function TeamGenerator({
           id="numTeams"
           type="number"
           min="2"
-          max="10"
+          max="20"
           value={numTeams}
           onChange={(e) => onNumTeamsChange(e.target.value)}
         />
