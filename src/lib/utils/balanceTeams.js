@@ -128,6 +128,7 @@ function balanceTeams(players, numTeams) {
     totalAttackScore: 0,
     totalMidfieldScore: 0,
     totalDefenseScore: 0,
+    totalFitnessScore: 0,
     fitnessScore: 0,
     genderCount: {
       male: 0,
@@ -176,7 +177,7 @@ function balanceTeams(players, numTeams) {
     targetTeam.totalAttackScore += player.attackScore
     targetTeam.totalMidfieldScore += player.midfieldScore
     targetTeam.totalDefenseScore += player.defenseScore
-    targetTeam.fitnessScore += player.fitnessScore
+    targetTeam.totalFitnessScore += player.fitnessScore
     targetTeam.genderCount[player.gender]++
   }
 
@@ -189,7 +190,7 @@ function balanceTeams(players, numTeams) {
     totalAttackScore: Number(team.totalAttackScore.toFixed(2)),
     totalMidfieldScore: Number(team.totalMidfieldScore.toFixed(2)),
     totalDefenseScore: Number(team.totalDefenseScore.toFixed(2)),
-    fitnessScore: Number(team.fitnessScore.toFixed(2)),
+    totalFitnessScore: Number(team.totalFitnessScore.toFixed(2)),
     genderCount: {
       male: team.genderCount.male,
       female: team.genderCount.female,

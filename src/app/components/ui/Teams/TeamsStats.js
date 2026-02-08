@@ -28,7 +28,7 @@ const TeamStats = ({ team }) => {
         </div>
         <div className={statsClasses}>
           <p className="text-xxs">Mobility/Stamina:</p>
-          <p className="text-xxs">{team.fitnessScore}</p>
+          <p className="text-xxs">{team.totalFitnessScore}</p>
         </div>
       </div>
     </div>

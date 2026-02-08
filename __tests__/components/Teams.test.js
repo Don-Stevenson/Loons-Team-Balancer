@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import Teams from '../../src/app/components/ui/Teams/Teams'
-import { calculateTeamStats } from '../../src/app/utils/teamStats'
+import { calculateTeamStats } from '../../src/app/utils/calculatePlayerAndTeamStats'
 
 // Mock the utility functions
 jest.mock('../../src/app/utils/getTeamName', () => ({

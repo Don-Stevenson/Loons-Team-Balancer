@@ -1,7 +1,7 @@
 import {
   calculatePlayerScore,
   calculateTeamStats,
-} from '../../src/app/utils/teamStats'
+} from '../../src/app/utils/calculatePlayerAndTeamStats'
 
 const WEIGHTS = {
   gameKnowledge: 0.2,

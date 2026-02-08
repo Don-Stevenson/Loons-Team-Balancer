@@ -21,7 +21,8 @@ export const calculateTeamStats = (team) => {
   const stats = team.players.reduce(
     (acc, player) => {
       const playerScore = calculatePlayerScore(player)
-
+      console.log('playerScore', acc.totalFitnessScore, player.fitnessScore)
+      console.log('player', player.name, player.fitnessScore)
       return {
         totalScore: acc.totalScore + playerScore,
         totalGameKnowledgeScore:
