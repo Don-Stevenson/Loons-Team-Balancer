@@ -426,19 +426,19 @@ const Teams = ({
     <>
       {/* Game name for print - only visible when printing */}
       {selectedGameInfo && (
-        <div className="print:block text-center mb-6">
+        <div className="mb-6 text-center print:block">
           <h2 className="text-2xl font-bold text-black">
             {selectedGameInfo?.title ? (
               selectedGameInfo.title
             ) : (
-              <div className="text-red-500 text-lg print:hidden">
+              <div className="text-lg text-red-500 print:hidden">
                 No game selected{' '}
               </div>
             )}
           </h2>
         </div>
       )}
-      <div className="print:block text-center mb-6">
+      <div className="mb-6 text-center print:block">
         {selectedGameInfo?.meetdate ? (
           <GameMeetDate meetdate={selectedGameInfo?.meetdate} />
         ) : (
@@ -452,13 +452,13 @@ const Teams = ({
         balancedTeams={balancedTeams}
       />
 
-      <div className="flex justify-center mb-4 flex-wrap text-xl print:hidden text-center sm:text-start">
+      <div className="mb-4 flex flex-wrap justify-center text-center text-xl sm:text-start print:hidden">
         Total Number of People Playing: {totalPlayers}
       </div>
       {teamGroups.map((group, pageIndex) => (
         <div
           key={pageIndex}
-          className={`grid grid-cols-1 md:grid-cols-2 gap-4 max-w-7xl mx-auto px-4 print:grid-cols-2 print:gap-1 print:max-w-none print:px-0 print:py-0 print:m-0 ${
+          className={`mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 md:grid-cols-2 print:m-0 print:max-w-none print:grid-cols-2 print:gap-1 print:px-0 print:py-0 ${
             pageIndex > 0 ? 'print:break-before-page' : ''
           }`}
         >
@@ -470,7 +470,7 @@ const Teams = ({
                 key={actualIndex}
                 data-team-drop-zone="true"
                 data-team-index={actualIndex}
-                className={`flex flex-col p-2 rounded max-w-[600px] border-4 print:w-full print:p-1 print:text-sm print:border-1 ${getTeamColourClasses(
+                className={`print:border-1 flex max-w-[600px] flex-col rounded border-4 p-2 print:w-full print:p-1 print:text-sm ${getTeamColourClasses(
                   actualIndex,
                   balancedTeams.length
                 )}`}
@@ -490,7 +490,7 @@ const Teams = ({
                   index={actualIndex}
                   totalTeams={balancedTeams.length}
                 />
-                <h4 className="font-semibold mt-2 print:hidden">
+                <h4 className="mt-2 font-semibold print:hidden">
                   {getTeamName(
                     actualIndex,
                     balancedTeams,

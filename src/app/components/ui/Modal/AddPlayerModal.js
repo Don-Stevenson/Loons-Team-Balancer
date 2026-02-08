@@ -113,16 +113,16 @@ export default function AddPlayerModal({
 
   return (
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4"
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-lg w-full max-w-md max-h-[90vh] flex flex-col shadow-xl"
+        className="flex max-h-[90vh] w-full max-w-md flex-col rounded-lg bg-white shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header - Fixed */}
-        <div className="px-4 sm:px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
+        <div className="border-b border-gray-200 px-4 py-4 sm:px-6">
+          <h2 className="text-xl font-bold text-gray-900 sm:text-2xl">
             Add Player
           </h2>
         </div>
@@ -131,14 +131,14 @@ export default function AddPlayerModal({
         <form
           onSubmit={handleSubmit}
           data-testid="add-player-form"
-          className="flex flex-col flex-1 overflow-hidden"
+          className="flex flex-1 flex-col overflow-hidden"
         >
-          <div className="overflow-y-auto px-4 sm:px-6 py-4 space-y-3 sm:space-y-4">
+          <div className="space-y-3 overflow-y-auto px-4 py-4 sm:space-y-4 sm:px-6">
             {formFields.map((field) => (
               <div key={field.name}>
                 <label
                   htmlFor={field.name}
-                  className="block text-gray-700 font-semibold mb-1 text-xs sm:text-sm"
+                  className="mb-1 block text-xs font-semibold text-gray-700 sm:text-sm"
                 >
                   {field.label}
                 </label>
@@ -152,7 +152,7 @@ export default function AddPlayerModal({
                   placeholder={field.placeholder}
                   min={field.min}
                   max={field.max}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -162,7 +162,7 @@ export default function AddPlayerModal({
             <div>
               <label
                 id="gender-label"
-                className="block text-gray-700 font-semibold mb-1 text-xs sm:text-sm"
+                className="mb-1 block text-xs font-semibold text-gray-700 sm:text-sm"
               >
                 Gender
               </label>
@@ -188,8 +188,8 @@ export default function AddPlayerModal({
           </div>
 
           {/* Footer - Fixed */}
-          <div className="px-4 sm:px-6 py-4 border-t border-gray-200 bg-gray-50">
-            <div className="flex flex-col-reverse sm:flex-row justify-around items-center gap-2 sm:gap-3">
+          <div className="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6">
+            <div className="flex flex-col-reverse items-center justify-around gap-2 sm:flex-row sm:gap-3">
               <Button
                 onClick={onClose}
                 text="Cancel"

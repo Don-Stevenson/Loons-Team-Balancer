@@ -45,7 +45,7 @@ export default function ClientLayout({ children }) {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <div className="flex flex-col min-h-screen">
+        <div className="flex min-h-screen flex-col">
           {showNavBar && <NavBar />}
           <main className="flex-grow">{children}</main>
           <Footer />

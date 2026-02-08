@@ -4,7 +4,7 @@ import NavBar from '../Navbar/NavBar'
 
 export default function Layout({ children, loggedIn }) {
   return (
-    <div className="flex flex-col min-h-screen print:m-0">
+    <div className="flex min-h-screen flex-col print:m-0">
       <Head>
         <title>Loons Team Balancer App</title>
         <link rel="icon" href="/TWSC_Badge.webp" type="image/webp" />

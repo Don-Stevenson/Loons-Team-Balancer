@@ -254,7 +254,7 @@ function Players() {
   return (
     <div className="mx-6">
       <div className="flex-col py-8">
-        <h1 className="text-3xl font-bold mb-8 text-loonsDarkBrown">
+        <h1 className="mb-8 text-3xl font-bold text-loonsDarkBrown">
           Manage Players
         </h1>
         <div>
@@ -274,10 +274,10 @@ function Players() {
           <Toaster position="bottom-right" />
         </div>
         <div>
-          <h2 className="text-2xl font-semibold mb-4 text-black mt-4">
+          <h2 className="mb-4 mt-4 text-2xl font-semibold text-black">
             List of Players
           </h2>
-          <div className="flex-col text-black mb-4 gap-1">
+          <div className="mb-4 flex-col gap-1 text-black">
             <p className="text-sm">
               Legend: <br />
               K: Game Knowledge, S: Goal Scoring, A: Attack, Md: Midfield, D:
@@ -285,7 +285,7 @@ function Players() {
             </p>
           </div>
           {showLoadingMessage && players.length === 0 ? (
-            <div className="flex justify-center items-center gap-2 text-gray-700 text-xl py-4">
+            <div className="flex items-center justify-center gap-2 py-4 text-xl text-gray-700">
               Loading players
               <PulseLoader color="black" size={6} />
             </div>

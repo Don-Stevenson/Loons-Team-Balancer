@@ -2,7 +2,7 @@ const TeamStats = ({ team }) => {
   const statsClasses =
     'flex justify-between border gap-1 border-gray-400 bg-gray-100 rounded py-1 px-3'
   return (
-    <div className="grid grid-cols-1 xs:grid-cols-2 gap-2 mt-2 print:hidden">
+    <div className="mt-2 grid grid-cols-1 gap-2 xs:grid-cols-2 print:hidden">
       <div className="flex flex-col gap-2 print:flex-col">
         <div className={statsClasses}>
           <p className="text-xxs">Game Knowledge:</p>

@@ -8,16 +8,16 @@ export default function TeamGenerator({
   onBalanceTeams,
 }) {
   return (
-    <div className="flex flex-col mt-10 items-center">
-      <div className="flex flex-col items-center mb-4">
+    <div className="mt-10 flex flex-col items-center">
+      <div className="mb-4 flex flex-col items-center">
         <label
-          className="block text-gray-700 text-sm font-bold mb-2 print:hidden"
+          className="mb-2 block text-sm font-bold text-gray-700 print:hidden"
           htmlFor="numTeams"
         >
           Number of Teams
         </label>
         <input
-          className="shadow appearance-none border rounded w-15 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline print:hidden"
+          className="w-15 focus:shadow-outline appearance-none rounded border px-3 py-2 leading-tight text-gray-700 shadow focus:outline-none print:hidden"
           id="numTeams"
           type="number"
           min="2"
@@ -26,7 +26,7 @@ export default function TeamGenerator({
           onChange={(e) => onNumTeamsChange(e.target.value)}
         />
       </div>
-      <div className="flex items-center justify-between print:hidden mt-4 mb-4">
+      <div className="mb-4 mt-4 flex items-center justify-between print:hidden">
         <Button
           variant="primary"
           onClick={onBalanceTeams}
@@ -36,7 +36,7 @@ export default function TeamGenerator({
           testId="create-balanced-teams-button"
         />
       </div>
-      {error && <p className="text-red-500 text-xs italic mt-4">{error}</p>}
+      {error && <p className="mt-4 text-xs italic text-red-500">{error}</p>}
     </div>
   )
 }

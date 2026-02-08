@@ -761,7 +761,7 @@ describe('Teams Component', () => {
         screen.getByText(/Enter colour names separated by commas/i)
       ).toBeInTheDocument()
       expect(
-        screen.getByText(/Available: red, blue, green, yellow, purple/i)
+        screen.getByText(/Available colours: red, blue, green, yellow, purple/i)
       ).toBeInTheDocument()
     })
 
