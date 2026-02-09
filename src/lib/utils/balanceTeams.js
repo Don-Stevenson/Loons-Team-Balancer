@@ -1,11 +1,10 @@
-// Add weights at the top of the file
 const WEIGHTS = {
-  gameKnowledge: 0.2,
-  goalScoring: 0.2,
-  attack: 0.135,
+  gameKnowledge: 0.235,
+  goalScoring: 0.233,
+  attack: 0.133,
   midfield: 0.133,
   defense: 0.133,
-  fitness: 0.1,
+  fitness: 0.133,
 }
 
 // Add randomization to prevent identical team formations

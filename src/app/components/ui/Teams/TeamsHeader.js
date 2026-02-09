@@ -19,7 +19,7 @@ const TeamHeader = ({
       </h3>
       <p className="text-sm underline print:hidden">Team Totals</p>
       <p className="pb-1 text-xxs xs:text-sm print:hidden">
-        Team Score: {team.totalScore?.toFixed(1)}
+        Team Score: {team.totalScore?.toFixed(2)}
       </p>
       <p className="text-xxs xs:text-xs print:hidden">
         No of Players:{' '}
