@@ -1,10 +1,10 @@
 const WEIGHTS = {
-  gameKnowledge: 0.2,
-  goalScoring: 0.2,
-  attack: 0.135,
+  gameKnowledge: 0.235,
+  goalScoring: 0.233,
+  attack: 0.133,
   midfield: 0.133,
   defense: 0.133,
-  fitness: 0.1,
+  fitness: 0.133,
 }
 
 export const calculatePlayerScore = (player) => {
@@ -21,7 +21,6 @@ export const calculateTeamStats = (team) => {
   const stats = team.players.reduce(
     (acc, player) => {
       const playerScore = calculatePlayerScore(player)
-
       return {
         totalScore: acc.totalScore + playerScore,
         totalGameKnowledgeScore:
@@ -49,5 +48,15 @@ export const calculateTeamStats = (team) => {
       genderCount: { male: 0, female: 0, nonBinary: 0 },
     }
   )
-  return { ...team, ...stats }
+  return {
+    ...team,
+    ...stats,
+    totalScore: Number(stats.totalScore.toFixed(2)),
+    totalGameKnowledgeScore: Number(stats.totalGameKnowledgeScore.toFixed(2)),
+    totalGoalScoringScore: Number(stats.totalGoalScoringScore.toFixed(2)),
+    totalAttackScore: Number(stats.totalAttackScore.toFixed(2)),
+    totalMidfieldScore: Number(stats.totalMidfieldScore.toFixed(2)),
+    totalDefenseScore: Number(stats.totalDefenseScore.toFixed(2)),
+    totalFitnessScore: Number(stats.totalFitnessScore.toFixed(2)),
+  }
 }

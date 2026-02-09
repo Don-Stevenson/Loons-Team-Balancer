@@ -1,7 +1,7 @@
 import {
   calculatePlayerScore,
   calculateTeamStats,
-} from '../../src/app/utils/teamStats'
+} from '../../src/app/utils/calculatePlayerAndTeamStats'
 
 const WEIGHTS = {
   gameKnowledge: 0.2,
@@ -32,8 +32,8 @@ describe('calculatePlayerScore', () => {
       mockPlayer.fitnessScore * WEIGHTS.fitness
 
     const result = calculatePlayerScore(mockPlayer)
-    expect(result).toBeCloseTo(69.4, 3)
-    expect(mockPlayer.totalScore).toBeCloseTo(69.4, 3)
+    expect(result).toBeCloseTo(77.505, 3)
+    expect(mockPlayer.totalScore).toBeCloseTo(77.505, 3)
   })
 
   it('should handle zero scores', () => {
@@ -61,7 +61,7 @@ describe('calculatePlayerScore', () => {
     }
 
     const result = calculatePlayerScore(perfectPlayer)
-    expect(result).toBe(90.1)
+    expect(result).toBe(99.99999999999999)
   })
 })
 

@@ -6,15 +6,6 @@ dotenv.config()
 const emailAddress = process.env.TEST_USERNAME
 const emailPassword = process.env.GMAIL_PASSWORD
 
-// Log configuration status (without exposing credentials)
-console.log('Email configuration:', {
-  emailConfigured: !!emailAddress,
-  passwordConfigured: !!emailPassword,
-  emailAddress: emailAddress ? `${emailAddress.substring(0, 3)}...` : 'NOT SET',
-  environment: process.env.NODE_ENV,
-  vercelEnv: process.env.VERCEL_ENV,
-})
-
 if (!emailAddress || !emailPassword) {
   console.error('CRITICAL: Email credentials not configured!')
   console.error('Missing environment variables:', {
@@ -57,8 +48,6 @@ export async function sendTemporaryPasswordEmail(
   }
 
   try {
-    console.log(`Attempting to send temporary password email to: ${toEmail}`)
-
     const info = await transporter.sendMail({
       from: `Loons Team Balancer <${emailAddress}>`,
       to: toEmail,

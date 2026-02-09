@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { calculateTeamStats } from '../../../utils/teamStats'
+import { calculateTeamStats } from '../../../utils/calculatePlayerAndTeamStats'
 import TeamHeader from './TeamsHeader'
 import TeamStats from './TeamsStats'
 import TeamsPlayerList from './TeamsPlayerList'
