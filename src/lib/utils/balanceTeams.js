@@ -8,7 +8,7 @@ const WEIGHTS = {
 }
 
 // Add randomization to prevent identical team formations
-const fudge = (score) => score + (Math.random() - 0.5) * 1.4
+const fudge = (score) => score + (Math.random() - 0.5) * 0.3
 
 // Helper function to calculate weighted player score
 const calculatePlayerScore = (player) => {
