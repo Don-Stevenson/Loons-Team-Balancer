@@ -1,11 +1,10 @@
-// Add weights at the top of the file
 const WEIGHTS = {
-  gameKnowledge: 0.2,
-  goalScoring: 0.2,
-  attack: 0.135,
+  gameKnowledge: 0.235,
+  goalScoring: 0.233,
+  attack: 0.133,
   midfield: 0.133,
   defense: 0.133,
-  fitness: 0.1,
+  fitness: 0.133,
 }
 
 // Add randomization to prevent identical team formations
@@ -128,6 +127,7 @@ function balanceTeams(players, numTeams) {
     totalAttackScore: 0,
     totalMidfieldScore: 0,
     totalDefenseScore: 0,
+    totalFitnessScore: 0,
     fitnessScore: 0,
     genderCount: {
       male: 0,
@@ -176,7 +176,7 @@ function balanceTeams(players, numTeams) {
     targetTeam.totalAttackScore += player.attackScore
     targetTeam.totalMidfieldScore += player.midfieldScore
     targetTeam.totalDefenseScore += player.defenseScore
-    targetTeam.fitnessScore += player.fitnessScore
+    targetTeam.totalFitnessScore += player.fitnessScore
     targetTeam.genderCount[player.gender]++
   }
 
@@ -189,7 +189,7 @@ function balanceTeams(players, numTeams) {
     totalAttackScore: Number(team.totalAttackScore.toFixed(2)),
     totalMidfieldScore: Number(team.totalMidfieldScore.toFixed(2)),
     totalDefenseScore: Number(team.totalDefenseScore.toFixed(2)),
-    fitnessScore: Number(team.fitnessScore.toFixed(2)),
+    totalFitnessScore: Number(team.totalFitnessScore.toFixed(2)),
     genderCount: {
       male: team.genderCount.male,
       female: team.genderCount.female,
