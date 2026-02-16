@@ -50,7 +50,7 @@ export const Button = ({
         className="w-full"
       >
         {isLoading ? (
-          <div className="flex items-center justify-center gap-2 py-4">
+          <div className="flex min-w-11 items-center justify-center gap-2 py-1">
             {loadingMessage}
             {variant === 'primary' || variant === 'delete' ? (
               <PulseLoader color="white" size={6} />
