@@ -35,6 +35,7 @@ export default function PlayerListManager({
               onClick={onTogglePlayerList}
               text={openPlayerList ? 'Hide Player List' : 'Show Player List'}
               testId="toggle-player-list-button"
+              backgroundClasses="!bg-loonsRed/80 hover:!bg-red-900/80"
             />
           </div>
         </div>
