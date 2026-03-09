@@ -34,13 +34,15 @@ export const Button = ({
   text,
   loadingMessage,
   classes,
+  textClasses,
+  backgroundClasses,
   onClick,
   testId,
   disabled,
 }) => {
   return (
     <div
-      className={`${getVariantStyles(variant)} ${classes}`}
+      className={`${getVariantStyles(variant)} ${backgroundClasses} ${classes}`}
       onClick={onClick}
       data-testid="button-container"
     >
@@ -59,7 +61,7 @@ export const Button = ({
             )}
           </div>
         ) : (
-          text
+          <span className={`text-center ${textClasses}`}>{text}</span>
         )}
       </button>
     </div>
