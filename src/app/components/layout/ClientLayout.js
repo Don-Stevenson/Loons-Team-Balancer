@@ -1,9 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, lazy, Suspense } from 'react'
 import { usePathname } from 'next/navigation'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+const ReactQueryDevtools = lazy(() =>
+  import('@tanstack/react-query-devtools').then((mod) => ({
+    default: mod.ReactQueryDevtools,
+  }))
+)
 
 import Footer from '../ui/Footer/Footer'
 import NavBar from '../ui/Navbar/NavBar'
@@ -52,7 +56,9 @@ export default function ClientLayout({ children }) {
         </div>
       </AuthProvider>
       <div className="print:hidden">
-        <ReactQueryDevtools initialIsOpen={false} />
+        <Suspense fallback={null}>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Suspense>
       </div>
     </QueryClientProvider>
   )
