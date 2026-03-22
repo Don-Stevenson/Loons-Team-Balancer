@@ -45,8 +45,8 @@ export default function GameSelector({
                 <PulseLoader color="black" size={6} />
               </p>
             ) : queryRsvpsForGame.length > 0 ? (
-              <div className="flex flex-col">
-                <ul className="grid list-disc grid-cols-1 items-center justify-center gap-2 pl-5 sm:grid-cols-2">
+              <div className="flex flex-col items-center justify-center">
+                <ul className="grid list-disc grid-cols-1 items-center justify-center gap-y-2 pl-5 sm:grid-cols-3 sm:gap-x-7 md:grid-cols-4 md:gap-x-10">
                   {queryRsvpsForGame
                     .sort((a, b) => a.localeCompare(b))
                     .map((player, index) => {
