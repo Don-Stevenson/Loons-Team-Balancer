@@ -36,7 +36,7 @@ export default function GameSelector({
         />
         {selectedGameId && (
           <div className="mt-4 items-center justify-center">
-            <h3 className="my-6 text-xl font-bold text-loonsRed">
+            <h3 className="my-6 text-center text-xl font-bold text-loonsRed">
               {queryRsvpsForGame.length} Players RSVP'd for this game on Heja
             </h3>
             {rsvpsLoading ? (
