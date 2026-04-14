@@ -21,7 +21,7 @@ const TeamHeader = ({
       <p className="pb-1 text-xxs xs:text-sm print:hidden">
         Team Score: {team.totalScore?.toFixed(2)}
       </p>
-      <p className="text-xxs xs:text-xs print:hidden">
+      <p className="text-xxs xs:text-xs print:flex print:items-center print:justify-center">
         No of Players:{' '}
         {team.genderCount.male +
           team.genderCount.female +
