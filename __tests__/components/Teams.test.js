@@ -150,8 +150,22 @@ jest.mock('../../src/app/components/ui/Teams/TeamsPlayerList', () => {
 jest.mock('../../src/app/components/ui/GamesSelector/GameMeetDate', () => {
   return {
     __esModule: true,
-    default: ({ meetdate }) => (
-      <div data-testid="game-meet-date">{meetdate}</div>
+    default: ({ meetdate, onDateChange }) => (
+      <div data-testid="game-meet-date">
+        {meetdate instanceof Date
+          ? meetdate.toDateString()
+          : String(meetdate ?? '')}
+        {onDateChange && (
+          <input
+            type="date"
+            data-testid="game-date-picker"
+            onChange={(e) => {
+              const [year, month, day] = e.target.value.split('-').map(Number)
+              onDateChange(new Date(year, month - 1, day))
+            }}
+          />
+        )}
+      </div>
     ),
     todaysDate: '2024-03-15',
   }
@@ -267,8 +281,73 @@ describe('Teams Component', () => {
         />
       )
 
+      expect(screen.getByTestId('game-meet-date')).toBeInTheDocument()
+      expect(screen.getByTestId('game-date-picker')).toBeInTheDocument()
+    })
+
+    it('allows overriding the displayed game date', () => {
+      const balancedTeams = [createTeamWithStats([mockPlayer1])]
+      const selectedGameInfo = {
+        _id: 'game-1',
+        title: 'Championship Match',
+        meetdate: '2024-03-20T10:00:00.000Z',
+      }
+
+      render(
+        <Teams
+          balancedTeams={balancedTeams}
+          setBalancedTeams={jest.fn()}
+          totalPlayers={1}
+          selectedGameInfo={selectedGameInfo}
+        />
+      )
+
+      fireEvent.change(screen.getByTestId('game-date-picker'), {
+        target: { value: '2024-04-01' },
+      })
+
       expect(screen.getByTestId('game-meet-date')).toHaveTextContent(
-        '2024-03-15'
+        new Date(2024, 3, 1).toDateString()
+      )
+    })
+
+    it('resets the date override when the selected game changes', () => {
+      const balancedTeams = [createTeamWithStats([mockPlayer1])]
+      const firstGame = {
+        _id: 'game-1',
+        title: 'Championship Match',
+        meetdate: '2024-03-20T15:00:00.000Z',
+      }
+      const secondGame = {
+        _id: 'game-2',
+        title: 'Friendly Match',
+        meetdate: '2024-03-27T15:00:00.000Z',
+      }
+
+      const { rerender } = render(
+        <Teams
+          balancedTeams={balancedTeams}
+          setBalancedTeams={jest.fn()}
+          totalPlayers={1}
+          selectedGameInfo={firstGame}
+        />
+      )
+
+      fireEvent.change(screen.getByTestId('game-date-picker'), {
+        target: { value: '2024-04-01' },
+      })
+
+      rerender(
+        <Teams
+          balancedTeams={balancedTeams}
+          setBalancedTeams={jest.fn()}
+          totalPlayers={1}
+          selectedGameInfo={secondGame}
+        />
+      )
+
+      expect(screen.getByTestId('game-meet-date')).toHaveTextContent(
+        secondGame.meetdate
       )
     })
 
