@@ -1,9 +1,9 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { calculateTeamStats } from '../../../utils/calculatePlayerAndTeamStats'
 import TeamHeader from './TeamsHeader'
 import TeamStats from './TeamsStats'
 import TeamsPlayerList from './TeamsPlayerList'
-import GameMeetDate, { todaysDate } from '../GamesSelector/GameMeetDate'
+import GameMeetDate from '../GamesSelector/GameMeetDate'
 import { getTeamName } from '../../../utils/getTeamName'
 import { parseCustomColours } from '../../../utils/parseCustomColours'
 import CustomizeTeamColours from './CustomizeTeamColours'
@@ -346,6 +346,11 @@ const Teams = ({
   const hoverTimeoutRef = useRef(null)
   const [customColourInput, setCustomColourInput] = useState('')
   const [parsedCustomColours, setParsedCustomColours] = useState([])
+  const [overrideDate, setOverrideDate] = useState(null)
+
+  useEffect(() => {
+    setOverrideDate(null)
+  }, [selectedGameInfo?._id])
 
   const handleMouseEnter = (player) => {
     // Clear any existing timeout
@@ -439,11 +444,10 @@ const Teams = ({
         </div>
       )}
       <div className="mb-6 text-center print:block">
-        {selectedGameInfo?.meetdate ? (
-          <GameMeetDate meetdate={selectedGameInfo?.meetdate} />
-        ) : (
-          <GameMeetDate meetdate={todaysDate} />
-        )}
+        <GameMeetDate
+          meetdate={overrideDate ?? selectedGameInfo?.meetdate ?? new Date()}
+          onDateChange={setOverrideDate}
+        />
       </div>
       <CustomizeTeamColours
         customColourInput={customColourInput}
