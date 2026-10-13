@@ -14,7 +14,8 @@
     "test:snapshot": "NODE_ENV=test jest --updateSnapshot",
     "test:watch": "NODE_ENV=test jest --watchAll --updateSnapshot",
     "test:coverage": "NODE_ENV=test jest --coverage --updateSnapshot",
-    "format": "npx prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
+    "format": "npx prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "heja:login": "node scripts/heja-login.mjs"
   },
   "dependencies": {
     "@atlaskit/pragmatic-drag-and-drop": "^1.6.1",

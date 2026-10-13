@@ -66,11 +66,48 @@ fragment Activity on Activity {
   }
 }`
 
+// Heja auth tokens last 10 minutes, so reuse one until just before it expires
+let authTokenCache = null
+let authTokenValidTo = 0
+const AUTH_TOKEN_EXPIRY_BUFFER = 60 * 1000 // 1 minute
+
+// The refresh token is a JWT that lasts a year; warn ahead of time
+const REFRESH_TOKEN_WARNING_DAYS = 30
+let refreshTokenExpiryChecked = false
+
+function warnIfRefreshTokenExpiringSoon() {
+  if (refreshTokenExpiryChecked) return
+  refreshTokenExpiryChecked = true
+
+  try {
+    const payload = JSON.parse(
+      Buffer.from(refreshToken.split('.')[1], 'base64url').toString()
+    )
+    const daysLeft = Math.floor((payload.exp * 1000 - Date.now()) / 86400000)
+    if (daysLeft <= REFRESH_TOKEN_WARNING_DAYS) {
+      console.warn(
+        `Heja REFRESH_TOKEN expires in ${daysLeft} days. Run \`npm run heja:login\` to create a new one.`
+      )
+    }
+  } catch {
+    // Not a JWT we can read; Heja will reject it if it's expired
+  }
+}
+
 /**
  * Get GraphQL authentication token using refresh token
  * @returns {Promise<string>} The auth token
  */
 async function getGraphqlToken() {
+  if (
+    authTokenCache &&
+    Date.now() < authTokenValidTo - AUTH_TOKEN_EXPIRY_BUFFER
+  ) {
+    return authTokenCache
+  }
+
+  warnIfRefreshTokenExpiringSoon()
+
   try {
     const response = await fetch('https://auth.heja.io/login/refreshToken', {
       method: 'POST',
@@ -86,12 +123,20 @@ async function getGraphqlToken() {
       }),
     })
 
+    if (response.status === 401 || response.status === 403) {
+      throw new Error(
+        'Heja rejected REFRESH_TOKEN (expired or revoked). Run `npm run heja:login` to create a new one.'
+      )
+    }
+
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
     }
 
     const data = await response.json()
-    return data.data.authToken
+    authTokenCache = data.data.authToken
+    authTokenValidTo = Number(data.data.authTokenValidTo) || 0
+    return authTokenCache
   } catch (error) {
     console.error('Error getting GraphQL token:', error)
     throw error
@@ -117,6 +162,11 @@ async function hejaGraphqlRequest(query) {
       },
       body: JSON.stringify(query),
     })
+
+    if (response.status === 401) {
+      // Drop the cached auth token so the next request gets a fresh one
+      authTokenCache = null
+    }
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)
