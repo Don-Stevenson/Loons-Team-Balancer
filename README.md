@@ -24,6 +24,22 @@ to generate the JWT_SECRET use:
 node -e "console.log(require('crypto').randomBytes(256).toString('base64'));"
 ```
 
+### Heja refresh token
+
+Upcoming games and RSVPs come from Heja using `REFRESH_TOKEN`, which lasts one year. To create a new one (Heja emails you a 4-digit code):
+
+```bash
+npm run heja:login
+```
+
+To see when the current token expires and whether Heja still accepts it:
+
+```bash
+npm run heja:login -- --check
+```
+
+After creating a new token, update `REFRESH_TOKEN` on Vercel and redeploy. The script prints the commands.
+
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
 ### Testing:
